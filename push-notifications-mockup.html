@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Mobile - Push Notifications Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z450: #898992; --z500: #71717A; --z600: #52525B; --z700: #3F3F46;
+  --z750: #333338; --z800: #27272A; --z850: #1F1F22; --z900: #18181B;
+  --z925: #101013; --z950: #09090B; --black: #000000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v800: #5A17B7;
+  --g500: #03E67A; --g600: #02C869;
+  --a300: #CEAD50;
+  --r400: #F64B4B;
+  --b300: #6EB6FF;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scrollbar-width: none; }
+body { scrollbar-width: none; -ms-overflow-style: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: #080808; color: var(--z50);
+  display: flex; justify-content: center; align-items: flex-start;
+  min-height: 100vh; padding: 32px; gap: 32px; flex-wrap: wrap;
+}
+body::-webkit-scrollbar { display: none; }
+
+.phone {
+  width: 390px; height: 844px; background: var(--z950);
+  border-radius: 52px; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 2px 4px rgba(0,0,0,0.4),
+    0 12px 40px rgba(0,0,0,0.6), 0 40px 100px -20px rgba(0,0,0,0.8);
+  flex-shrink: 0;
+}
+.island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 124px; height: 36px; background: var(--black); border-radius: 20px; z-index: 100; }
+.home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; border-radius: 100px; background: rgba(255,255,255,0.15); z-index: 100; }
+
+/* ── Lock Screen ── */
+.lock-screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  z-index: 1;
+}
+
+/* Wallpaper */
+.wallpaper {
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, #0a0a1a 0%, #0d1025 30%, #0a0f1e 60%, #080a14 100%);
+  z-index: 0;
+}
+.wallpaper::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 40% 30% at 30% 20%, rgba(139,92,246,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 70% 80%, rgba(59,130,246,0.04) 0%, transparent 70%);
+}
+
+/* Status */
+.ls-status {
+  position: relative; z-index: 10;
+  padding: 58px 32px 0;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.ls-status .time { font-size: 16px; font-weight: 600; color: var(--white); }
+.ls-status .sys { display: flex; gap: 5px; }
+.ls-status .sys svg { width: 16px; height: 16px; fill: var(--white); }
+
+/* Clock */
+.ls-clock {
+  position: relative; z-index: 10;
+  text-align: center; padding: 20px 0 12px;
+}
+.ls-clock .clock-time {
+  font-size: 72px; font-weight: 700; color: var(--white);
+  letter-spacing: -0.04em; line-height: 1;
+}
+.ls-clock .clock-date {
+  font-size: 16px; color: rgba(255,255,255,0.6);
+  margin-top: 4px;
+}
+
+/* ── Notification Stack ── */
+.notif-stack {
+  position: relative; z-index: 10;
+  padding: 16px 16px 0;
+  display: flex; flex-direction: column; gap: 10px;
+  flex: 1;
+}
+
+.notif {
+  background: rgba(30,30,35,0.85);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* App header */
+.notif-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 6px;
+}
+.notif-icon {
+  width: 20px; height: 20px; border-radius: 5px;
+  background: linear-gradient(135deg, var(--v800), var(--v500));
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.notif-icon svg { width: 11px; height: 11px; color: var(--white); }
+.notif-app {
+  font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.5);
+  flex: 1;
+}
+.notif-time {
+  font-size: 12px; color: rgba(255,255,255,0.3);
+}
+
+/* Content */
+.notif-title {
+  font-size: 15px; font-weight: 600; color: var(--white);
+  line-height: 20px; margin-bottom: 3px;
+}
+.notif-body {
+  font-size: 14px; line-height: 19px;
+  color: rgba(255,255,255,0.6);
+}
+.notif-body strong {
+  color: rgba(255,255,255,0.8); font-weight: 500;
+}
+
+/* Price highlight */
+.notif-price {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  margin-top: 6px;
+}
+.np-now {
+  font-size: 17px; font-weight: 700;
+  font-family: var(--mono); color: #34d399;
+}
+.np-was {
+  font-size: 13px; font-family: var(--mono);
+  color: rgba(255,255,255,0.25);
+  text-decoration: line-through;
+}
+.np-pct {
+  font-size: 11px; font-weight: 600;
+  font-family: var(--mono); color: #34d399;
+}
+
+/* Subtle accent line per type */
+.notif.price-drop::before {
+  content: ''; position: absolute; top: 0; left: 20%; right: 20%;
+  height: 0.5px; background: linear-gradient(90deg, transparent, rgba(52,211,153,0.3), transparent);
+}
+.notif.restock::before {
+  content: ''; position: absolute; top: 0; left: 20%; right: 20%;
+  height: 0.5px; background: linear-gradient(90deg, transparent, rgba(107,182,255,0.3), transparent);
+}
+.notif.new-release::before {
+  content: ''; position: absolute; top: 0; left: 20%; right: 20%;
+  height: 0.5px; background: linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent);
+}
+.notif.reorder::before {
+  content: ''; position: absolute; top: 0; left: 20%; right: 20%;
+  height: 0.5px; background: linear-gradient(90deg, transparent, rgba(206,173,80,0.3), transparent);
+}
+.notif.verdict::before {
+  content: ''; position: absolute; top: 0; left: 20%; right: 20%;
+  height: 0.5px; background: linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent);
+}
+
+/* Signal tag */
+.notif-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.notif-tag .nt-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+}
+.notif-tag.green { color: #34d399; }
+.notif-tag.green .nt-dot { background: #34d399; }
+.notif-tag.blue { color: var(--b300); }
+.notif-tag.blue .nt-dot { background: var(--b300); }
+.notif-tag.violet { color: var(--v400); }
+.notif-tag.violet .nt-dot { background: var(--v400); }
+.notif-tag.amber { color: var(--a300); }
+.notif-tag.amber .nt-dot { background: var(--a300); }
+
+/* ── Banner notification (top of screen) ── */
+.banner-phone .lock-screen { justify-content: flex-start; }
+
+.banner {
+  position: relative; z-index: 50;
+  margin: 60px 10px 0;
+  background: rgba(30,30,35,0.92);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+.banner::before {
+  content: ''; position: absolute; top: 0; left: 20%; right: 20%;
+  height: 0.5px; background: linear-gradient(90deg, transparent, rgba(52,211,153,0.3), transparent);
+}
+
+/* Fake app screen behind banner */
+.fake-app {
+  position: relative; z-index: 1;
+  padding: 20px;
+  opacity: 0.15;
+  filter: blur(1px);
+}
+.fa-bar {
+  height: 44px; background: rgba(255,255,255,0.03);
+  border-radius: 22px; margin-bottom: 16px;
+}
+.fa-card {
+  height: 80px; background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.04);
+  border-radius: 14px; margin-bottom: 8px;
+}
+
+/* Screen labels */
+.screen-label {
+  position: absolute; bottom: -32px; left: 0; right: 0;
+  text-align: center; font-size: 12px; font-family: var(--mono); color: var(--z600);
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════
+     PHONE 1: LOCK SCREEN WITH NOTIFICATION STACK
+     ══════════════════ -->
+<div class="phone" style="margin-bottom: 44px;">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+  <div class="lock-screen">
+    <div class="wallpaper"></div>
+
+    <div class="ls-status">
+      <span class="time">2:41</span>
+      <div class="sys">
+        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <div class="ls-clock">
+      <div class="clock-time">2:41</div>
+      <div class="clock-date">Monday, March 17</div>
+    </div>
+
+    <div class="notif-stack">
+
+      <!-- Verdict Updated - HERO (axiom-native) -->
+      <div class="notif verdict">
+        <div class="notif-header">
+          <div class="notif-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <span class="notif-app">Product.ai</span>
+          <span class="notif-time">3h ago</span>
+        </div>
+        <div class="notif-tag violet"><span class="nt-dot"></span> Verdict Changed</div>
+        <div class="notif-title">Ninja Foodi DZ201: Recommended &#x2192; Caution</div>
+        <div class="notif-body">New owner data confirms coating degradation after 12-18 months. You own this product.</div>
+      </div>
+
+      <!-- Reorder - axiom-native -->
+      <div class="notif reorder">
+        <div class="notif-header">
+          <div class="notif-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <span class="notif-app">Product.ai</span>
+          <span class="notif-time">5h ago</span>
+        </div>
+        <div class="notif-tag amber"><span class="nt-dot"></span> Running Low</div>
+        <div class="notif-title">CeraVe Retinol Serum</div>
+        <div class="notif-body">~80% used. This was flagged Caution - your saved alternative is stronger.</div>
+      </div>
+
+      <!-- Price Drop -->
+      <div class="notif price-drop">
+        <div class="notif-header">
+          <div class="notif-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <span class="notif-app">Product.ai</span>
+          <span class="notif-time">2d ago</span>
+        </div>
+        <div class="notif-tag green"><span class="nt-dot"></span> Price Drop</div>
+        <div class="notif-title">KitchenAid Artisan Stand Mixer</div>
+        <div class="notif-body">Lowest price in 12 months at Williams Sonoma. $29 above your target.</div>
+        <div class="notif-price">
+          <span class="np-now">$279</span>
+          <span class="np-was">$399</span>
+          <span class="np-pct">-30%</span>
+        </div>
+      </div>
+
+      <!-- Restock -->
+      <div class="notif restock">
+        <div class="notif-header">
+          <div class="notif-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <span class="notif-app">Product.ai</span>
+          <span class="notif-time">3d ago</span>
+        </div>
+        <div class="notif-tag blue"><span class="nt-dot"></span> Back in Stock</div>
+        <div class="notif-title">La Roche-Posay Retinaldehyde</div>
+        <div class="notif-body">Restocked at Ulta. Your <strong>SKINCARE15</strong> code still works - $37.80 after discount.</div>
+      </div>
+
+    </div>
+  </div>
+  <div class="screen-label">Lock Screen - Notification Stack</div>
+</div>
+
+<!-- ══════════════════
+     PHONE 2: BANNER NOTIFICATION (in-app)
+     ══════════════════ -->
+<div class="phone banner-phone" style="margin-bottom: 44px;">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+
+  <div class="lock-screen">
+    <div class="wallpaper" style="background: var(--z950);"></div>
+
+    <!-- Status bar -->
+    <div class="ls-status">
+      <span class="time">2:43</span>
+      <div class="sys">
+        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <!-- Banner notification -->
+    <div class="banner">
+      <div class="notif-header">
+        <div class="notif-icon">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+        </div>
+        <span class="notif-app">Product.ai</span>
+        <span class="notif-time">now</span>
+      </div>
+      <div class="notif-tag green"><span class="nt-dot"></span> Price Target Hit</div>
+      <div class="notif-title">La Roche-Posay Retinaldehyde dropped to $37.80</div>
+      <div class="notif-body">Below your $40 target at Ulta. Code <strong>SKINCARE15</strong> verified.</div>
+      <div class="notif-price">
+        <span class="np-now">$37.80</span>
+        <span class="np-was">$42.00</span>
+        <span class="np-pct">-10%</span>
+      </div>
+    </div>
+
+    <!-- Faded app content behind -->
+    <div class="fake-app">
+      <div class="fa-bar"></div>
+      <div class="fa-card"></div>
+      <div class="fa-card"></div>
+      <div class="fa-card"></div>
+      <div class="fa-card"></div>
+      <div class="fa-card"></div>
+    </div>
+  </div>
+  <div class="screen-label">Banner Notification - Price Target Hit</div>
+</div>
+
+<!-- ══════════════════
+     PHONE 3: VERDICT UPDATE NOTIFICATION
+     ══════════════════ -->
+<div class="phone" style="margin-bottom: 44px;">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+  <div class="lock-screen">
+    <div class="wallpaper"></div>
+
+    <div class="ls-status">
+      <span class="time">9:14</span>
+      <div class="sys">
+        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <div class="ls-clock">
+      <div class="clock-time">9:14</div>
+      <div class="clock-date">Tuesday, March 18</div>
+    </div>
+
+    <div class="notif-stack">
+
+      <!-- Verdict Update -->
+      <div class="notif verdict">
+        <div class="notif-header">
+          <div class="notif-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <span class="notif-app">Product.ai</span>
+          <span class="notif-time">8:42 AM</span>
+        </div>
+        <div class="notif-tag violet"><span class="nt-dot"></span> Verdict Updated</div>
+        <div class="notif-title">Ninja Foodi DZ201 Air Fryer</div>
+        <div class="notif-body">New owner data confirms basket coating degradation after 12-18 months. Previously unverified claim now at <strong>78% confidence</strong>.</div>
+      </div>
+
+      <!-- Seasonal Deal -->
+      <div class="notif price-drop">
+        <div class="notif-header">
+          <div class="notif-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <span class="notif-app">Product.ai</span>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        <div class="notif-tag green"><span class="nt-dot"></span> Seasonal Deal</div>
+        <div class="notif-title">Sephora Spring Sale starts April 4</div>
+        <div class="notif-body">15-20% off sitewide. Your saved Drunk Elephant Protini ($68) would drop to ~$54-58 - below your $55 target.</div>
+      </div>
+
+    </div>
+  </div>
+  <div class="screen-label">Lock Screen - Verdict Update + Seasonal Deal</div>
+</div>
+
+</body>
+</html>

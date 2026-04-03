@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai - Challenge Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v400: #A384FF; --v500: #8B5CF6;
+  --green: #34d399; --green-surface: rgba(52,211,153,0.06);
+  --amber: #CEAD50; --amber-surface: rgba(206,173,80,0.06);
+  --red: #f87171; --red-surface: rgba(248,113,113,0.06);
+  --blue: #6EB6FF; --blue-surface: rgba(110,182,255,0.06);
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0; background: var(--black); color: var(--white); line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+
+/* Nav */
+.nav { position: sticky; top: 0; z-index: 100; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--z900); }
+.nav-inner { max-width: 800px; margin: 0 auto; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.nav-logo { display: flex; align-items: baseline; }
+.lp { font-size: 17px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.la { font-family: var(--mono); font-size: 17px; color: var(--v500); }
+.nav-links { display: flex; gap: 24px; }
+.nav-links a { font-size: 13px; color: var(--z500); transition: color 150ms; }
+.nav-links a.active { color: var(--v500); }
+
+/* Content container */
+.content { max-width: 800px; margin: 0 auto; padding: 0 48px; }
+
+/* Breadcrumb */
+.breadcrumb { padding: 16px 0 0; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--z600); }
+.breadcrumb a { color: var(--z500); }
+
+/* Section label */
+.section-label { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--v500); margin-bottom: 12px; }
+.section-label::before { content: ''; width: 8px; height: 8px; background: var(--v500); transform: rotate(45deg); }
+
+/* Article hero */
+.article-hero { padding: 48px 0 40px; border-bottom: 1px solid var(--z900); }
+.article-hero h1 { font-size: 36px; font-weight: 500; color: var(--white); letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px; }
+.article-hero .sub { font-size: 16px; color: var(--z400); line-height: 1.7; margin-bottom: 16px; }
+.article-meta { display: flex; gap: 16px; font-family: var(--mono); font-size: 11px; color: var(--z600); }
+
+/* Article body */
+.article-body { padding: 40px 0 80px; }
+.article-body h2 { font-size: 24px; font-weight: 500; color: var(--white); letter-spacing: -0.01em; margin: 40px 0 12px; }
+.article-body h2:first-child { margin-top: 0; }
+.article-body p { font-size: 16px; color: var(--z400); line-height: 1.7; margin-bottom: 16px; }
+.article-body strong { color: var(--z200); font-weight: 500; }
+
+/* ══════════════════════════════════════════
+   INLINE AXIOM CARD (in article body)
+   Entry point #1 for challenges
+   ══════════════════════════════════════════ */
+.inline-axiom {
+  margin: 24px 0;
+  padding: 20px 24px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--z900);
+  position: relative;
+}
+.inline-axiom-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.inline-axiom-id {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--z600); letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: 8px;
+}
+.inline-axiom-id .badge {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 10px; padding: 1px 6px; border-radius: 100px;
+}
+.inline-axiom-id .badge.forged { color: var(--green); background: var(--green-surface); }
+.inline-axiom-id .badge .dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+
+/* ENTRY POINT: Challenge link on inline axiom */
+.inline-axiom-actions {
+  display: flex; align-items: center; gap: 12px;
+}
+.challenge-link {
+  font-size: 12px; color: var(--z600);
+  display: flex; align-items: center; gap: 4px;
+  cursor: pointer; transition: color 150ms;
+  background: none; border: none; font-family: var(--sans);
+  padding: 0;
+}
+.challenge-link:hover { color: var(--z400); }
+.challenge-link svg { width: 12px; height: 12px; }
+
+.inline-axiom-statement {
+  font-size: 14px; font-weight: 500; color: var(--z200);
+  line-height: 1.5; margin-bottom: 6px;
+}
+.inline-axiom-physics {
+  font-family: var(--mono); font-size: 12px; color: var(--z500);
+  line-height: 1.5; padding-left: 12px;
+  border-left: 2px solid rgba(139,92,246,0.15);
+}
+.inline-axiom-footer {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  font-size: 11px; color: var(--z600);
+}
+
+/* Product verdict card (brand page context) */
+.verdict-card {
+  margin: 24px 0; padding: 24px;
+  border-radius: 12px; background: rgba(255,255,255,0.02);
+  border: 1px solid var(--z900);
+}
+.verdict-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px;
+}
+.verdict-badge {
+  padding: 6px 12px; border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+}
+.verdict-badge.caution { background: var(--amber-surface); color: var(--amber); border: 1px solid rgba(206,173,80,0.15); }
+.verdict-badge.recommended { background: var(--green-surface); color: var(--green); border: 1px solid rgba(52,211,153,0.15); }
+.verdict-badge.killshot { background: var(--red-surface); color: var(--red); border: 1px solid rgba(248,113,113,0.15); }
+.verdict-product { font-size: 16px; font-weight: 500; color: var(--z200); }
+.verdict-text { font-size: 14px; color: var(--z400); line-height: 1.6; margin-bottom: 12px; }
+
+/* Axioms driving verdict */
+.verdict-axioms-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--z600); letter-spacing: 0.06em; margin-bottom: 8px;
+}
+.verdict-axiom-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 10px 14px; border-radius: 8px;
+  background: rgba(255,255,255,0.015);
+  margin-bottom: 6px;
+  gap: 12px;
+}
+.verdict-axiom-row:last-child { margin-bottom: 0; }
+.verdict-axiom-left { flex: 1; }
+.verdict-axiom-id {
+  font-family: var(--mono); font-size: 10px; color: var(--z600);
+  margin-bottom: 2px;
+}
+.verdict-axiom-text {
+  font-size: 13px; color: var(--z400); line-height: 1.4;
+}
+/* ENTRY POINT: Challenge on verdict axiom rows */
+.verdict-axiom-challenge {
+  font-size: 11px; color: var(--z700);
+  display: flex; align-items: center; gap: 4px;
+  cursor: pointer; transition: color 150ms;
+  background: none; border: none; font-family: var(--sans);
+  white-space: nowrap; flex-shrink: 0; padding: 4px 0;
+}
+.verdict-axiom-challenge:hover { color: var(--z400); }
+
+/* ══════════════════════════════════════════
+   FLOW SEPARATOR
+   ══════════════════════════════════════════ */
+.flow-separator {
+  margin: 80px 0;
+  padding: 40px 0;
+  border-top: 2px dashed rgba(139,92,246,0.2);
+  border-bottom: 2px dashed rgba(139,92,246,0.2);
+  text-align: center;
+}
+.flow-separator h2 {
+  font-size: 20px; font-weight: 600; color: var(--v400);
+  margin-bottom: 4px;
+}
+.flow-separator p {
+  font-size: 14px; color: var(--z500);
+}
+
+/* ══════════════════════════════════════════
+   PRE-SEED SCREEN (Step 1 of challenge flow)
+   ══════════════════════════════════════════ */
+.challenge-flow { max-width: 560px; margin: 0 auto; }
+
+.flow-step {
+  margin-bottom: 64px;
+  padding: 32px;
+  border-radius: 16px;
+  background: var(--z925);
+  border: 1px solid var(--z800);
+}
+.flow-step-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--v400); letter-spacing: 0.08em; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.flow-step-label .step-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(139,92,246,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--v400);
+}
+.flow-step h3 {
+  font-size: 18px; font-weight: 600; color: var(--white); margin-bottom: 8px;
+}
+.flow-step .desc {
+  font-size: 14px; color: var(--z400); line-height: 1.6; margin-bottom: 20px;
+}
+
+/* Axiom being challenged (reference) */
+.challenged-axiom {
+  padding: 14px 16px; border-radius: 10px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+  margin-bottom: 20px;
+}
+.challenged-axiom .ca-id {
+  font-family: var(--mono); font-size: 10px; color: var(--z600);
+  margin-bottom: 4px;
+}
+.challenged-axiom .ca-text {
+  font-size: 13px; color: var(--z300); line-height: 1.5;
+}
+
+/* Pre-seed options */
+.preseed-options {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.preseed-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-radius: 10px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+  cursor: pointer; transition: all 150ms;
+}
+.preseed-option:hover { border-color: var(--z700); background: rgba(255,255,255,0.03); }
+.preseed-option.selected { border-color: var(--v500); background: rgba(139,92,246,0.04); }
+.preseed-radio {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--z700); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 150ms;
+}
+.preseed-option.selected .preseed-radio { border-color: var(--v500); }
+.preseed-option.selected .preseed-radio::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--v500);
+}
+.preseed-option-text { flex: 1; }
+.preseed-option-title { font-size: 14px; font-weight: 500; color: var(--z200); }
+.preseed-option-desc { font-size: 12px; color: var(--z500); margin-top: 2px; }
+
+.flow-next-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: var(--v500); color: var(--white);
+  font-size: 14px; font-weight: 500; border: none;
+  cursor: pointer; transition: opacity 150ms;
+  font-family: var(--sans); margin-top: 20px;
+}
+.flow-next-btn:hover { opacity: 0.9; }
+
+/* ══════════════════════════════════════════
+   EVIDENCE FORM (Step 2)
+   ══════════════════════════════════════════ */
+.form-group { margin-bottom: 20px; }
+.form-label { font-size: 13px; font-weight: 500; color: var(--z200); margin-bottom: 6px; display: block; }
+.form-hint { font-size: 12px; color: var(--z600); margin-bottom: 8px; }
+.form-textarea {
+  width: 100%; padding: 12px 14px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--z800);
+  color: var(--z300); font-size: 14px; font-family: var(--sans);
+  resize: vertical; min-height: 100px; line-height: 1.6;
+}
+.form-textarea::placeholder { color: var(--z700); }
+.form-input {
+  width: 100%; padding: 10px 14px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--z800);
+  color: var(--z300); font-size: 14px; font-family: var(--sans);
+}
+.form-input::placeholder { color: var(--z700); }
+
+.evidence-requirement {
+  padding: 14px 16px; border-radius: 10px;
+  background: rgba(139,92,246,0.03); border: 1px solid rgba(139,92,246,0.1);
+  margin-bottom: 20px;
+  font-size: 13px; color: var(--z400); line-height: 1.5;
+}
+.evidence-requirement strong { color: var(--z300); font-weight: 500; }
+
+.source-row {
+  display: flex; gap: 8px; margin-bottom: 8px;
+}
+.source-row .form-input { flex: 1; }
+.add-source-btn {
+  font-size: 12px; color: var(--v400); cursor: pointer;
+  background: none; border: none; font-family: var(--sans);
+  padding: 4px 0;
+}
+
+/* ══════════════════════════════════════════
+   REVIEW & SUBMIT (Step 3)
+   ══════════════════════════════════════════ */
+.review-summary {
+  padding: 16px 20px; border-radius: 10px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+  margin-bottom: 16px;
+}
+.review-row {
+  display: flex; justify-content: space-between;
+  padding: 6px 0; font-size: 13px;
+}
+.review-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.04); }
+.review-label { color: var(--z500); }
+.review-value { color: var(--z200); font-weight: 500; text-align: right; max-width: 300px; }
+
+.terms-text {
+  font-size: 12px; color: var(--z600); line-height: 1.5;
+  margin-bottom: 16px; padding: 12px 16px; border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+}
+
+.submit-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 14px; border-radius: 10px;
+  background: var(--v500); color: var(--white);
+  font-size: 15px; font-weight: 600; border: none;
+  cursor: pointer; transition: opacity 150ms;
+  font-family: var(--sans);
+}
+.submit-btn:hover { opacity: 0.9; }
+
+/* ══════════════════════════════════════════
+   CONFIRMATION (Step 4)
+   ══════════════════════════════════════════ */
+.confirmation {
+  text-align: center; padding: 48px 32px;
+}
+.confirmation-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--green-surface); border: 1px solid rgba(52,211,153,0.15);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px; font-size: 24px; color: var(--green);
+}
+.confirmation h3 {
+  font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 8px;
+}
+.confirmation p {
+  font-size: 14px; color: var(--z400); line-height: 1.6; max-width: 400px; margin: 0 auto;
+}
+.confirmation .timeline {
+  margin-top: 24px; padding: 16px 20px; border-radius: 10px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+  text-align: left;
+}
+.timeline-item {
+  display: flex; gap: 12px; padding: 8px 0;
+  font-size: 13px;
+}
+.timeline-item:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.04); }
+.timeline-dot {
+  width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0;
+}
+.timeline-dot.done { background: var(--green); }
+.timeline-dot.next { background: var(--v500); }
+.timeline-dot.future { background: var(--z700); }
+.timeline-text { color: var(--z400); }
+.timeline-text strong { color: var(--z200); font-weight: 500; }
+
+/* Footer */
+.footer { padding: 48px; border-top: 1px solid var(--z900); display: flex; justify-content: center; gap: 16px; align-items: center; }
+.footer span { font-size: 14px; }
+.f-lp { font-weight: 600; color: var(--z600); }
+.f-la { font-family: var(--mono); color: var(--z700); }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><span class="lp">Product</span><span class="la">.ai</span></a>
+    <div class="nav-links">
+      <a href="#">For Shoppers</a>
+      <a href="#" class="active">Truth Graph</a>
+      <a href="#">Codex</a>
+      <a href="#">Research</a>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ══════════════════════════════════════════════════════
+       CONTEXT A: Editorial Guide Page
+       Entry points: inline axiom cards within article content
+       ══════════════════════════════════════════════════════ -->
+
+  <div class="breadcrumb">
+    <a href="#">Truth Graph</a> <span style="color:var(--z700)">/</span>
+    <a href="#">Supplements</a> <span style="color:var(--z700)">/</span>
+    <span style="color:var(--z400)">Bioavailability</span>
+  </div>
+
+  <div class="article-hero">
+    <div class="section-label">Deep Dive Guide</div>
+    <h1>Why the form of your supplement matters more than the dose</h1>
+    <div class="sub">You're probably absorbing a fraction of what the label says. Here's the physics of why - and how to fix it.</div>
+    <div class="article-meta">
+      <span>9 AXIOMS</span>
+      <span>5 MIN READ</span>
+      <span>UPDATED MAR 2026</span>
+    </div>
+  </div>
+
+  <div class="article-body">
+
+    <h2>The label lie</h2>
+    <p>When a bottle says "Magnesium 400mg," you'd reasonably assume you're getting 400mg of magnesium. You're not. The form of the mineral determines how much your body actually absorbs, and the difference isn't marginal - it's often 20x.</p>
+
+    <p>This isn't a niche biochemistry detail. It's the single most important fact about supplements that most consumers don't know, and that most supplement companies have no incentive to explain.</p>
+
+    <!-- ENTRY POINT #1: Inline axiom in article body -->
+    <div class="inline-axiom">
+      <div class="inline-axiom-header">
+        <div class="inline-axiom-id">
+          <span>SUPP-BIO-001</span>
+          <span class="badge forged"><span class="dot"></span> FORGED</span>
+        </div>
+        <div class="inline-axiom-actions">
+          <button class="challenge-link">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M140 180a12 12 0 11-24 0 12 12 0 0124 0zm36-108a60 60 0 01-32.78 53.51A8 8 0 00136 133v11a8 8 0 01-16 0v-16a8 8 0 018-8 44 44 0 10-44-44 8 8 0 01-16 0 60 60 0 0168-4z"/></svg>
+            Challenge
+          </button>
+        </div>
+      </div>
+      <div class="inline-axiom-statement">Supplement form determines bioavailability more than dosage. Magnesium glycinate absorbs at 2.3x the rate of magnesium oxide despite identical label claims.</div>
+      <div class="inline-axiom-physics">Bioavailability: glycinate 80% vs oxide 4%. The chelation bond protects the mineral through gastric acid, enabling intestinal absorption.</div>
+      <div class="inline-axiom-footer">
+        <span style="font-family:var(--mono);">Forged Feb 2026</span>
+        <span style="color:var(--z700)">-</span>
+        <span style="color:var(--green)">2 challenges resolved, axiom stands</span>
+      </div>
+    </div>
+
+    <p>The practical implication: if you're taking 400mg of magnesium oxide, you're absorbing roughly 16mg. Switch to 200mg of magnesium glycinate and you'll absorb roughly 160mg - ten times more from half the dose.</p>
+
+    <h2>Why fat-soluble vitamins need food</h2>
+    <p>Vitamins A, D, E, and K are fat-soluble. This means they require dietary fat to form the mixed micelles that enable absorption. Taking them on an empty stomach - which most people do, with their morning stack - reduces absorption by 50-80%.</p>
+
+    <!-- ENTRY POINT #1 (repeated): Another inline axiom -->
+    <div class="inline-axiom">
+      <div class="inline-axiom-header">
+        <div class="inline-axiom-id">
+          <span>SUPP-BIO-005</span>
+          <span class="badge forged"><span class="dot"></span> FORGED</span>
+        </div>
+        <div class="inline-axiom-actions">
+          <button class="challenge-link">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M140 180a12 12 0 11-24 0 12 12 0 0124 0zm36-108a60 60 0 01-32.78 53.51A8 8 0 00136 133v11a8 8 0 01-16 0v-16a8 8 0 018-8 44 44 0 10-44-44 8 8 0 01-16 0 60 60 0 0168-4z"/></svg>
+            Challenge
+          </button>
+        </div>
+      </div>
+      <div class="inline-axiom-statement">Fat-soluble vitamins (A, D, E, K) require co-ingestion with dietary fat for absorption. Taking them on an empty stomach reduces bioavailability by 50-80%.</div>
+      <div class="inline-axiom-physics">Minimum ~10-15g dietary fat needed for micelle formation. Without fat, vitamin solubilization and transepithelial absorption is insufficient.</div>
+      <div class="inline-axiom-footer">
+        <span style="font-family:var(--mono);">Forged Feb 2026</span>
+        <span style="color:var(--z700)">-</span>
+        <span>No challenges</span>
+      </div>
+    </div>
+
+    <p>The fix is simple: take fat-soluble vitamins with a meal that contains fat. Even a tablespoon of olive oil or a handful of nuts is enough.</p>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CONTEXT B: Product Verdict Page
+     Entry points: axiom rows driving the verdict
+     ══════════════════════════════════════════════════════ -->
+
+<div style="border-top:2px dashed rgba(139,92,246,0.15);margin:0 48px;"></div>
+
+<div class="content">
+  <div style="padding:40px 0 0;">
+    <div class="section-label">Entry Point Context B: Product Verdict</div>
+    <p style="font-size:14px;color:var(--z500);margin-bottom:24px;">When a consumer sees a verdict about a specific product, each axiom driving that verdict is challengeable.</p>
+  </div>
+
+  <!-- ENTRY POINT #2: Verdict card with challengeable axiom rows -->
+  <div class="verdict-card">
+    <div class="verdict-header">
+      <span class="verdict-badge caution">CAUTION</span>
+      <span class="verdict-product">Athletic Greens AG1</span>
+    </div>
+    <div class="verdict-text">Overpriced for what it delivers. Proprietary blend hides individual ingredient doses, making clinical efficacy unverifiable. The vitamin/mineral portion duplicates a $0.10/day multivitamin. You'd get more verified nutrition from targeted supplements based on actual bloodwork.</div>
+
+    <div class="verdict-axioms-label">AXIOMS DRIVING THIS VERDICT</div>
+
+    <div class="verdict-axiom-row">
+      <div class="verdict-axiom-left">
+        <div class="verdict-axiom-id">SUPP-LABEL-003</div>
+        <div class="verdict-axiom-text">89% of supplement performance labels contain inaccurate claims. Proprietary blends prevent dose verification.</div>
+      </div>
+      <button class="verdict-axiom-challenge">
+        <svg width="10" height="10" viewBox="0 0 256 256" fill="currentColor"><path d="M140 180a12 12 0 11-24 0 12 12 0 0124 0zm36-108a60 60 0 01-32.78 53.51A8 8 0 00136 133v11a8 8 0 01-16 0v-16a8 8 0 018-8 44 44 0 10-44-44 8 8 0 01-16 0 60 60 0 0168-4z"/></svg>
+        Challenge
+      </button>
+    </div>
+
+    <div class="verdict-axiom-row">
+      <div class="verdict-axiom-left">
+        <div class="verdict-axiom-id">SUPP-ECON-002</div>
+        <div class="verdict-axiom-text">DTC supplement brands command 30-50% affiliate commissions, creating structural incentive bias in review sites.</div>
+      </div>
+      <button class="verdict-axiom-challenge" style="color:var(--amber);">
+        <svg width="10" height="10" viewBox="0 0 256 256" fill="currentColor"><path d="M140 180a12 12 0 11-24 0 12 12 0 0124 0zm36-108a60 60 0 01-32.78 53.51A8 8 0 00136 133v11a8 8 0 01-16 0v-16a8 8 0 018-8 44 44 0 10-44-44 8 8 0 01-16 0 60 60 0 0168-4z"/></svg>
+        Under review
+      </button>
+    </div>
+
+    <div class="verdict-axiom-row">
+      <div class="verdict-axiom-left">
+        <div class="verdict-axiom-id">SUPP-VERIFY-001</div>
+        <div class="verdict-axiom-text">Three third-party verification bodies provide meaningful quality signals: USP, NSF, ConsumerLab.</div>
+      </div>
+      <button class="verdict-axiom-challenge">
+        <svg width="10" height="10" viewBox="0 0 256 256" fill="currentColor"><path d="M140 180a12 12 0 11-24 0 12 12 0 0124 0zm36-108a60 60 0 01-32.78 53.51A8 8 0 00136 133v11a8 8 0 01-16 0v-16a8 8 0 018-8 44 44 0 10-44-44 8 8 0 01-16 0 60 60 0 0168-4z"/></svg>
+        Challenge
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     THE CHALLENGE FLOW (4 steps)
+     What happens after you click "Challenge"
+     ══════════════════════════════════════════════════════ -->
+
+<div style="border-top:2px dashed rgba(139,92,246,0.15);margin:0 48px;"></div>
+
+<div class="content">
+  <div style="padding:48px 0 0;text-align:center;">
+    <div class="section-label" style="justify-content:center;">Challenge Flow</div>
+    <h2 style="font-size:28px;font-weight:500;color:var(--white);margin-bottom:8px;">What happens when you click "Challenge"</h2>
+    <p style="font-size:15px;color:var(--z400);max-width:500px;margin:0 auto 48px;">Four steps. Under two minutes. Your evidence enters our intelligence system.</p>
+  </div>
+
+  <div class="challenge-flow">
+
+    <!-- STEP 1: Pre-seed (What kind of challenge?) -->
+    <div class="flow-step">
+      <div class="flow-step-label"><span class="step-num">1</span> SELECT CHALLENGE TYPE</div>
+      <h3>What's your concern?</h3>
+      <div class="desc">Select the type of issue you've identified with this axiom.</div>
+
+      <div class="challenged-axiom">
+        <div class="ca-id">SUPP-BIO-001</div>
+        <div class="ca-text">Supplement form determines bioavailability more than dosage. Magnesium glycinate absorbs at 2.3x the rate of magnesium oxide despite identical label claims.</div>
+      </div>
+
+      <div class="preseed-options">
+        <div class="preseed-option selected">
+          <div class="preseed-radio"></div>
+          <div class="preseed-option-text">
+            <div class="preseed-option-title">This is inaccurate</div>
+            <div class="preseed-option-desc">The claim is factually wrong or the numbers are incorrect</div>
+          </div>
+        </div>
+        <div class="preseed-option">
+          <div class="preseed-radio"></div>
+          <div class="preseed-option-text">
+            <div class="preseed-option-title">This is outdated</div>
+            <div class="preseed-option-desc">New research or data changes the conclusion</div>
+          </div>
+        </div>
+        <div class="preseed-option">
+          <div class="preseed-radio"></div>
+          <div class="preseed-option-text">
+            <div class="preseed-option-title">This is missing nuance</div>
+            <div class="preseed-option-desc">The claim is partially true but oversimplified or incomplete</div>
+          </div>
+        </div>
+        <div class="preseed-option">
+          <div class="preseed-radio"></div>
+          <div class="preseed-option-text">
+            <div class="preseed-option-title">Something is missing entirely</div>
+            <div class="preseed-option-desc">There's an important claim that should exist in this category but doesn't</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="flow-next-btn">Continue &#8594;</button>
+    </div>
+
+    <!-- STEP 2: Evidence -->
+    <div class="flow-step">
+      <div class="flow-step-label"><span class="step-num">2</span> PROVIDE EVIDENCE</div>
+      <h3>Show us what you know</h3>
+      <div class="desc">Describe the issue and provide a verifiable source. Challenges without evidence can't be evaluated.</div>
+
+      <div class="evidence-requirement">
+        <strong>What counts as evidence:</strong> Published studies, lab reports, clinical trial data, regulatory filings, manufacturer test results, third-party certifications. We weight peer-reviewed sources highest, but any verifiable data is considered.
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">What's wrong and why?</label>
+        <textarea class="form-textarea" placeholder="The 2.3x figure overstates the bioavailability gap. A 2023 meta-analysis by Walker et al. found the range is 1.6-2.1x across chelated forms, and this varies significantly by individual GI pH levels..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Source (at least one required)</label>
+        <div class="form-hint">Link to the evidence. DOIs, PubMed IDs, and direct URLs to published research are preferred.</div>
+        <div class="source-row">
+          <input class="form-input" type="url" placeholder="https://doi.org/10.1234/example" value="https://doi.org/10.1016/j.jand.2023.04.012">
+        </div>
+        <div class="source-row">
+          <input class="form-input" type="url" placeholder="Add another source (optional)">
+        </div>
+        <button class="add-source-btn">+ Add another source</button>
+      </div>
+
+      <button class="flow-next-btn">Continue &#8594;</button>
+    </div>
+
+    <!-- STEP 3: Review & Submit -->
+    <div class="flow-step">
+      <div class="flow-step-label"><span class="step-num">3</span> REVIEW & SUBMIT</div>
+      <h3>Confirm your challenge</h3>
+
+      <div class="review-summary">
+        <div class="review-row">
+          <span class="review-label">Axiom</span>
+          <span class="review-value">SUPP-BIO-001 (Bioavailability)</span>
+        </div>
+        <div class="review-row">
+          <span class="review-label">Challenge type</span>
+          <span class="review-value">Inaccurate</span>
+        </div>
+        <div class="review-row">
+          <span class="review-label">Sources</span>
+          <span class="review-value">1 provided</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Your email (for resolution notification)</label>
+        <input class="form-input" type="email" placeholder="you@example.com">
+      </div>
+
+      <div class="terms-text">By submitting, your evidence enters Product.ai's Axiomatic Intelligence system for evaluation. All evidence becomes part of our knowledge base. Challenge outcomes are published on the axiom's public page. Evaluation typically takes 5-10 business days.</div>
+
+      <button class="submit-btn">Submit Challenge</button>
+    </div>
+
+    <!-- STEP 4: Confirmation -->
+    <div class="flow-step">
+      <div class="flow-step-label"><span class="step-num">4</span> SUBMITTED</div>
+
+      <div class="confirmation">
+        <div class="confirmation-icon">&#10003;</div>
+        <h3>Challenge submitted</h3>
+        <p>Your evidence has entered our evaluation pipeline. You'll receive an email when the review is complete.</p>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-text"><strong>Submitted</strong> - Your challenge is in the system</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot next"></div>
+            <div class="timeline-text"><strong>Evidence triage</strong> - We verify your source meets quality thresholds (1-2 days)</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot future"></div>
+            <div class="timeline-text"><strong>Adversarial re-evaluation</strong> - If evidence qualifies, the axiom is re-forged through our intelligence system (3-7 days)</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot future"></div>
+            <div class="timeline-text"><strong>Resolution published</strong> - Outcome posted on axiom page. You're notified via email.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <span class="f-lp">Product</span><span class="f-la">.ai</span>
+</div>
+
+</body>
+</html>

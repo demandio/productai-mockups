@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Consumer Surfaces Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar { display: none; }
+
+:root {
+  --zinc-950: #09090B;
+  --zinc-900: #18181B;
+  --zinc-800: #27272A;
+  --zinc-700: #3F3F46;
+  --zinc-600: #52525B;
+  --zinc-500: #71717A;
+  --zinc-400: #A1A1AA;
+  --zinc-300: #D4D4D8;
+  --zinc-200: #E4E4E7;
+  --zinc-100: #F4F4F5;
+  --zinc-50: #FAFAFA;
+  --violet-500: #8B5CF6;
+  --violet-400: #A78BFA;
+  --violet-600: #7C3AED;
+  --violet-900: #1e1035;
+  --green-500: #22C55E;
+  --green-400: #4ADE80;
+  --green-900: #0a2614;
+  --amber-500: #F59E0B;
+  --amber-400: #FBBF24;
+  --amber-900: #2a1a04;
+  --red-500: #EF4444;
+  --red-400: #F87171;
+  --red-900: #2a0a0a;
+  --blue-500: #3B82F6;
+  --blue-400: #60A3FA;
+  --card-bg: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.06);
+  --border-hairline: 0.5px solid rgba(255,255,255,0.06);
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --font-features: "ss02" 1, "liga" 0, "clig" 0;
+}
+
+html {
+  background: var(--zinc-950);
+  color: var(--zinc-50);
+  font-family: var(--font-sans);
+  font-feature-settings: var(--font-features);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px 120px;
+}
+
+/* -- Typography -- */
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zinc-500);
+}
+.label-violet { color: var(--violet-500); }
+.label-green { color: var(--green-500); }
+.label-amber { color: var(--amber-500); }
+.label-red { color: var(--red-500); }
+.label-blue { color: var(--blue-500); }
+
+h1 {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--zinc-50);
+}
+h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--zinc-50);
+  margin-bottom: 12px;
+}
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--zinc-50);
+  margin-bottom: 8px;
+}
+h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--zinc-300);
+  margin-bottom: 4px;
+}
+p, .body-text {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--zinc-300);
+}
+.body-large {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--zinc-300);
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* -- Layout -- */
+.section {
+  margin-top: 96px;
+}
+.section-divider {
+  width: 100%;
+  height: 0.5px;
+  background: rgba(255,255,255,0.06);
+  margin-bottom: 48px;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.grid-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* -- Cards -- */
+.card {
+  background: var(--card-bg);
+  border: var(--border-hairline);
+  border-radius: 12px;
+  padding: 24px;
+}
+.card-sm {
+  background: var(--card-bg);
+  border: var(--border-hairline);
+  border-radius: 8px;
+  padding: 16px;
+}
+.card-glow-violet {
+  border-color: rgba(139,92,246,0.15);
+  background: linear-gradient(135deg, rgba(139,92,246,0.04) 0%, var(--card-bg) 100%);
+}
+.card-glow-green {
+  border-color: rgba(34,197,94,0.15);
+  background: linear-gradient(135deg, rgba(34,197,94,0.04) 0%, var(--card-bg) 100%);
+}
+.card-glow-amber {
+  border-color: rgba(245,158,11,0.15);
+  background: linear-gradient(135deg, rgba(245,158,11,0.04) 0%, var(--card-bg) 100%);
+}
+.card-glow-red {
+  border-color: rgba(239,68,68,0.15);
+  background: linear-gradient(135deg, rgba(239,68,68,0.04) 0%, var(--card-bg) 100%);
+}
+.card-glow-blue {
+  border-color: rgba(59,130,246,0.15);
+  background: linear-gradient(135deg, rgba(59,130,246,0.04) 0%, var(--card-bg) 100%);
+}
+
+/* -- Specific Components -- */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 64px;
+  padding-bottom: 32px;
+}
+.hero-subtitle {
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 400;
+  color: var(--zinc-400);
+  margin-top: 16px;
+  max-width: 600px;
+}
+.brand-line {
+  display: inline-block;
+  padding: 6px 14px;
+  border: var(--border-hairline);
+  border-radius: 100px;
+  margin-bottom: 24px;
+}
+
+.thesis-quote {
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--zinc-100);
+  border-left: 2px solid var(--violet-500);
+  padding-left: 24px;
+  margin: 32px 0;
+  max-width: 800px;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.dot-violet { background: var(--violet-500); }
+.dot-green { background: var(--green-500); }
+.dot-amber { background: var(--amber-500); }
+.dot-red { background: var(--red-500); }
+.dot-blue { background: var(--blue-500); }
+
+.icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 16px;
+  border: var(--border-hairline);
+}
+.icon-circle-violet { background: rgba(139,92,246,0.1); color: var(--violet-400); }
+.icon-circle-green { background: rgba(34,197,94,0.1); color: var(--green-400); }
+.icon-circle-amber { background: rgba(245,158,11,0.1); color: var(--amber-400); }
+.icon-circle-red { background: rgba(239,68,68,0.1); color: var(--red-400); }
+.icon-circle-blue { background: rgba(59,130,246,0.1); color: var(--blue-400); }
+
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.tag-violet { background: rgba(139,92,246,0.12); color: var(--violet-400); }
+.tag-green { background: rgba(34,197,94,0.12); color: var(--green-400); }
+.tag-amber { background: rgba(245,158,11,0.12); color: var(--amber-400); }
+.tag-red { background: rgba(239,68,68,0.12); color: var(--red-400); }
+.tag-blue { background: rgba(59,130,246,0.12); color: var(--blue-400); }
+
+.timeline-bar {
+  display: flex;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 24px 0 12px;
+}
+
+.stack-layer {
+  border: var(--border-hairline);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.stack-layer + .stack-layer {
+  margin-top: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.stack-layer:not(:last-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.stack-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--violet-500);
+  min-width: 20px;
+}
+
+.coexist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.coexist-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--zinc-500);
+  border-bottom: var(--border-hairline);
+}
+.coexist-table td {
+  padding: 10px 16px;
+  color: var(--zinc-300);
+  border-bottom: var(--border-hairline);
+}
+.coexist-table tr:last-child td { border-bottom: none; }
+
+.nav-diagram {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  justify-content: center;
+  margin: 32px 0;
+}
+.nav-item {
+  text-align: center;
+  padding: 20px 32px;
+  border: var(--border-hairline);
+  min-width: 160px;
+}
+.nav-item:first-child { border-radius: 12px 0 0 12px; }
+.nav-item:last-child { border-radius: 0 12px 12px 0; }
+.nav-item + .nav-item { border-left: none; }
+.nav-item-label {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--zinc-50);
+  margin-top: 8px;
+}
+.nav-item-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--zinc-500);
+  margin-top: 4px;
+}
+
+.question-list {
+  list-style: none;
+  counter-reset: q;
+}
+.question-list li {
+  counter-increment: q;
+  padding: 16px 0;
+  border-bottom: var(--border-hairline);
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+}
+.question-list li:last-child { border-bottom: none; }
+.question-list li::before {
+  content: counter(q, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--violet-500);
+  min-width: 24px;
+}
+
+.flow-steps {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+.flow-step {
+  flex: 1;
+  padding: 20px;
+  border: var(--border-hairline);
+  position: relative;
+}
+.flow-step:first-child { border-radius: 12px 0 0 12px; }
+.flow-step:last-child { border-radius: 0 12px 12px 0; }
+.flow-step + .flow-step { border-left: none; }
+.flow-step-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--zinc-500);
+  margin-bottom: 8px;
+}
+@media (max-width: 768px) {
+  .flow-steps { flex-direction: column; }
+  .flow-step { border-radius: 0 !important; }
+  .flow-step + .flow-step { border-left: var(--border-hairline); border-top: none; }
+  .nav-diagram { flex-direction: column; }
+  .nav-item { border-radius: 0 !important; min-width: 100%; }
+  .nav-item + .nav-item { border-left: var(--border-hairline); border-top: none; }
+}
+
+.era-card {
+  position: relative;
+  overflow: hidden;
+}
+.era-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+}
+.era-now::before { background: var(--green-500); }
+.era-mid::before { background: var(--violet-500); }
+.era-far::before { background: var(--amber-500); }
+
+.survive-col {
+  padding: 24px;
+  border: var(--border-hairline);
+  border-radius: 12px;
+}
+.survive-col h4 {
+  margin-bottom: 16px;
+}
+.survive-item {
+  padding: 10px 0;
+  border-bottom: var(--border-hairline);
+  font-size: 14px;
+  color: var(--zinc-300);
+  line-height: 1.5;
+}
+.survive-item:last-child { border-bottom: none; }
+
+.badge-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: var(--border-hairline);
+}
+.badge-row:last-child { border-bottom: none; }
+.badge-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--zinc-600);
+  flex-shrink: 0;
+}
+.badge-dot-green { background: var(--green-500); border-color: var(--green-500); }
+.badge-dot-violet { background: var(--violet-500); border-color: var(--violet-500); }
+
+.spacer-sm { height: 24px; }
+.spacer-md { height: 48px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<div class="hero">
+  <div class="brand-line">
+    <span class="label label-violet">Product.ai Consumer Surfaces Strategy</span>
+  </div>
+  <h1>The Three Eras<br>of Shopping.</h1>
+  <p class="hero-subtitle">How shopping is changing, and how Product.ai is positioned to win across every era.</p>
+  <div style="margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap;">
+    <span class="tag tag-violet">Mobile App</span>
+    <span class="tag tag-violet">Desktop Extension</span>
+  </div>
+  <p class="mono" style="color: var(--zinc-500); margin-top: 48px;">v1.0 / March 2026</p>
+</div>
+
+<!-- ===================== THREE ERAS (NOW FIRST) ===================== -->
+<div class="section">
+  <div class="section-divider"></div>
+  <span class="label">01 / Context</span>
+  <h2 style="margin-top: 16px;">Three Eras of Shopping</h2>
+  <p style="margin-bottom: 32px; max-width: 640px;">Shopping is undergoing a structural transformation. The surfaces we build today must survive a transition from human-driven browsing to agent-mediated commerce.</p>
+
+  <!-- Timeline Bar -->
+  <div class="timeline-bar">
+    <div style="flex: 2; background: var(--green-500); border-radius: 2px 0 0 2px;"></div>
+    <div style="flex: 2; background: var(--violet-500); margin-left: 2px;"></div>
+    <div style="flex: 3; background: var(--amber-500); margin-left: 2px; border-radius: 0 2px 2px 0;"></div>
+  </div>
+  <div style="display: flex; margin-bottom: 24px;">
+    <div style="flex: 2;"><span class="mono" style="color: var(--green-400); font-size: 11px;">Now</span></div>
+    <div style="flex: 2;"><span class="mono" style="color: var(--violet-400); font-size: 11px;">~2027</span></div>
+    <div style="flex: 3; text-align: right;"><span class="mono" style="color: var(--amber-400); font-size: 11px;">~2029+</span></div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card era-card era-now">
+      <span class="tag tag-green" style="margin-bottom: 12px;">Era 1 / Now</span>
+      <h3>Human-Driven, Tool-Augmented</h3>
+      <p style="font-size: 13px; color: var(--zinc-400); margin-top: 8px;">Users browse, search, click. Extensions and apps augment. Product.ai surfaces are standalone tools the user opens deliberately.</p>
+    </div>
+    <div class="card era-card era-mid">
+      <span class="tag tag-violet" style="margin-bottom: 12px;">Era 2 / ~2027-2029</span>
+      <h3>Agent-Advised, Human-Confirmed</h3>
+      <p style="font-size: 13px; color: var(--zinc-400); margin-top: 8px;">OS agents mediate shopping. Users set goals, agents do work, users confirm. Product.ai integrates via App Intents and MCP.</p>
+    </div>
+    <div class="card era-card era-far">
+      <span class="tag tag-amber" style="margin-bottom: 12px;">Era 3 / ~2029+</span>
+      <h3>Agent-Autonomous, Human-Governed</h3>
+      <p style="font-size: 13px; color: var(--zinc-400); margin-top: 8px;">Agents execute end-to-end. My Radar becomes the primary interface. Biometric Presence Gate blocks full autonomy on iOS.</p>
+    </div>
+  </div>
+
+  <!-- Survives / Doesn't -->
+  <div class="spacer-md"></div>
+  <div class="grid-2">
+    <div class="survive-col" style="border-color: rgba(34,197,94,0.15);">
+      <h4 style="color: var(--green-400);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;"><path d="M20 6L9 17l-5-5"/></svg>
+        What Survives Every Era
+      </h4>
+      <div class="survive-item"><strong style="color: var(--zinc-200);">The intelligence layer</strong> - Truth Graph + Commerce Graph + Preference Graph. Surface-agnostic. Whether served by an app, extension, MCP server, or OS agent.</div>
+      <div class="survive-item"><strong style="color: var(--zinc-200);">Verification infrastructure</strong> - Protocol commerce makes this MORE valuable. Structured rejection codes create richer signal than DOM observation.</div>
+      <div class="survive-item"><strong style="color: var(--zinc-200);">The Preference Graph</strong> - Deepens over time. Creates genuine switching cost. OS agents start from zero with every user.</div>
+    </div>
+    <div class="survive-col" style="border-color: rgba(239,68,68,0.1);">
+      <h4 style="color: var(--red-400);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        What Doesn't Survive
+      </h4>
+      <div class="survive-item"><strong style="color: var(--zinc-200);">DOM injection</strong> - Permission ratchet, iframe isolation, and protocol commerce collectively end this model.</div>
+      <div class="survive-item"><strong style="color: var(--zinc-200);">Installation as distribution</strong> - MCP servers, APIs, OS agent integrations reach users without installation.</div>
+      <div class="survive-item"><strong style="color: var(--zinc-200);">Brute-force code testing</strong> - Protocol commerce replacement semantics and the Honey precedent make this extinct.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PRODUCT.AI THESIS ===================== -->
+<div class="section">
+  <div class="section-divider"></div>
+  <span class="label">02 / Product.ai</span>
+  <h2 style="margin-top: 16px;">Know Before You Buy</h2>
+
+  <div class="thesis-quote">
+    Verified shopping intelligence that changes purchase decisions - delivered through conversation, at the point of shopping, and proactively when things change.
+  </div>
+
+  <p class="body-large" style="max-width: 720px;">
+    Product.ai is the consumer AI shopping advisor. It tells you what to buy, where to get the best price, and what to avoid. It earns affiliate revenue from merchant partnerships while maintaining editorial independence verified by a cryptographic trust ledger - funded by affiliate partnerships and B2A API licensing. Product.ai is free for every consumer. When you buy through a partner link, a share supports our mission.
+  </p>
+
+  <div class="spacer-md"></div>
+
+  <!-- Three Surfaces -->
+  <h3>Three Surfaces, Three Moments</h3>
+  <p style="margin-bottom: 24px; max-width: 640px;">All surfaces connect to the same Alloy intelligence backend. Same Truth Graph, Commerce Graph, Preference Graph. Conversation persists across surfaces.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="icon-circle icon-circle-violet">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"/></svg>
+      </div>
+      <span class="label label-violet" style="margin-bottom: 8px; display: block;">Exploring</span>
+      <h3>"I'm thinking about buying something"</h3>
+      <div class="spacer-sm"></div>
+      <div class="card-sm">
+        <p class="mono" style="color: var(--zinc-400); font-size: 12px;">SURFACE</p>
+        <p style="font-weight: 600; font-size: 14px; margin-top: 2px;">Mobile App (Chat)</p>
+      </div>
+      <div class="card-sm" style="margin-top: 4px;">
+        <p class="mono" style="color: var(--zinc-400); font-size: 12px;">MODEL</p>
+        <p style="font-weight: 600; font-size: 14px; margin-top: 2px;">Conversation</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="icon-circle icon-circle-blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+      </div>
+      <span class="label label-blue" style="margin-bottom: 8px; display: block;">Evaluating</span>
+      <h3>"I'm looking at a specific product"</h3>
+      <div class="spacer-sm"></div>
+      <div class="card-sm">
+        <p class="mono" style="color: var(--zinc-400); font-size: 12px;">SURFACE</p>
+        <p style="font-weight: 600; font-size: 14px; margin-top: 2px;">Extension (Side Panel)</p>
+      </div>
+      <div class="card-sm" style="margin-top: 4px;">
+        <p class="mono" style="color: var(--zinc-400); font-size: 12px;">MODEL</p>
+        <p style="font-weight: 600; font-size: 14px; margin-top: 2px;">Context-Triggered</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="icon-circle icon-circle-green">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <span class="label label-green" style="margin-bottom: 8px; display: block;">Transacting</span>
+      <h3>"I'm buying, I need a code"</h3>
+      <div class="spacer-sm"></div>
+      <div class="card-sm">
+        <p class="mono" style="color: var(--zinc-400); font-size: 12px;">SURFACE</p>
+        <p style="font-weight: 600; font-size: 14px; margin-top: 2px;">SimplyCodes Extension</p>
+      </div>
+      <div class="card-sm" style="margin-top: 4px;">
+        <p class="mono" style="color: var(--zinc-400); font-size: 12px;">MODEL</p>
+        <p style="font-weight: 600; font-size: 14px; margin-top: 2px;">Utility</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Freemium -->
+  <div class="spacer-md"></div>
+  <h3>Revenue Model</h3>
+  <p style="margin-bottom: 16px; max-width: 640px;">Product.ai is free for consumers. Revenue comes from affiliate partnerships when users purchase through partner links, plus B2A API licensing. Editorial independence maintained by structural separation of truth signals from commercial signals.</p>
+  <div class="grid-2" style="max-width: 640px;">
+    <div class="card-sm">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 600; font-size: 14px;">Free</span>
+        <span class="mono" style="color: var(--zinc-500);">Limited verdicts</span>
+      </div>
+    </div>
+    <div class="card-sm" style="border-color: rgba(139,92,246,0.2);">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 600; font-size: 14px; color: var(--violet-400);">Pro</span>
+        <span class="mono" style="color: var(--zinc-500);">Unlimited + The Lock</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MOBILE APP ===================== -->
+<div class="section">
+  <div class="section-divider"></div>
+  <span class="label">03 / Mobile App</span>
+  <h2 style="margin-top: 16px;">Conversational Shopping Intelligence</h2>
+
+  <!-- What It Is -->
+  <div class="card" style="margin-top: 32px;">
+    <span class="label label-violet" style="margin-bottom: 12px; display: block;">What It Is</span>
+    <p class="body-large" style="color: var(--zinc-100); font-weight: 500;">"Know before you buy. Scan any product for an independent, verified verdict."</p>
+    <div class="spacer-sm"></div>
+    <p style="color: var(--zinc-400); font-size: 14px;">Chat-first, camera-capable, personalization-aware. The app IS a conversation with an AI advisor that knows products, knows prices, and progressively learns about you.</p>
+    <div class="spacer-sm"></div>
+    <div class="card-sm" style="max-width: 560px;">
+      <span class="label" style="font-size: 10px;">Why Your Mom Installs It</span>
+      <p style="font-size: 13px; color: var(--zinc-400); margin-top: 6px;">"There's this app. You scan anything you're thinking about buying and it tells you if it's actually worth it. And it finds you the best price. And it doesn't try to sell you anything."</p>
+    </div>
+  </div>
+
+  <!-- UX Architecture -->
+  <div class="spacer-md"></div>
+  <h3>UX Architecture</h3>
+  <p style="margin-bottom: 24px; max-width: 600px;">Chat input at the bottom. No bottom tab bar. Hamburger menu reveals navigation. Avatar shows identity. Follows the AI chat app convention.</p>
+
+  <div class="grid-3">
+    <div class="card-sm">
+      <p class="mono" style="color: var(--violet-400); font-size: 12px; margin-bottom: 6px;">Primary Input</p>
+      <p style="font-size: 14px; font-weight: 600;">Chat Bar</p>
+      <p style="font-size: 13px; color: var(--zinc-500); margin-top: 4px;">Text, voice, camera inline. Keyboard-ready on open.</p>
+    </div>
+    <div class="card-sm">
+      <p class="mono" style="color: var(--violet-400); font-size: 12px; margin-bottom: 6px;">Navigation</p>
+      <p style="font-size: 14px; font-weight: 600;">Hamburger Drawer</p>
+      <p style="font-size: 13px; color: var(--zinc-500); margin-top: 4px;">Three nav items + conversation history + settings.</p>
+    </div>
+    <div class="card-sm">
+      <p class="mono" style="color: var(--violet-400); font-size: 12px; margin-bottom: 6px;">Identity</p>
+      <p style="font-size: 14px; font-weight: 600;">Avatar (Top Right)</p>
+      <p style="font-size: 13px; color: var(--zinc-500); margin-top: 4px;">P-Axioms, preferences, data controls, profile.</p>
+    </div>
+  </div>
+
+  <!-- Chat Modules -->
+  <div class="spacer-md"></div>
+  <h3>Verdict Types</h3>
+  <p style="margin-bottom: 24px;">Structured verdict cards as rich message bubbles. Each carries evidence, confidence scores, pros/cons, price comparison, and action bar.</p>
+
+  <div class="grid-4">
+    <div class="card-sm card-glow-green" style="text-align: center; padding: 20px 12px;">
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(34,197,94,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <p style="font-weight: 600; font-size: 14px; color: var(--green-400);">Recommended</p>
+      <p style="font-size: 12px; color: var(--zinc-500); margin-top: 4px;">The positive verdict. The 80% case.</p>
+    </div>
+    <div class="card-sm card-glow-amber" style="text-align: center; padding: 20px 12px;">
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(245,158,11,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+      </div>
+      <p style="font-weight: 600; font-size: 14px; color: var(--amber-400);">Caution</p>
+      <p style="font-size: 12px; color: var(--zinc-500); margin-top: 4px;">Product has issues. Not a kill shot.</p>
+    </div>
+    <div class="card-sm card-glow-red" style="text-align: center; padding: 20px 12px;">
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(239,68,68,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F87171" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+      <p style="font-weight: 600; font-size: 14px; color: var(--red-400);">Don't Buy This</p>
+      <p style="font-size: 12px; color: var(--zinc-500); margin-top: 4px;">Kill Shot. The trust primitive.</p>
+    </div>
+    <div class="card-sm card-glow-amber" style="text-align: center; padding: 20px 12px; border-color: rgba(245,158,11,0.08);">
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(245,158,11,0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2" opacity="0.6"><circle cx="12" cy="12" r="10"/><path d="M12 16v.01M12 8v4"/></svg>
+      </div>
+      <p style="font-weight: 600; font-size: 14px; color: var(--amber-400); opacity: 0.7;">Honest Gap</p>
+      <p style="font-size: 12px; color: var(--zinc-500); margin-top: 4px;">Insufficient verified data. Says so.</p>
+    </div>
+  </div>
+
+  <!-- Commerce Flow -->
+  <div class="spacer-md"></div>
+  <h3>Commerce Flow</h3>
+  <p style="margin-bottom: 24px; color: var(--zinc-400);">No in-app browser. No affiliate parameters. No redirect chain.</p>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">01</div>
+      <h4>Tap Price Row</h4>
+      <p style="font-size: 13px; color: var(--zinc-400);">User taps a merchant price in the verdict card.</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">02</div>
+      <h4>Code Copies</h4>
+      <p style="font-size: 13px; color: var(--zinc-400);">Code auto-copies to clipboard.</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">03</div>
+      <h4>Toast Confirms</h4>
+      <p style="font-size: 13px; color: var(--zinc-400);">"SKINCARE15 copied. Opening Ulta..."</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">04</div>
+      <h4>Safari Opens</h4>
+      <p style="font-size: 13px; color: var(--zinc-400);">Clean, unaffiliated URL in default browser.</p>
+    </div>
+  </div>
+
+  <!-- Preference Graph -->
+  <div class="spacer-md"></div>
+  <h3>Preference Graph Signal Layers</h3>
+  <p style="margin-bottom: 24px; color: var(--zinc-400);">Four layers, ordered by importance. The AI listens and remembers.</p>
+
+  <div>
+    <div class="stack-layer" style="background: rgba(139,92,246,0.06);">
+      <div class="stack-num">L1</div>
+      <div style="flex: 1;">
+        <p style="font-weight: 600; font-size: 14px;">Conversation</p>
+        <p style="font-size: 13px; color: var(--zinc-500);">Foundation. AI picks up signals naturally from chat. Ownership, price thresholds, category interests. Primary source.</p>
+      </div>
+      <span class="tag tag-violet">Foundation</span>
+    </div>
+    <div class="stack-layer" style="background: rgba(139,92,246,0.04);">
+      <div class="stack-num">L2</div>
+      <div style="flex: 1;">
+        <p style="font-weight: 600; font-size: 14px;">In-Chat Actions</p>
+        <p style="font-size: 13px; color: var(--zinc-500);">Save, Watch price, I own this, Got it. Single-tap, zero-friction. Feeds My Products and My Radar.</p>
+      </div>
+      <span class="tag tag-violet">Explicit</span>
+    </div>
+    <div class="stack-layer" style="background: rgba(139,92,246,0.025);">
+      <div class="stack-num">L3</div>
+      <div style="flex: 1;">
+        <p style="font-weight: 600; font-size: 14px;">Gmail Integration</p>
+        <p style="font-size: 13px; color: var(--zinc-500);">Progressive, not launch requirement. Bootstraps cold start by parsing purchase confirmations. User confirms all inferences.</p>
+      </div>
+      <span class="tag" style="background: rgba(255,255,255,0.04); color: var(--zinc-400);">Accelerator</span>
+    </div>
+    <div class="stack-layer" style="background: rgba(139,92,246,0.015);">
+      <div class="stack-num">L4</div>
+      <div style="flex: 1;">
+        <p style="font-weight: 600; font-size: 14px;">Proactive Follow-Up</p>
+        <p style="font-size: 13px; color: var(--zinc-500);">Sparse. Only high-intent threads. "Did you end up getting one?" Once per thread, not repeated.</p>
+      </div>
+      <span class="tag" style="background: rgba(255,255,255,0.04); color: var(--zinc-400);">Sparse</span>
+    </div>
+  </div>
+
+  <!-- Onboarding -->
+  <div class="spacer-md"></div>
+  <h3>Onboarding Flow</h3>
+  <p style="margin-bottom: 24px; color: var(--zinc-400);">Four screens, ~30 seconds. No Gmail permission. No payment. No tutorial. Prove value first.</p>
+
+  <div class="grid-4">
+    <div class="card-sm" style="text-align: center;">
+      <p class="mono" style="color: var(--violet-500); font-size: 12px; margin-bottom: 8px;">Screen 1</p>
+      <h4 style="color: var(--zinc-50);">Welcome</h4>
+      <p style="font-size: 12px; color: var(--zinc-500); margin-top: 6px;">Logo, tagline, three value props, Get Started CTA</p>
+    </div>
+    <div class="card-sm" style="text-align: center;">
+      <p class="mono" style="color: var(--violet-500); font-size: 12px; margin-bottom: 8px;">Screen 2</p>
+      <h4 style="color: var(--zinc-50);">Sign Up</h4>
+      <p style="font-size: 12px; color: var(--zinc-500); margin-top: 6px;">Google/Apple social sign-in or email. Privacy note.</p>
+    </div>
+    <div class="card-sm" style="text-align: center;">
+      <p class="mono" style="color: var(--violet-500); font-size: 12px; margin-bottom: 8px;">Screen 3</p>
+      <h4 style="color: var(--zinc-50);">Quick Profile</h4>
+      <p style="font-size: 12px; color: var(--zinc-500); margin-top: 6px;">Interest chips, price slider, ecosystem. ~10 sec. Skippable.</p>
+    </div>
+    <div class="card-sm" style="text-align: center;">
+      <p class="mono" style="color: var(--violet-500); font-size: 12px; margin-bottom: 8px;">Screen 4</p>
+      <h4 style="color: var(--zinc-50);">Ready</h4>
+      <p style="font-size: 12px; color: var(--zinc-500); margin-top: 6px;">P-Axiom pills, conversation starters, chat input ready.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== DESKTOP EXTENSION ===================== -->
+<div class="section">
+  <div class="section-divider"></div>
+  <span class="label">04 / Desktop Extension</span>
+  <h2 style="margin-top: 16px;">Side Panel Architecture</h2>
+  <p style="margin-bottom: 32px; max-width: 640px;">A Chrome side panel that serves as your second opinion at the point of shopping. 380px alongside the merchant page. Reads the URL to identify the product, then serves everything from Product.ai's backend.</p>
+
+  <!-- Invocation vs Injection -->
+  <h3 style="margin-bottom: 8px;">Invocation Model, Not Injection</h3>
+  <p style="margin-bottom: 24px; color: var(--zinc-400);">The extension never touches the merchant page DOM. No content script injection, no overlays, no host permissions. Four structural pressures are killing the injection model:</p>
+
+  <div class="grid-2" style="margin-bottom: 32px;">
+    <div class="card-sm">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <div class="dot dot-red"></div>
+        <span class="mono" style="color: var(--red-400); font-size: 12px;">Pressure 1</span>
+      </div>
+      <h4>Permission Ratchet</h4>
+      <p style="font-size: 13px; color: var(--zinc-500);">Safari defaults to per-site "Ask" with 24-hour expiration. Chrome making per-site controls more prominent.</p>
+    </div>
+    <div class="card-sm">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <div class="dot dot-red"></div>
+        <span class="mono" style="color: var(--red-400); font-size: 12px;">Pressure 2</span>
+      </div>
+      <h4>Iframe Isolation</h4>
+      <p style="font-size: 13px; color: var(--zinc-500);">Payment processors moving card inputs into cross-origin iframes, shrinking accessible checkout surface.</p>
+    </div>
+    <div class="card-sm">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <div class="dot dot-red"></div>
+        <span class="mono" style="color: var(--red-400); font-size: 12px;">Pressure 3</span>
+      </div>
+      <h4>Declarative Inversion</h4>
+      <p style="font-size: 13px; color: var(--zinc-500);">MV3 replacing programmatic decisions with declarative rules.</p>
+    </div>
+    <div class="card-sm">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <div class="dot dot-red"></div>
+        <span class="mono" style="color: var(--red-400); font-size: 12px;">Pressure 4</span>
+      </div>
+      <h4>Protocol Commerce</h4>
+      <p style="font-size: 13px; color: var(--zinc-500);">UCP/ACP replacement semantics make brute-force code testing structurally extinct.</p>
+    </div>
+  </div>
+
+  <!-- Badge States -->
+  <h3 style="margin-bottom: 16px;">Toolbar Badge States</h3>
+  <div class="card" style="max-width: 480px;">
+    <div class="badge-row">
+      <div class="badge-dot"></div>
+      <div>
+        <p style="font-size: 14px; font-weight: 500;">No Badge</p>
+        <p style="font-size: 12px; color: var(--zinc-500);">Non-commerce page or unknown product</p>
+      </div>
+    </div>
+    <div class="badge-row">
+      <div class="badge-dot badge-dot-green"></div>
+      <div>
+        <p style="font-size: 14px; font-weight: 500; color: var(--green-400);">Green Dot</p>
+        <p style="font-size: 12px; color: var(--zinc-500);">Verdict available for this product</p>
+      </div>
+    </div>
+    <div class="badge-row">
+      <div class="badge-dot badge-dot-violet"></div>
+      <div>
+        <p style="font-size: 14px; font-weight: 500; color: var(--violet-400);">Violet Dot</p>
+        <p style="font-size: 12px; color: var(--zinc-500);">Deep analysis available (L3+)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SC Coexistence -->
+  <div class="spacer-md"></div>
+  <h3 style="margin-bottom: 16px;">SC Extension Coexistence</h3>
+  <div class="card" style="overflow-x: auto;">
+    <table class="coexist-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Product.ai Extension</th>
+          <th>SC Extension</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color: var(--zinc-500);">Architecture</td>
+          <td>Side panel (invocation)</td>
+          <td>Popup (contextual)</td>
+        </tr>
+        <tr>
+          <td style="color: var(--zinc-500);">Trigger</td>
+          <td>User clicks icon</td>
+          <td>Badge lights up at checkout</td>
+        </tr>
+        <tr>
+          <td style="color: var(--zinc-500);">Permissions</td>
+          <td>None (reads URL only)</td>
+          <td>Minimal (URL matching)</td>
+        </tr>
+        <tr>
+          <td style="color: var(--zinc-500);">Content</td>
+          <td>Verdicts, prices, evidence, chat</td>
+          <td>Coupon codes</td>
+        </tr>
+        <tr>
+          <td style="color: var(--zinc-500);">Revenue</td>
+          <td><span class="tag tag-green" style="font-size: 10px;">Free + Affiliate</span></td>
+          <td><span class="tag tag-green" style="font-size: 10px;">Affiliate</span></td>
+        </tr>
+        <tr>
+          <td style="color: var(--zinc-500);">DOM Injection</td>
+          <td>None</td>
+          <td>None (popup only)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top: 12px; font-size: 13px; color: var(--zinc-500);">They complement. Product.ai helps you decide. SC helps you save.</p>
+</div>
+
+<!-- ===================== APP IA ===================== -->
+<div class="section">
+  <div class="section-divider"></div>
+  <span class="label">05 / App Information Architecture</span>
+  <h2 style="margin-top: 16px;">Three Navigation Items</h2>
+  <p style="margin-bottom: 16px; max-width: 640px;">Hamburger drawer reveals navigation. Conversation history lives below as a chronological thread list. Footer: Settings, About Product.ai.</p>
+
+  <div class="nav-diagram">
+    <div class="nav-item" style="background: rgba(139,92,246,0.04);">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <div class="nav-item-label">Home</div>
+      <div class="nav-item-sub">Personalized feed, For You cards, recent threads</div>
+    </div>
+    <div class="nav-item" style="background: rgba(139,92,246,0.04);">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+      <div class="nav-item-label">My Products</div>
+      <div class="nav-item-sub">Own (registry) + Want (watchlist)</div>
+    </div>
+    <div class="nav-item" style="background: rgba(139,92,246,0.04);">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <div class="nav-item-label">My Radar</div>
+      <div class="nav-item-sub">Price drops, restocks, releases, reorders, deals, updates</div>
+    </div>
+  </div>
+
+  <!-- My Radar Signal Types -->
+  <div class="spacer-md"></div>
+  <h3 style="margin-bottom: 16px;">My Radar Signal Types</h3>
+  <div class="grid-3">
+    <div class="card-sm card-glow-green" style="padding: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <div class="dot dot-green"></div>
+        <span style="font-weight: 600; font-size: 13px; color: var(--green-400);">Price Drop</span>
+      </div>
+      <p style="font-size: 12px; color: var(--zinc-500);">Saved item hit target price</p>
+    </div>
+    <div class="card-sm card-glow-blue" style="padding: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <div class="dot dot-blue"></div>
+        <span style="font-weight: 600; font-size: 13px; color: var(--blue-400);">Back in Stock</span>
+      </div>
+      <p style="font-size: 12px; color: var(--zinc-500);">Out-of-stock item returned</p>
+    </div>
+    <div class="card-sm card-glow-violet" style="padding: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <div class="dot dot-violet"></div>
+        <span style="font-weight: 600; font-size: 13px; color: var(--violet-400);">New Release</span>
+      </div>
+      <p style="font-size: 12px; color: var(--zinc-500);">Successor to owned product</p>
+    </div>
+    <div class="card-sm card-glow-amber" style="padding: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <div class="dot dot-amber"></div>
+        <span style="font-weight: 600; font-size: 13px; color: var(--amber-400);">Reorder Soon</span>
+      </div>
+      <p style="font-size: 12px; color: var(--zinc-500);">Consumable running low</p>
+    </div>
+    <div class="card-sm card-glow-green" style="padding: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <div class="dot dot-green"></div>
+        <span style="font-weight: 600; font-size: 13px; color: var(--green-400);">Seasonal Deal</span>
+      </div>
+      <p style="font-size: 12px; color: var(--zinc-500);">Upcoming sale on saved items</p>
+    </div>
+    <div class="card-sm card-glow-violet" style="padding: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <div class="dot dot-violet"></div>
+        <span style="font-weight: 600; font-size: 13px; color: var(--violet-400);">Verdict Updated</span>
+      </div>
+      <p style="font-size: 12px; color: var(--zinc-500);">Truth Graph self-corrected</p>
+    </div>
+  </div>
+  <p style="margin-top: 12px; font-size: 13px; color: var(--zinc-500);">Every alert connects to something the user has done, owns, or saved. Nothing generic. Signal-to-noise ratio is the metric.</p>
+</div>
+
+<!-- ===================== OPEN QUESTIONS ===================== -->
+<div class="section">
+  <div class="section-divider"></div>
+  <span class="label">06 / Open Questions</span>
+  <h2 style="margin-top: 16px;">Unresolved</h2>
+
+  <ol class="question-list" style="margin-top: 24px;">
+    <li><span style="color: var(--zinc-300);">Affiliate conversion optimization - maximizing revenue per session without compromising verdict integrity. Needs validation.</span></li>
+    <li><span style="color: var(--zinc-300);">B2A API pricing and value prop - needs market testing and strategic definition.</span></li>
+    <li><span style="color: var(--zinc-300);">Cross-surface conversation sync - requires login infrastructure (Phase 2). Mobile and extension operate independently until then.</span></li>
+    <li><span style="color: var(--zinc-300);">SC extension distribution from Product.ai - the "Get codes applied automatically at checkout" upsell needs UX design and messaging refinement.</span></li>
+    <li><span style="color: var(--zinc-300);">App Intents / Siri integration - technical scoping needed. Priority for Era 2 readiness.</span></li>
+    <li><span style="color: var(--zinc-300);">WebMCP preparation - monitor Chrome 146+ for flag availability. Structure extension intelligence as typed tool interfaces now.</span></li>
+  </ol>
+</div>
+
+<!-- Footer -->
+<div style="margin-top: 120px; padding-top: 24px; border-top: var(--border-hairline);">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <span class="label label-violet">Product.ai</span>
+    <span class="label">Consumer Surfaces Strategy v1.0 / March 2026</span>
+  </div>
+</div>
+
+</body>
+</html>

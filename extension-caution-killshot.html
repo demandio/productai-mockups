@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Extension - Caution & Kill Shot Verdicts</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z850: #1F1F22; --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v400: #A384FF; --v500: #8B5CF6;
+  --a300: #CEAD50; --r400: #F64B4B;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1;
+  background: #0a0a0a; color: var(--z50);
+  display: flex; justify-content: center; align-items: flex-start;
+  min-height: 100vh; padding: 24px; gap: 32px; flex-wrap: wrap;
+}
+
+/* ── Shared Panel Frame ── */
+.panel-frame {
+  width: 380px; height: 780px;
+  background: var(--z950);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  display: flex; flex-direction: column;
+  overflow: hidden; flex-shrink: 0;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.4);
+}
+
+.frame-label {
+  text-align: center;
+  font-family: var(--mono); font-size: 11px; color: var(--z600);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+/* Panel header */
+.sp-header {
+  padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04); flex-shrink: 0;
+}
+.sp-logo { display: flex; align-items: baseline; }
+.sp-p { font-size: 15px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.sp-a { font-family: var(--mono); font-size: 15px; color: var(--v500); }
+.sp-actions { display: flex; gap: 4px; }
+.sp-btn {
+  width: 28px; height: 28px; border-radius: 6px; border: none;
+  background: rgba(255,255,255,0.04); color: var(--z500);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-btn svg { width: 15px; height: 15px; }
+
+/* Panel content */
+.sp-content { flex: 1; overflow-y: auto; padding: 14px 16px; }
+
+/* Product header */
+.sp-product { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.sp-thumb {
+  width: 56px; height: 56px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; flex-shrink: 0;
+}
+.sp-prod-info { flex: 1; min-width: 0; }
+.sp-prod-info h3 { font-size: 14px; font-weight: 500; color: var(--z200); line-height: 18px; margin-bottom: 2px; }
+.sp-prod-info .sp-brand { font-size: 11px; color: var(--z600); }
+
+/* Depth bar */
+.sp-depth {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-radius: 10px;
+  margin-bottom: 12px; font-size: 11px; font-weight: 500;
+}
+.sp-depth svg { width: 13px; height: 13px; flex-shrink: 0; }
+.sp-depth span { font-family: var(--mono); }
+.sp-depth.deep { background: rgba(139,92,246,0.06); border: 0.5px solid rgba(139,92,246,0.1); color: var(--v400); }
+
+/* Verdict card */
+.sp-verdict {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 14px; overflow: hidden; margin-bottom: 12px;
+}
+.sp-v-header {
+  padding: 12px 14px; display: flex; align-items: center; gap: 8px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+}
+.sp-v-header.caution { background: rgba(206,173,80,0.04); border-bottom-color: rgba(206,173,80,0.08); }
+.sp-v-header.killshot { background: rgba(248,113,113,0.04); border-bottom-color: rgba(248,113,113,0.08); }
+
+.sp-v-icon {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.sp-v-icon svg { width: 15px; height: 15px; }
+.sp-v-icon.warn { background: rgba(206,173,80,0.1); color: var(--a300); }
+.sp-v-icon.bad { background: rgba(248,113,113,0.1); color: var(--r400); }
+
+.sp-v-title { font-size: 14px; font-weight: 600; color: var(--white); }
+.sp-v-sub { font-size: 10px; color: var(--z600); margin-top: 1px; }
+
+.sp-v-body { padding: 12px 14px; }
+.sp-v-body p { font-size: 13px; line-height: 19px; color: var(--z400); margin-bottom: 6px; }
+.sp-v-body p:last-child { margin-bottom: 0; }
+.hl { color: var(--v400); font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.hl-w { color: var(--a300); font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.hl-r { color: var(--r400); font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.hl-g { color: #34d399; font-family: var(--mono); font-weight: 500; font-size: 12px; }
+
+/* Evidence */
+.sp-ev { margin-top: 8px; padding-top: 8px; border-top: 0.5px solid rgba(255,255,255,0.04); }
+.ev-row { display: flex; gap: 6px; padding: 4px 0; }
+.ev-dot { width: 3px; border-radius: 1.5px; flex-shrink: 0; margin-top: 3px; }
+.ev-dot.warn { background: var(--a300); }
+.ev-dot.bad { background: var(--r400); }
+.ev-dot.hi { background: #34d399; }
+.ev-txt { font-size: 11px; line-height: 15px; color: var(--z500); }
+.ev-txt .cf { font-family: var(--mono); font-size: 9px; color: var(--z700); }
+
+/* Pros/Cons */
+.sp-proscons {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-top: 8px; padding-top: 8px;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+}
+.spc-col h5 {
+  font-size: 9px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+}
+.spc-col.pros h5 { color: #34d399; }
+.spc-col.cons h5 { color: var(--a300); }
+.spc-col.severe h5 { color: var(--r400); }
+.spc-item {
+  display: flex; gap: 4px; padding: 2px 0;
+  font-size: 11px; line-height: 14px; color: var(--z500);
+}
+.spc-item .spc-d { width: 3px; height: 3px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.pros .spc-d { background: #34d399; }
+.cons .spc-d { background: var(--a300); }
+.severe .spc-d { background: var(--r400); }
+
+/* Actions */
+.sp-act-row { display: flex; gap: 6px; margin-bottom: 12px; }
+.sp-act {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 12px; border-radius: 100px;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  font-family: var(--sans); white-space: nowrap;
+}
+.sp-act svg { width: 13px; height: 13px; }
+.sp-act.primary { background: rgba(139,92,246,0.08); border: 0.5px solid rgba(139,92,246,0.2); color: var(--v400); }
+.sp-act.ghost { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06); color: var(--z500); }
+.sp-act.green { background: rgba(3,230,122,0.06); border: 0.5px solid rgba(3,230,122,0.15); color: #34d399; }
+
+/* Prices */
+.sp-prices {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 14px; overflow: hidden; margin-bottom: 12px;
+}
+.sp-pr-label {
+  padding: 10px 14px 6px;
+  font-size: 9px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--z700);
+}
+.sp-pr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 14px; border-bottom: 0.5px solid rgba(255,255,255,0.03);
+  cursor: pointer; transition: background 150ms;
+}
+.sp-pr:last-child { border-bottom: none; }
+.sp-pr:hover { background: rgba(255,255,255,0.02); }
+.sp-pr .mn { font-size: 13px; color: var(--z500); display: flex; align-items: center; gap: 4px; }
+.sp-pr .mr { display: flex; align-items: baseline; gap: 6px; }
+.sp-pr .mp { font-size: 13px; font-weight: 600; font-family: var(--mono); color: var(--z300); }
+.sp-pr .mc {
+  font-size: 9px; font-family: var(--mono); color: #34d399;
+  background: rgba(3,230,122,0.08); padding: 2px 6px; border-radius: 100px; font-weight: 500;
+}
+.sp-pr .arrow { color: var(--z800); }
+.sp-pr .arrow svg { width: 12px; height: 12px; }
+.sp-pr.best .mn { color: #34d399; font-weight: 500; }
+.sp-pr.best .mp { color: #34d399; }
+.sp-pr.current .mn { color: var(--z300); }
+.sp-pr.current::after { content: 'You are here'; font-size: 9px; font-family: var(--mono); color: var(--z700); margin-left: 4px; }
+
+.partner-dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--v500); opacity: 0.6; flex-shrink: 0;
+}
+.sp-partner-footer {
+  padding: 6px 14px 10px; border-top: 0.5px solid rgba(255,255,255,0.03);
+  font-size: 9px; color: #3f3f46; display: flex; align-items: center; gap: 4px;
+}
+.sp-partner-footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--v500); opacity: 0.4; flex-shrink: 0; }
+.sp-partner-footer a { color: var(--z600); text-decoration: underline; text-decoration-color: var(--z700); text-underline-offset: 2px; }
+
+/* Alternative */
+.sp-alt {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 12px; margin-bottom: 12px;
+}
+.sp-alt.rec { border-left: 2px solid #34d399; }
+.sp-alt-tag {
+  font-size: 9px; font-weight: 700; font-family: var(--mono);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.sp-alt-tag.good { color: #34d399; }
+.sp-alt h4 { font-size: 13px; font-weight: 500; color: var(--z200); margin-bottom: 2px; }
+.sp-alt .alt-why { font-size: 11px; color: var(--z500); line-height: 15px; margin-bottom: 4px; }
+.sp-alt .alt-pr { display: flex; align-items: baseline; gap: 6px; }
+.sp-alt .alt-price { font-size: 14px; font-weight: 600; font-family: var(--mono); color: var(--z200); }
+.sp-alt .alt-deal { font-size: 10px; font-family: var(--mono); color: #34d399; }
+
+/* Section label */
+.sp-sec {
+  font-size: 9px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--z700); padding: 8px 0 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.sp-sec .ssl { flex: 1; height: 0.5px; background: rgba(255,255,255,0.03); }
+
+/* Kill shot warning banner */
+.ks-banner {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; border-radius: 10px;
+  background: rgba(248,113,113,0.06); border: 0.5px solid rgba(248,113,113,0.12);
+  margin-bottom: 12px;
+  font-size: 12px; color: var(--r400); font-weight: 500;
+}
+.ks-banner svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* Chat input */
+.sp-input-area {
+  padding: 10px 16px 14px;
+  border-top: 0.5px solid rgba(255,255,255,0.04); flex-shrink: 0;
+}
+.sp-input {
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 8px 8px 8px 14px;
+}
+.sp-input input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--sans); font-size: 13px; color: var(--white);
+}
+.sp-input input::placeholder { color: var(--z600); }
+.sp-input-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  background: var(--v500); color: var(--white);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-input-btn svg { width: 14px; height: 14px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ -->
+<!-- CAUTION VERDICT                -->
+<!-- ═══════════════════════════════ -->
+<div>
+<div class="frame-label">Caution Verdict</div>
+<div class="panel-frame">
+  <div class="sp-header">
+    <div class="sp-logo"><span class="sp-p">Product</span><span class="sp-a">.ai</span></div>
+    <div class="sp-actions">
+      <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><polyline points="128 72 128 128 176 128"/></svg></button>
+      <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></button>
+    </div>
+  </div>
+
+  <div class="sp-content">
+    <div class="sp-product">
+      <div class="sp-thumb">&#x1F9F4;</div>
+      <div class="sp-prod-info">
+        <h3>CeraVe Skin Renewing Retinol Serum</h3>
+        <div class="sp-brand">CeraVe - Face Serum, 1 fl oz</div>
+      </div>
+    </div>
+
+    <div class="sp-depth deep">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+      Deep analysis - <span>Skincare L3</span>
+    </div>
+
+    <div class="sp-verdict">
+      <div class="sp-v-header caution">
+        <div class="sp-v-icon warn">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8 188.1L148.8 36.1a24 24 0 0 0-41.6 0L19.2 188.1A23.9 23.9 0 0 0 40 224h176a23.9 23.9 0 0 0 20.8-35.9zM120 104a8 8 0 0 1 16 0v40a8 8 0 0 1-16 0zm8 88a12 12 0 1 1 12-12 12 12 0 0 1-12 12z"/></svg>
+        </div>
+        <div>
+          <div class="sp-v-title">Caution</div>
+          <div class="sp-v-sub">Underdosed for its primary claim</div>
+        </div>
+      </div>
+      <div class="sp-v-body">
+        <p>Contains retinol at <span class="hl-w">0.3%</span>. Clinical studies showing visible wrinkle reduction used <span class="hl">0.5-1.0%</span>. At this concentration, expect mild texture improvement - not the fine line reduction marketed on the label.</p>
+        <p>The ceramide complex is genuinely good for barrier repair. But you can get that from CeraVe PM moisturizer at <span class="hl-g">$15</span> without paying the retinol premium.</p>
+
+        <div class="sp-ev">
+          <div class="ev-row">
+            <div class="ev-dot warn"></div>
+            <div class="ev-txt">Retinol concentration verified at 0.3% via independent lab testing. Below clinical threshold. <span class="cf">91% confidence</span></div>
+          </div>
+          <div class="ev-row">
+            <div class="ev-dot hi"></div>
+            <div class="ev-txt">Ceramide NP, AP, EOP complex present at effective concentrations. Barrier support claim is valid. <span class="cf">94% confidence</span></div>
+          </div>
+          <div class="ev-row">
+            <div class="ev-dot warn"></div>
+            <div class="ev-txt">No published clinical trial on this specific formulation. Claims extrapolated from ingredient-level research. <span class="cf">78% confidence</span></div>
+          </div>
+        </div>
+
+        <div class="sp-proscons">
+          <div class="spc-col pros">
+            <h5>Strengths</h5>
+            <div class="spc-item"><span class="spc-d"></span> Ceramide barrier repair</div>
+            <div class="spc-item"><span class="spc-d"></span> Niacinamide 4%</div>
+            <div class="spc-item"><span class="spc-d"></span> Fragrance-free</div>
+          </div>
+          <div class="spc-col cons">
+            <h5>Concerns</h5>
+            <div class="spc-item"><span class="spc-d"></span> Retinol underdosed</div>
+            <div class="spc-item"><span class="spc-d"></span> No clinical trial</div>
+            <div class="spc-item"><span class="spc-d"></span> Premium pricing for barrier product</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sp-act-row">
+      <div class="sp-act primary"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M168 224a8 8 0 0 1-13.9 5.4L128 200l-26.1 29.4A8 8 0 0 1 88 224V32a8 8 0 0 1 8-8h64a8 8 0 0 1 8 8z"/></svg> Save</div>
+      <div class="sp-act ghost"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M216 112v96a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8v-96"/><polyline points="96 144 128 112 160 144"/><line x1="128" y1="112" x2="128" y2="24"/></svg> Share</div>
+    </div>
+
+    <div class="sp-prices">
+      <div class="sp-pr-label">Prices</div>
+      <div class="sp-pr current">
+        <span class="mn">Amazon <span class="partner-dot"></span></span>
+        <div class="mr"><span class="mp">$18.99</span></div>
+      </div>
+      <div class="sp-pr best">
+        <span class="mn">Ulta <span class="partner-dot"></span></span>
+        <div class="mr">
+          <span class="mc">SKINCARE15</span>
+          <span class="mp">$16.14</span>
+          <span class="arrow"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></span>
+        </div>
+      </div>
+      <div class="sp-pr">
+        <span class="mn">Target</span>
+        <div class="mr"><span class="mp">$18.99</span><span class="arrow"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></span></div>
+      </div>
+      <div class="sp-partner-footer">
+        <span class="sp-partner-footer-dot"></span>
+        <span>Supports Product.ai's mission. <a href="#">Learn more</a></span>
+      </div>
+    </div>
+
+    <div class="sp-sec">Better alternative <span class="ssl"></span></div>
+    <div class="sp-alt rec">
+      <div class="sp-alt-tag good">Recommended Instead</div>
+      <h4>La Roche-Posay Retinaldehyde</h4>
+      <div class="alt-why">Retinaldehyde (0.1%) converts to retinoic acid 11x faster than retinol. Clinically tested on this exact formulation. Visible results at 12 weeks.</div>
+      <div class="alt-pr">
+        <span class="alt-price">$45.00</span>
+        <span class="alt-deal">Dermstore</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sp-input-area">
+    <div class="sp-input">
+      <input type="text" placeholder="Ask about this product...">
+      <button class="sp-input-btn"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg></button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- KILL SHOT VERDICT               -->
+<!-- ═══════════════════════════════ -->
+<div>
+<div class="frame-label">Kill Shot Verdict</div>
+<div class="panel-frame">
+  <div class="sp-header">
+    <div class="sp-logo"><span class="sp-p">Product</span><span class="sp-a">.ai</span></div>
+    <div class="sp-actions">
+      <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><polyline points="128 72 128 128 176 128"/></svg></button>
+      <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></button>
+    </div>
+  </div>
+
+  <div class="sp-content">
+    <div class="sp-product">
+      <div class="sp-thumb">&#x1F6CF;</div>
+      <div class="sp-prod-info">
+        <h3>Purple Hybrid Premier 4" - Queen</h3>
+        <div class="sp-brand">Purple - Mattress, Queen Size</div>
+      </div>
+    </div>
+
+    <div class="sp-depth deep">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+      Deep analysis - <span>Mattress L3</span>
+    </div>
+
+    <!-- Kill Shot Banner -->
+    <div class="ks-banner">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-8 56a8 8 0 0 1 16 0v56a8 8 0 0 1-16 0zm8 104a12 12 0 1 1 12-12 12 12 0 0 1-12 12z"/></svg>
+      Product.ai recommends against buying this product.
+    </div>
+
+    <div class="sp-verdict">
+      <div class="sp-v-header killshot">
+        <div class="sp-v-icon bad">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm40 112H88a8 8 0 0 1 0-16h80a8 8 0 0 1 0 16z"/></svg>
+        </div>
+        <div>
+          <div class="sp-v-title">Don't Buy This</div>
+          <div class="sp-v-sub">Structurally wrong for side sleepers</div>
+        </div>
+      </div>
+      <div class="sp-v-body">
+        <p>Purple's hyper-elastic polymer grid is engineered for <strong>back and stomach sleepers</strong>. The grid distributes weight evenly across a flat surface - great for supine, but it <span class="hl-r">fails to conform to the curved hip-shoulder profile of side sleepers</span>.</p>
+        <p>At <span class="hl-r">$2,499</span> for a mattress that actively works against your sleep position, this is the clearest don't-buy in the category.</p>
+
+        <div class="sp-ev">
+          <div class="ev-row">
+            <div class="ev-dot bad"></div>
+            <div class="ev-txt">Side sleepers show 2.3x higher hip pressure vs memory foam alternatives. Purple's own pressure map data confirms. <span class="cf">92% confidence</span></div>
+          </div>
+          <div class="ev-row">
+            <div class="ev-dot bad"></div>
+            <div class="ev-txt">Purple return rate for self-reported side sleepers: 31% vs 12% average. <span class="cf">87% confidence</span></div>
+          </div>
+          <div class="ev-row">
+            <div class="ev-dot bad"></div>
+            <div class="ev-txt">Hyper-elastic polymer degrades measurably after 18 months in hip-concentrated loading. <span class="cf">79% confidence</span></div>
+          </div>
+        </div>
+
+        <div class="sp-proscons">
+          <div class="spc-col pros">
+            <h5>If you sleep on your back</h5>
+            <div class="spc-item"><span class="spc-d"></span> Excellent airflow</div>
+            <div class="spc-item"><span class="spc-d"></span> Temperature neutral</div>
+            <div class="spc-item"><span class="spc-d"></span> Good lumbar support</div>
+          </div>
+          <div class="spc-col severe">
+            <h5>For side sleepers</h5>
+            <div class="spc-item"><span class="spc-d"></span> Hip pressure points</div>
+            <div class="spc-item"><span class="spc-d"></span> Shoulder doesn't sink</div>
+            <div class="spc-item"><span class="spc-d"></span> 31% return rate</div>
+            <div class="spc-item"><span class="spc-d"></span> Grid degradation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sp-act-row">
+      <div class="sp-act ghost"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M216 112v96a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8v-96"/><polyline points="96 144 128 112 160 144"/><line x1="128" y1="112" x2="128" y2="24"/></svg> Share</div>
+    </div>
+
+    <div class="sp-sec">What to buy instead <span class="ssl"></span></div>
+    <div class="sp-alt rec">
+      <div class="sp-alt-tag good">Top Pick for Side Sleepers</div>
+      <h4>Helix Midnight Luxe</h4>
+      <div class="alt-why">Zoned lumbar support with memory foam shoulder zone. Designed specifically for side sleepers. $200 off right now.</div>
+      <div class="alt-pr">
+        <span class="alt-price">$1,374</span>
+        <span class="alt-deal">$200 off</span>
+      </div>
+    </div>
+    <div class="sp-alt rec">
+      <div class="sp-alt-tag good">Budget Pick</div>
+      <h4>Brooklyn Bedding Signature Hybrid</h4>
+      <div class="alt-why">Medium-soft firmness with targeted hip relief. Best value in the category for side sleepers.</div>
+      <div class="alt-pr">
+        <span class="alt-price">$999</span>
+        <span class="alt-deal">Free pillows</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sp-input-area">
+    <div class="sp-input">
+      <input type="text" placeholder="Ask about this product...">
+      <button class="sp-input-btn"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg></button>
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

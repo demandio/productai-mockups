@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Mobile - My Products v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z450: #898992; --z500: #71717A; --z600: #52525B; --z700: #3F3F46;
+  --z750: #333338; --z800: #27272A; --z850: #1F1F22; --z900: #18181B;
+  --z925: #101013; --z950: #09090B; --black: #000000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v800: #5A17B7;
+  --g500: #03E67A; --g600: #02C869;
+  --a300: #CEAD50;
+  --r400: #F64B4B;
+  --b300: #6EB6FF;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { scrollbar-width: none; -ms-overflow-style: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: #080808; color: var(--z50);
+  display: flex; justify-content: center; align-items: flex-start;
+  min-height: 100vh; padding: 32px; gap: 24px;
+}
+body::-webkit-scrollbar { display: none; }
+
+.phone {
+  width: 390px; height: 844px; background: var(--z950);
+  border-radius: 52px; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 2px 4px rgba(0,0,0,0.4),
+    0 12px 40px rgba(0,0,0,0.6), 0 40px 100px -20px rgba(0,0,0,0.8);
+  flex-shrink: 0;
+}
+.island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 124px; height: 36px; background: var(--black); border-radius: 20px; z-index: 100; }
+.home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; border-radius: 100px; background: rgba(255,255,255,0.15); z-index: 100; }
+.status { position: absolute; top: 16px; left: 32px; right: 32px;
+  display: flex; justify-content: space-between; align-items: center; z-index: 90; }
+.status .time { font-size: 16px; font-weight: 600; color: var(--white); }
+.status .sys { display: flex; gap: 5px; }
+.status .sys svg { width: 16px; height: 16px; fill: var(--white); }
+.app { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
+
+/* Header */
+.hdr {
+  padding: 58px 20px 0; height: 108px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-shrink: 0;
+  background: rgba(9,9,11,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  z-index: 50; padding-bottom: 12px;
+}
+.h-l { display: flex; align-items: center; gap: 10px; }
+.h-back {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.h-back svg { width: 18px; height: 18px; }
+.h-title { font-size: 18px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.h-r { display: flex; gap: 4px; }
+.h-btn {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.h-btn svg { width: 18px; height: 18px; }
+
+/* ── Tabs ── */
+.tab-row {
+  display: flex; padding: 0 20px; flex-shrink: 0;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+}
+.tab {
+  flex: 1; padding: 12px 0;
+  text-align: center;
+  font-size: 14px; font-weight: 500;
+  color: var(--z600);
+  cursor: pointer;
+  position: relative;
+  transition: color 150ms;
+}
+.tab.active { color: var(--v400); }
+.tab.active::after {
+  content: ''; position: absolute; bottom: -0.5px; left: 20%; right: 20%;
+  height: 2px; background: var(--v500); border-radius: 1px;
+}
+.tab .tab-count {
+  font-size: 11px; font-family: var(--mono); font-weight: 600;
+  margin-left: 4px;
+}
+
+/* Content */
+.list { flex: 1; overflow-y: auto; padding: 8px 20px 40px; }
+.list::-webkit-scrollbar { display: none; }
+
+/* Summary */
+.summary {
+  display: flex; gap: 6px; padding: 8px 0 12px;
+}
+.s-chip {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px; background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 100px; font-size: 12px; color: var(--z400); font-weight: 500;
+}
+.s-chip .sn { font-family: var(--mono); font-weight: 600; color: var(--z200); }
+.s-chip .sd { width: 4px; height: 4px; border-radius: 50%; }
+.sd.g { background: #34d399; }
+.sd.a { background: var(--a300); }
+.sd.v { background: var(--v400); }
+
+/* Insight */
+.insight {
+  background: rgba(139,92,246,0.04); border: 0.5px solid rgba(139,92,246,0.1);
+  border-radius: 14px; padding: 14px; margin-bottom: 12px;
+  position: relative; overflow: hidden;
+}
+.insight::before { content: ''; position: absolute; top: 0; left: 15%; right: 15%;
+  height: 0.5px; background: linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent); }
+.insight-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.insight-ic { width: 28px; height: 28px; border-radius: 7px;
+  background: rgba(139,92,246,0.1); display: flex; align-items: center; justify-content: center; color: var(--v400); }
+.insight-ic svg { width: 14px; height: 14px; }
+.insight-t { font-size: 12px; font-weight: 600; color: var(--v300); }
+.insight-body { font-size: 13px; line-height: 18px; color: var(--z400); }
+.insight-body strong { color: var(--z300); font-weight: 500; }
+
+/* Category */
+.cat { font-size: 10px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--z700); padding: 12px 0 8px; }
+
+/* Product Card */
+.pc {
+  background: rgba(255,255,255,0.02); border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 14px; padding: 14px; margin-bottom: 8px;
+  cursor: pointer; transition: border-color 200ms;
+}
+.pc:active { border-color: rgba(255,255,255,0.12); }
+.pc-top { display: flex; gap: 12px; align-items: flex-start; }
+.pc-thumb {
+  width: 48px; height: 48px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.05);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+.pc-info { flex: 1; min-width: 0; }
+.pc-info .pc-name { font-size: 14px; font-weight: 500; color: var(--z200); line-height: 18px; margin-bottom: 2px; }
+.pc-info .pc-brand { font-size: 11px; color: var(--z600); }
+.pc-right { flex-shrink: 0; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.pc-badge { padding: 3px 8px; border-radius: 100px; font-size: 10px; font-weight: 600; }
+.pc-badge.good { background: rgba(3,230,122,0.08); color: #34d399; }
+.pc-badge.warn { background: rgba(206,173,80,0.08); color: var(--a300); }
+.pc-badge.great { background: rgba(139,92,246,0.1); color: var(--v400); }
+.pc-price { font-size: 12px; font-family: var(--mono); color: var(--z500); }
+
+/* Meta tags */
+.pc-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; padding-top: 10px;
+  border-top: 0.5px solid rgba(255,255,255,0.03); }
+.pm {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 3px 8px; border-radius: 100px;
+  font-size: 10px; font-weight: 500;
+}
+.pm svg { width: 10px; height: 10px; }
+.pm.reorder { background: rgba(206,173,80,0.06); border: 0.5px solid rgba(206,173,80,0.12); color: var(--a300); }
+.pm.upgrade { background: rgba(139,92,246,0.06); border: 0.5px solid rgba(139,92,246,0.12); color: var(--v400); }
+.pm.drop { background: rgba(3,230,122,0.06); border: 0.5px solid rgba(3,230,122,0.12); color: #34d399; }
+.pm.date { background: none; color: var(--z700); font-family: var(--mono); }
+
+/* ── Want Tab - Price tracking cards ── */
+.wc {
+  background: rgba(255,255,255,0.02); border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 14px; margin-bottom: 8px; overflow: hidden;
+  cursor: pointer; transition: border-color 200ms;
+}
+.wc:active { border-color: rgba(255,255,255,0.12); }
+.wc.hit { border-color: rgba(3,230,122,0.15); }
+.wc.hit::before { content: ''; display: block; height: 0.5px;
+  background: linear-gradient(90deg, transparent 10%, rgba(3,230,122,0.3) 50%, transparent 90%); }
+
+.wc-main { padding: 14px; display: flex; gap: 12px; align-items: flex-start; }
+.wc-thumb {
+  width: 48px; height: 48px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.05);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+.wc-info { flex: 1; min-width: 0; }
+.wc-info .wc-name { font-size: 14px; font-weight: 500; color: var(--z200); line-height: 18px; margin-bottom: 2px; }
+.wc-info .wc-brand { font-size: 11px; color: var(--z600); margin-bottom: 4px; }
+.wc-row { display: flex; align-items: center; gap: 6px; }
+.wc-badge { padding: 2px 7px; border-radius: 100px; font-size: 9px; font-weight: 600; }
+.wc-badge.good { background: rgba(3,230,122,0.08); color: #34d399; }
+.wc-badge.great { background: rgba(139,92,246,0.1); color: var(--v400); }
+.wc-from { font-size: 10px; font-family: var(--mono); color: var(--z750); }
+
+/* Price section */
+.wc-price {
+  padding: 10px 14px; background: rgba(255,255,255,0.015);
+  border-top: 0.5px solid rgba(255,255,255,0.03);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.wc-pl { display: flex; flex-direction: column; }
+.wc-now { font-size: 16px; font-weight: 600; font-family: var(--mono); color: var(--z200); }
+.wc-now.green { color: #34d399; }
+.wc-ctx { font-size: 10px; font-family: var(--mono); color: var(--z700); margin-top: 1px; }
+.wc-pr { text-align: right; }
+.wc-target { display: flex; align-items: center; gap: 4px; }
+.wc-tl { font-size: 10px; font-family: var(--mono); color: var(--z700); }
+.wc-tv { font-size: 13px; font-weight: 600; font-family: var(--mono); color: var(--v400); }
+
+/* Sparkline */
+.spark { display: flex; align-items: flex-end; gap: 2px; height: 20px; margin-top: 6px; }
+.sbar { flex: 1; border-radius: 1px; background: rgba(255,255,255,0.05); min-width: 0; }
+.sbar.now { background: var(--v400); }
+.sbar.low { background: rgba(3,230,122,0.25); }
+
+/* Hit badge */
+.hit-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; background: rgba(3,230,122,0.1); border-radius: 100px;
+  font-size: 10px; font-weight: 600; font-family: var(--mono); color: #34d399;
+  margin-bottom: 4px;
+}
+.hit-tag .hd { width: 4px; height: 4px; border-radius: 50%; background: #34d399;
+  animation: hp 2.5s ease-in-out infinite; }
+@keyframes hp { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* Hit CTA */
+.hit-cta {
+  padding: 8px 14px; border-top: 0.5px solid rgba(3,230,122,0.06);
+  display: flex; gap: 6px;
+}
+.hc-btn {
+  padding: 7px 12px; border-radius: 100px;
+  font-size: 11px; font-weight: 500; cursor: pointer; font-family: var(--sans);
+}
+.hc-btn.primary { background: rgba(3,230,122,0.08); border: 0.5px solid rgba(3,230,122,0.15); color: #34d399; }
+.hc-btn.ghost { background: none; border: none; color: var(--z600); }
+
+/* Intelligence note */
+.wc-note {
+  padding: 6px 14px 10px; display: flex; align-items: flex-start; gap: 5px;
+}
+.wc-note svg { width: 10px; height: 10px; color: var(--z700); flex-shrink: 0; margin-top: 3px; }
+.wc-note span { font-size: 10px; color: var(--z600); line-height: 14px; }
+
+/* Comparison card */
+.comp {
+  background: rgba(139,92,246,0.03); border: 0.5px solid rgba(139,92,246,0.1);
+  border-radius: 14px; margin-bottom: 8px; overflow: hidden;
+  cursor: pointer; position: relative;
+}
+.comp::before { content: ''; position: absolute; top: 0; left: 15%; right: 15%;
+  height: 0.5px; background: linear-gradient(90deg, transparent, rgba(139,92,246,0.25), transparent); }
+.comp-hd { padding: 12px 14px; display: flex; align-items: center; gap: 8px; }
+.comp-ic { width: 28px; height: 28px; border-radius: 7px;
+  background: rgba(139,92,246,0.1); display: flex; align-items: center; justify-content: center; color: var(--v400); }
+.comp-ic svg { width: 14px; height: 14px; }
+.comp-t { font-size: 14px; font-weight: 500; color: var(--z200); }
+.comp-date { font-size: 10px; font-family: var(--mono); color: var(--z750); margin-left: auto; }
+.comp-items { padding: 0 14px 12px; display: flex; gap: 6px; }
+.ci { flex: 1; background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 8px; padding: 8px; text-align: center; }
+.ci.win { border-color: rgba(3,230,122,0.2); }
+.ci-e { font-size: 18px; margin-bottom: 3px; }
+.ci-n { font-size: 10px; font-weight: 500; color: var(--z300); line-height: 13px; margin-bottom: 2px; }
+.ci-p { font-size: 10px; font-family: var(--mono); color: var(--z600); }
+.ci-b { margin-top: 3px; font-size: 8px; font-weight: 700; text-transform: uppercase; }
+.ci-b.pick { color: #34d399; }
+.ci-b.alt { color: var(--z600); }
+
+/* Screen label */
+.screen-label {
+  position: absolute; bottom: -32px; left: 0; right: 0;
+  text-align: center; font-size: 12px; font-family: var(--mono); color: var(--z600);
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════
+     OWN TAB
+     ══════════════════ -->
+<div class="phone" style="margin-bottom: 44px;">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+  <div class="status">
+    <span class="time">2:48</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+  <div class="app">
+    <div class="hdr">
+      <div class="h-l">
+        <button class="h-back"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg></button>
+        <span class="h-title">My Products</span>
+      </div>
+      <div class="h-r">
+        <button class="h-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="116" cy="116" r="84"/><line x1="175.4" y1="175.4" x2="224" y2="224"/></svg></button>
+        <button class="h-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="40" y1="128" x2="216" y2="128"/></svg></button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-row">
+      <div class="tab active">Own <span class="tab-count">12</span></div>
+      <div class="tab">Want <span class="tab-count">7</span></div>
+    </div>
+
+    <div class="list">
+      <div class="summary">
+        <div class="s-chip"><span class="sd a"></span> <span class="sn">2</span> need attention</div>
+        <div class="s-chip"><span class="sd v"></span> <span class="sn">3</span> upgrades</div>
+      </div>
+
+      <div class="insight">
+        <div class="insight-hd">
+          <div class="insight-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+          <span class="insight-t">Product Intelligence</span>
+        </div>
+        <div class="insight-body">Your <strong>CeraVe retinol</strong> is ~80% used. Your <strong>Brooks Glycerin 21</strong> has ~320 miles - cushioning degrades at 400.</div>
+      </div>
+
+      <div class="cat">Skincare</div>
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-thumb">&#x1F9F4;</div>
+          <div class="pc-info"><div class="pc-name">CeraVe Skin Renewing Retinol Serum</div><div class="pc-brand">CeraVe - 1 fl oz</div></div>
+          <div class="pc-right"><div class="pc-badge warn">Caution</div><span class="pc-price">$18.99</span></div>
+        </div>
+        <div class="pc-meta">
+          <div class="pm reorder">~80% used</div>
+          <div class="pm upgrade">Upgrade available</div>
+          <div class="pm date">Jan 12</div>
+        </div>
+      </div>
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-thumb">&#x1F9FB;</div>
+          <div class="pc-info"><div class="pc-name">La Roche-Posay Toleriane Cleanser</div><div class="pc-brand">La Roche-Posay</div></div>
+          <div class="pc-right"><div class="pc-badge good">Good Buy</div><span class="pc-price">$15.99</span></div>
+        </div>
+        <div class="pc-meta"><div class="pm date">Feb 3</div></div>
+      </div>
+
+      <div class="cat">Running</div>
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-thumb">&#x1F45F;</div>
+          <div class="pc-info"><div class="pc-name">Brooks Glycerin 21</div><div class="pc-brand">Brooks - Size 8.5</div></div>
+          <div class="pc-right"><div class="pc-badge great">Top Pick</div><span class="pc-price">$149.95</span></div>
+        </div>
+        <div class="pc-meta">
+          <div class="pm reorder">~320 mi / 400 mi</div>
+          <div class="pm upgrade">Glycerin 22 out</div>
+          <div class="pm date">Nov 8</div>
+        </div>
+      </div>
+
+      <div class="cat">Audio</div>
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-thumb">&#x1F3A7;</div>
+          <div class="pc-info"><div class="pc-name">Sony WH-1000XM5</div><div class="pc-brand">Sony</div></div>
+          <div class="pc-right"><div class="pc-badge good">Recommended</div><span class="pc-price">$328</span></div>
+        </div>
+        <div class="pc-meta">
+          <div class="pm drop">Now $278 at Best Buy</div>
+          <div class="pm date">Mar 2</div>
+        </div>
+      </div>
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-thumb">&#x1F3B5;</div>
+          <div class="pc-info"><div class="pc-name">AirPods Pro 2</div><div class="pc-brand">Apple</div></div>
+          <div class="pc-right"><div class="pc-badge good">Good Buy</div><span class="pc-price">$249</span></div>
+        </div>
+        <div class="pc-meta"><div class="pm date">Dec 20</div></div>
+      </div>
+
+      <div class="cat">Kitchen</div>
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-thumb">&#x2615;</div>
+          <div class="pc-info"><div class="pc-name">Breville Barista Express</div><div class="pc-brand">Breville</div></div>
+          <div class="pc-right"><div class="pc-badge great">Top Pick</div><span class="pc-price">$599</span></div>
+        </div>
+        <div class="pc-meta"><div class="pm date">Feb 22</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-label">Own Tab</div>
+</div>
+
+<!-- ══════════════════
+     WANT TAB
+     ══════════════════ -->
+<div class="phone" style="margin-bottom: 44px;">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+  <div class="status">
+    <span class="time">2:48</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+  <div class="app">
+    <div class="hdr">
+      <div class="h-l">
+        <button class="h-back"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg></button>
+        <span class="h-title">My Products</span>
+      </div>
+      <div class="h-r">
+        <button class="h-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="116" cy="116" r="84"/><line x1="175.4" y1="175.4" x2="224" y2="224"/></svg></button>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <div class="tab">Own <span class="tab-count">12</span></div>
+      <div class="tab active">Want <span class="tab-count">7</span></div>
+    </div>
+
+    <div class="list">
+      <div class="summary">
+        <div class="s-chip"><span class="sd g"></span> <span class="sn">1</span> hit target</div>
+        <div class="s-chip"><span class="sd a"></span> <span class="sn">1</span> approaching</div>
+      </div>
+
+      <!-- Hit Target -->
+      <div class="wc hit">
+        <div class="wc-main">
+          <div class="wc-thumb">&#x1F9F4;</div>
+          <div class="wc-info">
+            <div class="wc-name">La Roche-Posay Retinaldehyde</div>
+            <div class="wc-brand">La Roche-Posay</div>
+            <div class="wc-row">
+              <span class="wc-badge great">Top Pick</span>
+              <span class="wc-from">saved Mar 17</span>
+            </div>
+          </div>
+        </div>
+        <div class="wc-price">
+          <div class="wc-pl">
+            <div class="hit-tag"><span class="hd"></span> Below target</div>
+            <span class="wc-now green">$37.80</span>
+            <span class="wc-ctx">Ulta - SKINCARE15 verified</span>
+          </div>
+          <div class="wc-pr">
+            <div class="wc-target"><span class="wc-tl">target</span><span class="wc-tv">$40</span></div>
+            <div class="spark" style="width:80px;">
+              <div class="sbar" style="height:60%;"></div><div class="sbar" style="height:65%;"></div>
+              <div class="sbar" style="height:70%;"></div><div class="sbar" style="height:75%;"></div>
+              <div class="sbar" style="height:70%;"></div><div class="sbar" style="height:65%;"></div>
+              <div class="sbar" style="height:80%;"></div><div class="sbar" style="height:85%;"></div>
+              <div class="sbar" style="height:70%;"></div><div class="sbar low" style="height:45%;"></div>
+              <div class="sbar now" style="height:50%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="hit-cta">
+          <div class="hc-btn primary">View at Ulta</div>
+          <div class="hc-btn ghost">Dismiss</div>
+        </div>
+      </div>
+
+      <!-- Watching -->
+      <div class="wc">
+        <div class="wc-main">
+          <div class="wc-thumb">&#x1F3A7;</div>
+          <div class="wc-info">
+            <div class="wc-name">Bose QuietComfort Ultra</div>
+            <div class="wc-brand">Bose</div>
+            <div class="wc-row">
+              <span class="wc-badge good">Recommended</span>
+              <span class="wc-from">saved Mar 8</span>
+            </div>
+          </div>
+        </div>
+        <div class="wc-price">
+          <div class="wc-pl">
+            <span class="wc-now">$349</span>
+            <span class="wc-ctx">Best Buy - $21 from target</span>
+          </div>
+          <div class="wc-pr">
+            <div class="wc-target"><span class="wc-tl">target</span><span class="wc-tv">$328</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wc">
+        <div class="wc-main">
+          <div class="wc-thumb">&#x1F45F;</div>
+          <div class="wc-info">
+            <div class="wc-name">Brooks Glycerin 22</div>
+            <div class="wc-brand">Brooks - Size 8.5</div>
+            <div class="wc-row">
+              <span class="wc-badge great">Top Pick</span>
+              <span class="wc-from">saved Mar 17</span>
+            </div>
+          </div>
+        </div>
+        <div class="wc-price">
+          <div class="wc-pl">
+            <span class="wc-now">$159.95</span>
+            <span class="wc-ctx">MSRP - no discounts yet</span>
+          </div>
+          <div class="wc-pr">
+            <div class="wc-target"><span class="wc-tl">target</span><span class="wc-tv">$130</span></div>
+          </div>
+        </div>
+        <div class="wc-note">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>New release - typically 8-12 weeks before first discount</span>
+        </div>
+      </div>
+
+      <!-- Saved Comparison -->
+      <div class="comp">
+        <div class="comp-hd">
+          <div class="comp-ic"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="40" y="40" width="176" height="176" rx="8"/><line x1="128" y1="40" x2="128" y2="216"/><line x1="40" y1="128" x2="216" y2="128"/></svg></div>
+          <span class="comp-t">Headphone Comparison</span>
+          <span class="comp-date">Mar 15</span>
+        </div>
+        <div class="comp-items">
+          <div class="ci win">
+            <div class="ci-e">&#x1F3A7;</div>
+            <div class="ci-n">Sony XM5</div>
+            <div class="ci-p">$328</div>
+            <div class="ci-b pick">Your pick</div>
+          </div>
+          <div class="ci">
+            <div class="ci-e">&#x1F3B5;</div>
+            <div class="ci-n">AirPods Max</div>
+            <div class="ci-p">$549</div>
+            <div class="ci-b alt">Runner up</div>
+          </div>
+          <div class="ci">
+            <div class="ci-e">&#x1F50A;</div>
+            <div class="ci-n">Bose QC Ultra</div>
+            <div class="ci-p">$379</div>
+            <div class="ci-b alt">Close 3rd</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wc">
+        <div class="wc-main">
+          <div class="wc-thumb">&#x1F9F4;</div>
+          <div class="wc-info">
+            <div class="wc-name">Drunk Elephant Protini</div>
+            <div class="wc-brand">Drunk Elephant - 50ml</div>
+            <div class="wc-row">
+              <span class="wc-badge good">Good Buy</span>
+              <span class="wc-from">saved Mar 12</span>
+            </div>
+          </div>
+        </div>
+        <div class="wc-price">
+          <div class="wc-pl">
+            <span class="wc-now">$68</span>
+            <span class="wc-ctx">Sephora - stable</span>
+          </div>
+          <div class="wc-pr">
+            <div class="wc-target"><span class="wc-tl">target</span><span class="wc-tv">$55</span></div>
+          </div>
+        </div>
+        <div class="wc-note">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>Sephora Spring Sale (April) historically 15-20% off</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-label">Want Tab</div>
+</div>
+
+</body>
+</html>

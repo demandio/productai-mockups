@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai - Partner Badge Explorations</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    color: #e4e4e7;
+    font-family: 'DM Sans', sans-serif;
+    padding: 40px 24px 80px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    max-width: 1200px;
+    margin: 0 auto 48px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 8px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+    color: #a1a1aa;
+    line-height: 1.5;
+    max-width: 640px;
+  }
+
+  /* -- Section -- */
+  .section-divider {
+    border: none;
+    border-top: 0.5px solid #27272a;
+    margin: 56px auto;
+    max-width: 1200px;
+  }
+
+  .section-header {
+    max-width: 1200px;
+    margin: 0 auto 32px;
+  }
+
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 4px;
+  }
+
+  .section-header p {
+    font-size: 13px;
+    color: #71717a;
+    line-height: 1.5;
+  }
+
+  /* -- Badge showcase grid -- */
+  .badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .badge-card {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .badge-card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #8b5cf6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-card-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fafafa;
+    text-align: center;
+  }
+
+  .badge-card-desc {
+    font-size: 12px;
+    color: #71717a;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .badge-showcase {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80px;
+    position: relative;
+  }
+
+  /* -- Shared badge hover tooltip -- */
+  .badge-wrap {
+    position: relative;
+    cursor: pointer;
+    display: inline-flex;
+  }
+
+  .badge-tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: #1c1c20;
+    border: 0.5px solid #3f3f46;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #d4d4d8;
+    line-height: 1.5;
+    width: 220px;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .badge-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1c1c20;
+  }
+
+  .badge-wrap:hover .badge-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .tooltip-highlight {
+    color: #8b5cf6;
+    font-weight: 500;
+  }
+
+  .tooltip-learn {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #71717a;
+    text-decoration: underline;
+    text-decoration-color: #3f3f46;
+    text-underline-offset: 2px;
+  }
+
+  /* ===================== */
+  /* BADGE DESIGNS         */
+  /* ===================== */
+
+  /* -- 1. Shield -- */
+  .badge-shield {
+    width: 20px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  /* -- 2. Verified circle -- */
+  .badge-verified {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  /* -- 3. Star seal -- */
+  .badge-seal {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  /* -- 4. Hexagon -- */
+  .badge-hex {
+    width: 20px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  /* -- 5. Heart pulse -- */
+  .badge-heart {
+    width: 20px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  /* -- 6. Spark / diamond -- */
+  .badge-spark {
+    width: 18px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ===================== */
+  /* PRICE ROW CONTEXT     */
+  /* ===================== */
+
+  .context-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .exploration {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .exploration-header {
+    padding: 20px 20px 16px;
+    border-bottom: 0.5px solid #27272a;
+  }
+
+  .exploration-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #8b5cf6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .exploration-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 4px;
+  }
+
+  .exploration-desc {
+    font-size: 12px;
+    color: #71717a;
+    line-height: 1.4;
+  }
+
+  .exploration-body {
+    padding: 20px;
+  }
+
+  .price-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .price-row:hover {
+    background: rgba(139, 92, 246, 0.06);
+  }
+
+  .price-row-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .merchant-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e4e4e7;
+    white-space: nowrap;
+  }
+
+  .price-row-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .price {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fafafa;
+  }
+
+  .price.best {
+    color: #4ade80;
+  }
+
+  .code-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    border: 0.5px solid rgba(74, 222, 128, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .you-are-here {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #a1a1aa;
+    background: rgba(161, 161, 170, 0.1);
+    border: 0.5px solid rgba(161, 161, 170, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .footer-note {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 0.5px solid #1a1a1e;
+    font-size: 11px;
+    color: #52525b;
+    line-height: 1.4;
+  }
+
+  .footer-note a {
+    color: #71717a;
+    text-decoration: underline;
+    text-decoration-color: #3f3f46;
+    text-underline-offset: 2px;
+  }
+
+  /* -- Verdict card for full context -- */
+  .verdict-card {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 420px;
+  }
+
+  .verdict-bar {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 0.5px solid #27272a;
+  }
+
+  .verdict-bar.recommended {
+    background: rgba(74, 222, 128, 0.04);
+    border-bottom-color: rgba(74, 222, 128, 0.1);
+  }
+
+  .verdict-icon-wrap {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+
+  .verdict-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fafafa;
+  }
+
+  .verdict-body {
+    padding: 16px 20px;
+    font-size: 13px;
+    color: #a1a1aa;
+    line-height: 1.5;
+  }
+
+  .verdict-prices {
+    padding: 0 20px 20px;
+  }
+
+  /* -- Tooltip wording variations -- */
+  .wording-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .wording-card {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .wording-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #8b5cf6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .wording-preview {
+    background: #1c1c20;
+    border: 0.5px solid #3f3f46;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #d4d4d8;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .wording-note {
+    font-size: 11px;
+    color: #52525b;
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+
+  /* -- Sizes demo -- */
+  .size-row {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .size-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .size-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #52525b;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Partner Badge Explorations</h1>
+  <p>Icon-only badge that sits proudly next to merchant names. Hover to reveal the mission connection. Six badge shapes, three tooltip wordings, shown isolated and in context.</p>
+</div>
+
+<!-- ====== BADGE SHAPES - ISOLATED ====== -->
+<div class="section-header">
+  <h2>Badge Shapes</h2>
+  <p>Hover each badge to see the tooltip. All rendered at 20px (inline with 14px merchant text).</p>
+</div>
+
+<div class="badge-grid">
+
+<!-- 1. Shield -->
+<div class="badge-card">
+  <div class="badge-card-label">Shape 1</div>
+  <div class="badge-card-name">Shield</div>
+  <div class="badge-showcase">
+    <div class="size-row">
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg class="badge-shield" width="20" height="22" viewBox="0 0 20 22" fill="none">
+            <path d="M10 1L2 4.5V10C2 15.5 5.8 19.7 10 21C14.2 19.7 18 15.5 18 10V4.5L10 1Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M7 11L9 13L13 9" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">20px</span>
+      </div>
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="16" height="18" viewBox="0 0 20 22" fill="none">
+            <path d="M10 1L2 4.5V10C2 15.5 5.8 19.7 10 21C14.2 19.7 18 15.5 18 10V4.5L10 1Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M7 11L9 13L13 9" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">16px</span>
+      </div>
+    </div>
+  </div>
+  <div class="badge-card-desc">Protection, trust, verification. Strong "we've got your back" signal. Familiar from security/verified contexts.</div>
+</div>
+
+<!-- 2. Verified Circle (Twitter-style) -->
+<div class="badge-card">
+  <div class="badge-card-label">Shape 2</div>
+  <div class="badge-card-name">Verified Seal</div>
+  <div class="badge-showcase">
+    <div class="size-row">
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg class="badge-verified" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1.5L12.1 3.1L14.8 2.8L15.8 5.3L18.1 6.8L17.3 9.5L18.1 12.2L15.8 13.7L14.8 16.2L12.1 15.9L10 17.5L7.9 15.9L5.2 16.2L4.2 13.7L1.9 12.2L2.7 9.5L1.9 6.8L4.2 5.3L5.2 2.8L7.9 3.1L10 1.5Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1" stroke-linejoin="round"/>
+            <path d="M7 10L9 12L13 8" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">20px</span>
+      </div>
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1.5L12.1 3.1L14.8 2.8L15.8 5.3L18.1 6.8L17.3 9.5L18.1 12.2L15.8 13.7L14.8 16.2L12.1 15.9L10 17.5L7.9 15.9L5.2 16.2L4.2 13.7L1.9 12.2L2.7 9.5L1.9 6.8L4.2 5.3L5.2 2.8L7.9 3.1L10 1.5Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1" stroke-linejoin="round"/>
+            <path d="M7 10L9 12L13 8" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">16px</span>
+      </div>
+    </div>
+  </div>
+  <div class="badge-card-desc">Starburst seal with checkmark. Instantly recognizable "verified" pattern. Prouder than a circle, more decorative.</div>
+</div>
+
+<!-- 3. Rounded Diamond -->
+<div class="badge-card">
+  <div class="badge-card-label">Shape 3</div>
+  <div class="badge-card-name">Diamond Mark</div>
+  <div class="badge-showcase">
+    <div class="size-row">
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="10" y="1.5" width="12" height="12" rx="2.5" transform="rotate(45 10 1.5)" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1"/>
+            <path d="M7.5 10L9.2 11.7L12.5 8.3" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">20px</span>
+      </div>
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <rect x="10" y="1.5" width="12" height="12" rx="2.5" transform="rotate(45 10 1.5)" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1"/>
+            <path d="M7.5 10L9.2 11.7L12.5 8.3" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">16px</span>
+      </div>
+    </div>
+  </div>
+  <div class="badge-card-desc">Rotated square with rounded corners. Distinctive, modern, avoids the "verification" associations of circles and shields. Feels like a quality mark.</div>
+</div>
+
+<!-- 4. Ribbon -->
+<div class="badge-card">
+  <div class="badge-card-label">Shape 4</div>
+  <div class="badge-card-name">Ribbon Seal</div>
+  <div class="badge-showcase">
+    <div class="size-row">
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="20" height="22" viewBox="0 0 20 22" fill="none">
+            <circle cx="10" cy="9" r="7" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1"/>
+            <path d="M7 9.5L9 11.5L13 7.5" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 15L4 21L7.5 18.5L10 21V14.5" stroke="#8b5cf6" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M14 15L16 21L12.5 18.5L10 21V14.5" stroke="#8b5cf6" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">20px</span>
+      </div>
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="16" height="18" viewBox="0 0 20 22" fill="none">
+            <circle cx="10" cy="9" r="7" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1"/>
+            <path d="M7 9.5L9 11.5L13 7.5" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 15L4 21L7.5 18.5L10 21V14.5" stroke="#8b5cf6" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M14 15L16 21L12.5 18.5L10 21V14.5" stroke="#8b5cf6" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">16px</span>
+      </div>
+    </div>
+  </div>
+  <div class="badge-card-desc">Award ribbon / medal. The proudest shape. Says "this merchant earned something." Classic badge/honor aesthetic.</div>
+</div>
+
+<!-- 5. PAI Monogram -->
+<div class="badge-card">
+  <div class="badge-card-label">Shape 5</div>
+  <div class="badge-card-name">PAI Monogram</div>
+  <div class="badge-showcase">
+    <div class="size-row">
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="1" y="1" width="18" height="18" rx="5" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1"/>
+            <text x="10" y="13.5" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="8.5" font-weight="600" fill="#8b5cf6">P</text>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">20px</span>
+      </div>
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <rect x="1" y="1" width="18" height="18" rx="5" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1"/>
+            <text x="10" y="13.5" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="8.5" font-weight="600" fill="#8b5cf6">P</text>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">16px</span>
+      </div>
+    </div>
+  </div>
+  <div class="badge-card-desc">Branded "P" in a rounded square. Ties directly to Product.ai identity. The badge IS the brand. No ambiguity about what it represents.</div>
+</div>
+
+<!-- 6. Spark Star -->
+<div class="badge-card">
+  <div class="badge-card-label">Shape 6</div>
+  <div class="badge-card-name">Spark</div>
+  <div class="badge-showcase">
+    <div class="size-row">
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1C10 1 11.5 7 13 8.5C14.5 10 19 10 19 10C19 10 14.5 10 13 11.5C11.5 13 10 19 10 19C10 19 8.5 13 7 11.5C5.5 10 1 10 1 10C1 10 5.5 10 7 8.5C8.5 7 10 1 10 1Z" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6" stroke-width="1" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">20px</span>
+      </div>
+      <div class="size-item">
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1C10 1 11.5 7 13 8.5C14.5 10 19 10 19 10C19 10 14.5 10 13 11.5C11.5 13 10 19 10 19C10 19 8.5 13 7 11.5C5.5 10 1 10 1 10C1 10 5.5 10 7 8.5C8.5 7 10 1 10 1Z" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6" stroke-width="1" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+            <span class="tooltip-learn">How we make money</span>
+          </div>
+        </div>
+        <span class="size-label">16px</span>
+      </div>
+    </div>
+  </div>
+  <div class="badge-card-desc">Four-point star / sparkle. Aligned with the Bioluminescent Intelligence visual register. Feels like "intelligence is here." Most on-brand with your design system's light-from-dark aesthetic.</div>
+</div>
+
+</div>
+
+<!-- ====== TOOLTIP WORDING VARIATIONS ====== -->
+<hr class="section-divider">
+
+<div class="section-header">
+  <h2>Tooltip Wording Variations</h2>
+  <p>The badge is the what. The tooltip is the why. Three tonal approaches.</p>
+</div>
+
+<div class="wording-grid">
+
+<div class="wording-card">
+  <div class="wording-label">Wording A - Mission</div>
+  <div class="wording-preview">
+    Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.
+    <span class="tooltip-learn">How we make money</span>
+  </div>
+  <div class="wording-note">Mission-first. Frames the purchase as supporting the cause. "Free for everyone" reinforces the equity angle.</div>
+</div>
+
+<div class="wording-card">
+  <div class="wording-label">Wording B - Factual</div>
+  <div class="wording-preview">
+    Product.ai earns a <span class="tooltip-highlight">commission</span> when you buy through this link. Our recommendations are independent of partnerships.
+    <span class="tooltip-learn">Verify our independence</span>
+  </div>
+  <div class="wording-note">Straight disclosure. No emotional framing. Links to Verifiable Trust Ledger. Most transparent, least warm.</div>
+</div>
+
+<div class="wording-card">
+  <div class="wording-label">Wording C - Gratitude</div>
+  <div class="wording-preview">
+    This is a <span class="tooltip-highlight">Product.ai partner</span>. Purchasing here helps fund the product you're using right now. Thank you.
+    <span class="tooltip-learn">Our transparency pledge</span>
+  </div>
+  <div class="wording-note">Direct, warm, grateful. "The product you're using right now" makes the connection concrete. "Thank you" is a bold choice - genuine or needy depending on execution.</div>
+</div>
+
+<div class="wording-card">
+  <div class="wording-label">Wording D - Hybrid</div>
+  <div class="wording-preview">
+    <span class="tooltip-highlight">Product.ai partner.</span> We earn a commission on purchases - this is how we keep everything free. Our recommendations never change based on partnerships.
+    <span class="tooltip-learn">How we make money</span>
+  </div>
+  <div class="wording-note">Leads with the fact, follows with the mission, closes with the independence claim. Most complete. Longest.</div>
+</div>
+
+</div>
+
+<!-- ====== IN CONTEXT: PRICE ROWS ====== -->
+<hr class="section-divider">
+
+<div class="section-header">
+  <h2>In Context: Price Comparison Rows</h2>
+  <p>Top three badge shapes shown inside actual price rows. Hover badges to see tooltips.</p>
+</div>
+
+<div class="context-grid">
+
+<!-- Shield in context -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Shield in context</div>
+    <div class="exploration-title">Price Comparison - Shield Badge</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Best Prices</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="16" height="18" viewBox="0 0 20 22" fill="none">
+            <path d="M10 1L2 4.5V10C2 15.5 5.8 19.7 10 21C14.2 19.7 18 15.5 18 10V4.5L10 1Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M7 11L9 13L13 9" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="16" height="18" viewBox="0 0 20 22" fill="none">
+            <path d="M10 1L2 4.5V10C2 15.5 5.8 19.7 10 21C14.2 19.7 18 15.5 18 10V4.5L10 1Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M7 11L9 13L13 9" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Verified Seal in context -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Verified Seal in context</div>
+    <div class="exploration-title">Price Comparison - Verified Seal Badge</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Best Prices</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1.5L12.1 3.1L14.8 2.8L15.8 5.3L18.1 6.8L17.3 9.5L18.1 12.2L15.8 13.7L14.8 16.2L12.1 15.9L10 17.5L7.9 15.9L5.2 16.2L4.2 13.7L1.9 12.2L2.7 9.5L1.9 6.8L4.2 5.3L5.2 2.8L7.9 3.1L10 1.5Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1" stroke-linejoin="round"/>
+            <path d="M7 10L9 12L13 8" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1.5L12.1 3.1L14.8 2.8L15.8 5.3L18.1 6.8L17.3 9.5L18.1 12.2L15.8 13.7L14.8 16.2L12.1 15.9L10 17.5L7.9 15.9L5.2 16.2L4.2 13.7L1.9 12.2L2.7 9.5L1.9 6.8L4.2 5.3L5.2 2.8L7.9 3.1L10 1.5Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1" stroke-linejoin="round"/>
+            <path d="M7 10L9 12L13 8" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Spark in context -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Spark in context</div>
+    <div class="exploration-title">Price Comparison - Spark Badge</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Best Prices</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1C10 1 11.5 7 13 8.5C14.5 10 19 10 19 10C19 10 14.5 10 13 11.5C11.5 13 10 19 10 19C10 19 8.5 13 7 11.5C5.5 10 1 10 1 10C1 10 5.5 10 7 8.5C8.5 7 10 1 10 1Z" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6" stroke-width="1" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1C10 1 11.5 7 13 8.5C14.5 10 19 10 19 10C19 10 14.5 10 13 11.5C11.5 13 10 19 10 19C10 19 8.5 13 7 11.5C5.5 10 1 10 1 10C1 10 5.5 10 7 8.5C8.5 7 10 1 10 1Z" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6" stroke-width="1" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAI Monogram in context -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Monogram in context</div>
+    <div class="exploration-title">Price Comparison - PAI Monogram Badge</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Best Prices</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <rect x="1" y="1" width="18" height="18" rx="5" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1"/>
+            <text x="10" y="13.5" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="8.5" font-weight="600" fill="#8b5cf6">P</text>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <rect x="1" y="1" width="18" height="18" rx="5" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.1"/>
+            <text x="10" y="13.5" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="8.5" font-weight="600" fill="#8b5cf6">P</text>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ====== FULL VERDICT CARD ====== -->
+<hr class="section-divider">
+
+<div class="section-header">
+  <h2>Full Verdict Card Context</h2>
+  <p>Shield badge inside a complete verdict card. The badge should feel like part of the system, not an afterthought.</p>
+</div>
+
+<div style="max-width: 420px; margin: 0 auto;">
+<div class="verdict-card">
+  <div class="verdict-bar recommended">
+    <div class="verdict-icon-wrap">&#10003;</div>
+    <div class="verdict-text">Recommended</div>
+  </div>
+  <div class="verdict-body">
+    The CeraVe PM Facial Moisturizing Lotion is well-formulated with ceramides and niacinamide at effective concentrations. Lightweight, non-comedogenic, and well-tolerated across skin types.
+  </div>
+  <div class="verdict-prices">
+    <div class="price-section-label">Best Prices</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="16" height="18" viewBox="0 0 20 22" fill="none">
+            <path d="M10 1L2 4.5V10C2 15.5 5.8 19.7 10 21C14.2 19.7 18 15.5 18 10V4.5L10 1Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M7 11L9 13L13 9" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$13.59</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Amazon</span>
+        <div class="badge-wrap">
+          <svg width="16" height="18" viewBox="0 0 20 22" fill="none">
+            <path d="M10 1L2 4.5V10C2 15.5 5.8 19.7 10 21C14.2 19.7 18 15.5 18 10V4.5L10 1Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M7 11L9 13L13 9" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tooltip-highlight">supports Product.ai</span> and keeps honest product advice free for everyone.<span class="tooltip-learn">How we make money</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$14.63</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Target</span></div>
+      <div class="price-row-right"><span class="price">$15.99</span></div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">CVS</span></div>
+      <div class="price-row-right"><span class="price">$16.49</span></div>
+    </div>
+
+    <div class="footer-note" style="display: flex; align-items: center; gap: 6px;">
+      <svg width="12" height="14" viewBox="0 0 20 22" fill="none" style="flex-shrink: 0; opacity: 0.5;">
+        <path d="M10 1L2 4.5V10C2 15.5 5.8 19.7 10 21C14.2 19.7 18 15.5 18 10V4.5L10 1Z" fill="rgba(139, 92, 246, 0.15)" stroke="#8b5cf6" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M7 11L9 13L13 9" stroke="#8b5cf6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>= Product.ai partner. Purchasing supports our mission. <a href="#">Learn more</a></span>
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

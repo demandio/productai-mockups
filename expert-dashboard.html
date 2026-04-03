@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai - Expert Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z850: #1F1F22; --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6;
+  --green: #34d399; --green-vivid: #34d399; --green-surface: rgba(52,211,153,0.06);
+  --amber: #CEAD50; --amber-surface: rgba(206,173,80,0.06);
+  --red: #f87171; --red-surface: rgba(248,113,113,0.06);
+  --blue: #6EB6FF; --blue-surface: rgba(110,182,255,0.06);
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: var(--z950); color: var(--z50); line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+
+/* ── Layout: Sidebar + Main ── */
+.layout { display: flex; min-height: 100vh; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 260px; flex-shrink: 0;
+  background: var(--z925);
+  border-right: 0.5px solid rgba(255,255,255,0.04);
+  padding: 24px 0;
+  display: flex; flex-direction: column;
+}
+.sidebar-logo {
+  display: flex; align-items: baseline;
+  padding: 0 24px; margin-bottom: 4px;
+}
+.sidebar-logo .lp { font-size: 17px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.sidebar-logo .la { font-family: var(--mono); font-size: 17px; color: var(--v500); }
+.sidebar-sub {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--z600); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0 24px; margin-bottom: 24px;
+}
+
+.sidebar-section {
+  margin-bottom: 24px;
+}
+.sidebar-section-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--z700); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0 24px; margin-bottom: 8px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 24px;
+  font-size: 13px; font-weight: 500; color: var(--z500);
+  cursor: pointer; transition: all 150ms;
+}
+.sidebar-item:hover { color: var(--z300); background: rgba(255,255,255,0.02); }
+.sidebar-item.active { color: var(--v400); background: rgba(139,92,246,0.06); }
+.sidebar-item .icon {
+  width: 18px; height: 18px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; flex-shrink: 0;
+}
+.sidebar-item .badge {
+  margin-left: auto;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  padding: 2px 6px; border-radius: 100px;
+}
+.sidebar-item .badge.review { background: var(--amber-surface); color: var(--amber); }
+.sidebar-item .badge.new { background: rgba(139,92,246,0.08); color: var(--v400); }
+.sidebar-item .badge.count { background: rgba(255,255,255,0.04); color: var(--z500); }
+
+.sidebar-category {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 24px 6px 36px;
+  font-size: 12px; color: var(--z600);
+  cursor: pointer; transition: color 150ms;
+}
+.sidebar-category:hover { color: var(--z400); }
+.sidebar-category.active { color: var(--v400); }
+.sidebar-category .cat-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+}
+
+.sidebar-user {
+  margin-top: auto;
+  padding: 16px 24px;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(52,211,153,0.12); color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+}
+.sidebar-user-name { font-size: 13px; font-weight: 500; color: var(--z300); }
+.sidebar-user-role { font-size: 11px; color: var(--z600); }
+
+/* ── Main Content ── */
+.main {
+  flex: 1; padding: 32px 40px;
+  max-width: 960px;
+}
+
+/* ── Top bar ── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 32px;
+}
+.topbar h1 {
+  font-size: 24px; font-weight: 600; color: var(--white);
+  letter-spacing: -0.02em;
+}
+.topbar-meta {
+  display: flex; align-items: center; gap: 12px;
+}
+.topbar-badge {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  padding: 4px 10px; border-radius: 100px;
+  letter-spacing: 0.04em;
+}
+.topbar-badge.expert { color: var(--green); background: var(--green-surface); }
+
+/* ── Summary Cards ── */
+.summary-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 32px;
+}
+.summary-card {
+  padding: 18px 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.06);
+}
+.summary-card .num {
+  font-family: var(--mono); font-size: 28px; font-weight: 600;
+  margin-bottom: 2px;
+}
+.summary-card .num.green { color: var(--green); }
+.summary-card .num.amber { color: var(--amber); }
+.summary-card .num.violet { color: var(--v400); }
+.summary-card .num.blue { color: var(--blue); }
+.summary-card .label { font-size: 12px; color: var(--z500); }
+
+/* ── Section Headers ── */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-header h2 {
+  font-size: 17px; font-weight: 600; color: var(--z200);
+}
+.section-header .filter {
+  font-family: var(--mono); font-size: 11px; color: var(--z600);
+  cursor: pointer; transition: color 150ms;
+}
+.section-header .filter:hover { color: var(--z400); }
+
+/* ── Review Queue ── */
+.review-queue { margin-bottom: 40px; }
+
+.review-item {
+  padding: 18px 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+  transition: border-color 150ms;
+}
+.review-item:hover { border-color: rgba(255,255,255,0.1); }
+.review-item.urgent { border-left: 3px solid var(--amber); }
+.review-item.new { border-left: 3px solid var(--v500); }
+
+.review-item-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.review-item-type {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.06em; padding: 2px 8px; border-radius: 4px;
+}
+.review-item-type.new-axiom { background: rgba(139,92,246,0.08); color: var(--v400); }
+.review-item-type.re-forge { background: var(--amber-surface); color: var(--amber); }
+.review-item-type.decay { background: var(--red-surface); color: var(--red); }
+.review-item-type.suggestion { background: var(--blue-surface); color: var(--blue); }
+
+.review-item-domain {
+  font-family: var(--mono); font-size: 10px; color: var(--z600);
+}
+
+.review-item-statement {
+  font-size: 14px; font-weight: 500; color: var(--z200);
+  line-height: 1.5; margin-bottom: 8px;
+}
+
+.review-item-context {
+  font-size: 12px; color: var(--z500); line-height: 1.5;
+  margin-bottom: 12px;
+  padding-left: 12px; border-left: 2px solid rgba(255,255,255,0.06);
+}
+
+.review-item-actions {
+  display: flex; gap: 8px;
+}
+.action-btn {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+  border: 0.5px solid; cursor: pointer;
+  transition: all 150ms;
+  font-family: var(--sans);
+  display: flex; align-items: center; gap: 6px;
+}
+.action-btn.endorse {
+  background: var(--green-surface); color: var(--green);
+  border-color: rgba(52,211,153,0.15);
+}
+.action-btn.endorse:hover { background: rgba(52,211,153,0.12); }
+.action-btn.contest {
+  background: var(--amber-surface); color: var(--amber);
+  border-color: rgba(206,173,80,0.15);
+}
+.action-btn.contest:hover { background: rgba(206,173,80,0.12); }
+.action-btn.flag {
+  background: var(--red-surface); color: var(--red);
+  border-color: rgba(248,113,113,0.15);
+}
+.action-btn.flag:hover { background: rgba(248,113,113,0.12); }
+.action-btn.skip {
+  background: rgba(255,255,255,0.02); color: var(--z500);
+  border-color: rgba(255,255,255,0.06);
+}
+.action-btn.skip:hover { color: var(--z300); }
+
+/* ── Verdict Spot-Check ── */
+.verdict-section { margin-bottom: 40px; }
+
+.verdict-item {
+  padding: 20px 24px; border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+}
+.verdict-query {
+  font-size: 13px; color: var(--z500); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.verdict-query .user-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--z600); background: rgba(255,255,255,0.04);
+  padding: 2px 6px; border-radius: 4px;
+}
+.verdict-response {
+  font-size: 14px; color: var(--z300); line-height: 1.6;
+  margin-bottom: 12px;
+  padding: 16px; border-radius: 10px;
+  background: rgba(139,92,246,0.03);
+  border: 0.5px solid rgba(139,92,246,0.08);
+}
+.verdict-response .claim {
+  display: inline;
+  border-bottom: 1px dashed rgba(52,211,153,0.3);
+  cursor: help;
+}
+.verdict-response .claim-source {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--z600); vertical-align: super;
+}
+.verdict-axioms-used {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 12px;
+}
+.axiom-ref {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 4px;
+  background: rgba(139,92,246,0.06); color: var(--v400);
+  cursor: pointer; transition: background 150ms;
+}
+.axiom-ref:hover { background: rgba(139,92,246,0.12); }
+
+.verdict-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 12px; border-top: 0.5px solid rgba(255,255,255,0.04);
+}
+.verdict-actions .left { display: flex; gap: 8px; }
+.verdict-accuracy {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--z500);
+}
+.accuracy-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: pointer; border: 0.5px solid;
+  transition: all 150ms;
+}
+.accuracy-btn.up {
+  background: var(--green-surface); color: var(--green);
+  border-color: rgba(52,211,153,0.15);
+}
+.accuracy-btn.up:hover { background: rgba(52,211,153,0.15); }
+.accuracy-btn.down {
+  background: var(--red-surface); color: var(--red);
+  border-color: rgba(248,113,113,0.15);
+}
+.accuracy-btn.down:hover { background: rgba(248,113,113,0.15); }
+.add-note-btn {
+  font-size: 12px; color: var(--z600); cursor: pointer;
+  background: none; border: none; font-family: var(--sans);
+  transition: color 150ms;
+}
+.add-note-btn:hover { color: var(--z400); }
+
+/* ── Activity Feed ── */
+.activity-section { margin-bottom: 40px; }
+
+.activity-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 12px; margin-top: 2px;
+}
+.activity-icon.endorsed { background: var(--green-surface); color: var(--green); }
+.activity-icon.contested { background: var(--amber-surface); color: var(--amber); }
+.activity-icon.resolved { background: rgba(139,92,246,0.08); color: var(--v400); }
+.activity-icon.suggested { background: var(--blue-surface); color: var(--blue); }
+.activity-text { flex: 1; }
+.activity-text .desc { font-size: 13px; color: var(--z400); line-height: 1.5; }
+.activity-text .desc strong { color: var(--z200); font-weight: 500; }
+.activity-text .time {
+  font-family: var(--mono); font-size: 11px; color: var(--z700); margin-top: 2px;
+}
+.activity-status {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 4px;
+  white-space: nowrap; margin-top: 4px;
+}
+.activity-status.live { background: var(--green-surface); color: var(--green); }
+.activity-status.pending { background: var(--amber-surface); color: var(--amber); }
+.activity-status.merged { background: rgba(139,92,246,0.08); color: var(--v400); }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo"><span class="lp">Product</span><span class="la">.ai</span></div>
+    <div class="sidebar-sub">Expert Portal</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Overview</div>
+      <div class="sidebar-item active">
+        <span class="icon">&#9632;</span>
+        Dashboard
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">&#9679;</span>
+        Review Queue
+        <span class="badge review">7</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">&#9654;</span>
+        Verdict Spot-Check
+        <span class="badge new">3</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">&#9650;</span>
+        Activity
+        <span class="badge count">24</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Categories</div>
+      <div class="sidebar-category active">
+        <span class="cat-dot"></span>
+        Dietary Supplements
+      </div>
+      <div class="sidebar-category">
+        <span class="cat-dot"></span>
+        Sports Nutrition
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Resources</div>
+      <div class="sidebar-item">
+        <span class="icon">&#9670;</span>
+        ARC Protocol Guide
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">&#9670;</span>
+        Axiom Style Guide
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">&#9670;</span>
+        Public Truth Page
+      </div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">SC</div>
+      <div>
+        <div class="sidebar-user-name">Dr. Sarah Chen</div>
+        <div class="sidebar-user-role">Trust Architect</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <h1>Dietary Supplements</h1>
+      <div class="topbar-meta">
+        <span class="topbar-badge expert">TRUST ARCHITECT</span>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-row">
+      <div class="summary-card">
+        <div class="num green">48</div>
+        <div class="label">Axioms endorsed</div>
+      </div>
+      <div class="summary-card">
+        <div class="num amber">3</div>
+        <div class="label">Under review</div>
+      </div>
+      <div class="summary-card">
+        <div class="num violet">7</div>
+        <div class="label">Awaiting your review</div>
+      </div>
+      <div class="summary-card">
+        <div class="num blue">12</div>
+        <div class="label">Verdicts to spot-check</div>
+      </div>
+    </div>
+
+    <!-- Review Queue -->
+    <div class="review-queue">
+      <div class="section-header">
+        <h2>Review queue</h2>
+        <span class="filter">Newest first &#9662;</span>
+      </div>
+
+      <!-- New Axiom -->
+      <div class="review-item new">
+        <div class="review-item-header">
+          <span class="review-item-type new-axiom">NEW AXIOM</span>
+          <span class="review-item-domain">BIOAVAILABILITY</span>
+        </div>
+        <div class="review-item-statement">Liposomal delivery increases vitamin C bioavailability by 1.5-1.8x compared to standard ascorbic acid, but at 3-5x the cost per effective milligram - making it cost-ineffective for most consumers below 2g/day dosing.</div>
+        <div class="review-item-context">Forged via ARC run #247 on Mar 16. Three agents converged on efficacy claim. Cost-effectiveness threshold is novel - flagged for expert review before publishing.</div>
+        <div class="review-item-actions">
+          <button class="action-btn endorse">&#10003; Endorse</button>
+          <button class="action-btn contest">&#9998; Contest</button>
+          <button class="action-btn flag">&#9888; Flag Decay</button>
+          <button class="action-btn skip">Skip</button>
+        </div>
+      </div>
+
+      <!-- Re-forged Axiom (from expert contest) -->
+      <div class="review-item urgent">
+        <div class="review-item-header">
+          <span class="review-item-type re-forge">RE-FORGED</span>
+          <span class="review-item-domain">ECONOMICS</span>
+        </div>
+        <div class="review-item-statement">DTC supplement affiliate commissions (30-50%) vs Amazon (1-3%) create a structural incentive for review sites to recommend DTC brands. However, some DTC brands (Thorne, Pure Encapsulations, Momentous) justify premium pricing through pharmaceutical-grade manufacturing, third-party verification, and clinical-dose formulations.</div>
+        <div class="review-item-context">Re-forged after your contest on Mar 14. Original axiom was over-broad - you noted some DTC brands genuinely deliver superior formulations. ARC re-run added the nuance. Does this version address your concern?</div>
+        <div class="review-item-actions">
+          <button class="action-btn endorse">&#10003; Endorse</button>
+          <button class="action-btn contest">&#9998; Contest Again</button>
+          <button class="action-btn skip">Skip</button>
+        </div>
+      </div>
+
+      <!-- Suggestion from another expert -->
+      <div class="review-item new">
+        <div class="review-item-header">
+          <span class="review-item-type suggestion">PEER SUGGESTION</span>
+          <span class="review-item-domain">SAFETY</span>
+        </div>
+        <div class="review-item-statement">Proposed by Dr. Riya Kapoor: "Pre-workout supplements containing DMAA (1,3-dimethylamylamine) remain available despite FDA warning letters. DMAA is a synthetic amphetamine analog associated with 5 reported deaths and multiple cardiac events."</div>
+        <div class="review-item-context">Dr. Kapoor suggests adding this to the Safety domain. She provided 3 FDA warning letter citations and 2 case reports. Do you endorse adding this axiom?</div>
+        <div class="review-item-actions">
+          <button class="action-btn endorse">&#10003; Endorse</button>
+          <button class="action-btn contest">&#9998; Modify</button>
+          <button class="action-btn skip">Skip</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Verdict Spot-Check -->
+    <div class="verdict-section">
+      <div class="section-header">
+        <h2>Recent verdicts to spot-check</h2>
+        <span class="filter">Last 7 days &#9662;</span>
+      </div>
+
+      <div class="verdict-item">
+        <div class="verdict-query">
+          <span class="user-label">USER QUERY</span>
+          "What's the best magnesium supplement for sleep? I've been taking Nature Made 400mg oxide."
+        </div>
+        <div class="verdict-response">
+          <strong>Verdict: Switch from oxide to glycinate form.</strong> Your current Nature Made 400mg oxide is delivering approximately <span class="claim">16mg of absorbed magnesium<span class="claim-source">[A1]</span></span> - about 4% bioavailability. For sleep specifically, <span class="claim">magnesium glycinate has dual benefit: the magnesium supports GABA receptor function, and glycine itself is an inhibitory neurotransmitter that independently promotes sleep<span class="claim-source">[A5]</span></span>. Recommended: Doctor's Best High Absorption Magnesium (glycinate/lysinate chelate), 200mg before bed. You'll absorb more from 200mg glycinate than 400mg oxide, and <span class="claim">glycinate is the best-tolerated form with lowest GI side effect rate<span class="claim-source">[A3]</span></span>.
+        </div>
+        <div class="verdict-axioms-used">
+          <span class="axiom-ref">[A1] Bioavailability</span>
+          <span class="axiom-ref">[A3] GI Tolerance</span>
+          <span class="axiom-ref">[A5] Sleep Mechanism</span>
+          <span class="axiom-ref">[A12] Brand Verification</span>
+        </div>
+        <div class="verdict-actions">
+          <div class="left">
+            <div class="verdict-accuracy">
+              <span>Accurate?</span>
+              <button class="accuracy-btn up">&#9650;</button>
+              <button class="accuracy-btn down">&#9660;</button>
+            </div>
+            <button class="add-note-btn">+ Add expert note</button>
+          </div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--z700);">Mar 18, 2026 14:32</span>
+        </div>
+      </div>
+
+      <div class="verdict-item">
+        <div class="verdict-query">
+          <span class="user-label">USER QUERY</span>
+          "Is Athletic Greens worth it or is it just marketing?"
+        </div>
+        <div class="verdict-response">
+          <strong>Verdict: Overpriced for what it delivers.</strong> AG1 costs <span class="claim">$2.63/day ($79/month)<span class="claim-source">[A9]</span></span> for a proprietary blend where <span class="claim">individual ingredient doses are hidden behind a combined "Alkaline, Nutrient-Dense Raw Superfood Complex" label of 7.2g<span class="claim-source">[A2]</span></span>. Without knowing individual doses, it's impossible to verify clinical efficacy for any single ingredient. The <span class="claim">vitamin/mineral portion duplicates a $0.10/day multivitamin<span class="claim-source">[A6]</span></span>. Independent testing exists (ConsumerLab reviewed it) but the proprietary blend structure prevents meaningful dose verification. You'd get more verified nutrition from a <span class="claim">basic multivitamin + specific supplements for your actual deficiencies (identified via blood work)<span class="claim-source">[A7]</span></span>.
+        </div>
+        <div class="verdict-axioms-used">
+          <span class="axiom-ref">[A2] Label Accuracy</span>
+          <span class="axiom-ref">[A6] Verification Tiers</span>
+          <span class="axiom-ref">[A7] Stack Optimization</span>
+          <span class="axiom-ref">[A9] DTC Economics</span>
+        </div>
+        <div class="verdict-actions">
+          <div class="left">
+            <div class="verdict-accuracy">
+              <span>Accurate?</span>
+              <button class="accuracy-btn up">&#9650;</button>
+              <button class="accuracy-btn down">&#9660;</button>
+            </div>
+            <button class="add-note-btn">+ Add expert note</button>
+          </div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--z700);">Mar 17, 2026 09:14</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="activity-section">
+      <div class="section-header">
+        <h2>Your activity</h2>
+        <span class="filter">All &#9662;</span>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon resolved">&#10003;</div>
+        <div class="activity-text">
+          <div class="desc">Your contest on <strong>"DTC affiliate incentives"</strong> was resolved. The axiom was re-forged with your nuance about quality DTC brands. Awaiting your re-review.</div>
+          <div class="time">Mar 18, 2026</div>
+        </div>
+        <span class="activity-status pending">AWAITING REVIEW</span>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon endorsed">&#10003;</div>
+        <div class="activity-text">
+          <div class="desc">You endorsed <strong>"Supplement-drug interactions"</strong> axiom. Now live on the public Truth Page with your attribution.</div>
+          <div class="time">Mar 8, 2026</div>
+        </div>
+        <span class="activity-status live">LIVE</span>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon endorsed">&#10003;</div>
+        <div class="activity-text">
+          <div class="desc">You endorsed <strong>"Bioavailability by form"</strong> axiom. Now live on the public Truth Page with your attribution.</div>
+          <div class="time">Mar 8, 2026</div>
+        </div>
+        <span class="activity-status live">LIVE</span>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon suggested">+</div>
+        <div class="activity-text">
+          <div class="desc">You suggested a new axiom: <strong>"Methylfolate vs folic acid for MTHFR variants"</strong>. Entered forge pipeline.</div>
+          <div class="time">Mar 6, 2026</div>
+        </div>
+        <span class="activity-status merged">IN FORGE</span>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon contested">!</div>
+        <div class="activity-text">
+          <div class="desc">You contested <strong>"DTC affiliate incentives"</strong>. Reason: "Over-broad conclusion. Some DTC brands justify premium through pharma-grade manufacturing."</div>
+          <div class="time">Mar 14, 2026</div>
+        </div>
+        <span class="activity-status merged">RE-FORGED</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bioavailability - Dietary Supplements Axioms | Product.ai Truth Graph</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v400: #A384FF; --v500: #8B5CF6;
+  --green: #34d399; --green-surface: rgba(52,211,153,0.06);
+  --amber: #CEAD50; --amber-surface: rgba(206,173,80,0.06);
+  --red: #f87171; --red-surface: rgba(248,113,113,0.06);
+  --blue: #6EB6FF; --blue-surface: rgba(110,182,255,0.06);
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: var(--black); color: var(--white); line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+.container { max-width: 900px; margin: 0 auto; padding: 0 48px; }
+
+/* Nav */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--z900); padding: 0 48px;
+}
+.nav-inner {
+  max-width: 900px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; height: 56px;
+}
+.nav-logo { display: flex; align-items: baseline; }
+.lp { font-size: 17px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.la { font-family: var(--mono); font-size: 17px; color: var(--v500); }
+.nav-links { display: flex; gap: 24px; }
+.nav-links a { font-size: 13px; color: var(--z500); transition: color 150ms; }
+.nav-links a:hover { color: var(--z300); }
+.nav-links a.active { color: var(--v500); }
+
+/* Breadcrumb */
+.breadcrumb {
+  padding: 16px 0 0; display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--z600);
+}
+.breadcrumb a { color: var(--z500); transition: color 150ms; }
+.breadcrumb a:hover { color: var(--z300); }
+
+/* Section label */
+.section-label {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--v500); margin-bottom: 12px;
+}
+.section-label::before {
+  content: ''; width: 8px; height: 8px; background: var(--v500); transform: rotate(45deg);
+}
+
+/* Domain header */
+.domain-header { padding: 48px 0 32px; }
+.domain-header h1 {
+  font-size: 36px; font-weight: 500; color: var(--white);
+  letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 8px;
+}
+.domain-header p { font-size: 16px; color: var(--z400); line-height: 1.7; max-width: 640px; }
+.domain-stats {
+  display: flex; gap: 32px; margin-top: 20px;
+}
+.domain-stat { display: flex; align-items: baseline; gap: 6px; }
+.domain-stat .num { font-family: var(--mono); font-size: 20px; font-weight: 500; }
+.domain-stat .num.v { color: var(--v500); }
+.domain-stat .num.w { color: var(--white); }
+.domain-stat .num.g { color: var(--green); }
+.domain-stat .num.a { color: var(--amber); }
+.domain-stat .lbl { font-size: 12px; color: var(--z500); }
+
+/* Axiom cards */
+.axiom-list { display: flex; flex-direction: column; gap: 16px; padding-bottom: 80px; }
+
+.axiom-card {
+  border-radius: 12px; background: rgba(255,255,255,0.02);
+  border: 1px solid var(--z900); overflow: hidden;
+}
+
+.axiom-main { padding: 24px; }
+
+.axiom-top {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.axiom-id {
+  font-family: var(--mono); font-size: 11px; color: var(--z600); letter-spacing: 0.04em;
+}
+.confidence {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.06em; padding: 2px 8px; border-radius: 100px;
+}
+.confidence .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.confidence.forged { color: var(--green); background: var(--green-surface); }
+.confidence.review { color: var(--amber); background: var(--amber-surface); }
+
+.axiom-statement {
+  font-size: 16px; font-weight: 500; color: var(--z200); line-height: 1.5; margin-bottom: 10px;
+}
+
+.axiom-physics {
+  font-family: var(--mono); font-size: 13px; color: var(--z500); line-height: 1.6;
+  padding: 12px 16px; border-radius: 8px; background: rgba(255,255,255,0.02);
+  border-left: 2px solid rgba(139,92,246,0.2); margin-bottom: 16px;
+}
+
+/* Kill surface */
+.kill-surface {
+  padding: 12px 16px; border-radius: 8px;
+  background: var(--red-surface); border: 1px solid rgba(248,113,113,0.1);
+  margin-bottom: 16px;
+}
+.kill-surface-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--red); letter-spacing: 0.06em; margin-bottom: 4px;
+}
+.kill-surface-text {
+  font-size: 13px; color: var(--z400); line-height: 1.5;
+}
+
+/* Evidence chain */
+.evidence-section { margin-bottom: 16px; }
+.evidence-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--z600); letter-spacing: 0.06em; margin-bottom: 8px;
+}
+.evidence-list { display: flex; flex-direction: column; gap: 8px; }
+.evidence-item {
+  display: flex; gap: 10px; padding: 10px 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+}
+.ev-icon {
+  width: 22px; height: 22px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 9px; font-weight: 600; flex-shrink: 0; margin-top: 1px;
+}
+.ev-icon.src { background: var(--blue-surface); color: var(--blue); }
+.ev-icon.arc { background: rgba(139,92,246,0.08); color: var(--v400); }
+.ev-text { font-size: 13px; color: var(--z400); line-height: 1.5; }
+.ev-text strong { color: var(--z300); font-weight: 500; }
+.ev-cite { font-family: var(--mono); font-size: 11px; color: var(--z600); display: block; margin-top: 2px; }
+
+/* Axiom meta footer */
+.axiom-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 12px; border-top: 1px solid var(--z900);
+  font-size: 12px; color: var(--z600);
+}
+.axiom-meta-left { display: flex; gap: 16px; }
+.axiom-meta-item { display: flex; align-items: center; gap: 4px; }
+.axiom-meta-item .mono { font-family: var(--mono); font-size: 11px; }
+
+/* ══════════════════════════════════════════
+   CHALLENGE BAR (the new thing)
+   ══════════════════════════════════════════ */
+.challenge-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(255,255,255,0.015);
+  border-top: 1px solid var(--z900);
+}
+.challenge-bar-left {
+  display: flex; align-items: center; gap: 16px;
+  font-size: 12px; color: var(--z600);
+}
+.challenge-count {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px;
+}
+.challenge-count .num { color: var(--z400); font-weight: 500; }
+.challenge-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 12px; font-weight: 500; color: var(--z400);
+  background: rgba(255,255,255,0.03); border: 1px solid var(--z900);
+  cursor: pointer; transition: all 150ms;
+  font-family: var(--sans);
+}
+.challenge-btn:hover { border-color: var(--z700); color: var(--z200); }
+
+/* ══════════════════════════════════════════
+   CHALLENGE HISTORY (visible on axiom)
+   ══════════════════════════════════════════ */
+.challenge-history {
+  padding: 0 24px 20px;
+}
+.challenge-history-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--z600); letter-spacing: 0.06em; margin-bottom: 10px;
+  padding-top: 4px;
+}
+
+.challenge-entry {
+  padding: 12px 16px; border-radius: 8px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+  margin-bottom: 8px;
+}
+.challenge-entry:last-child { margin-bottom: 0; }
+
+.challenge-entry-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.challenge-entry-who {
+  font-size: 12px; color: var(--z400);
+}
+.challenge-entry-who .type {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 1px 6px; border-radius: 4px; margin-right: 6px;
+}
+.challenge-entry-who .type.user { background: rgba(255,255,255,0.04); color: var(--z500); }
+.challenge-entry-who .type.merchant { background: rgba(139,92,246,0.08); color: var(--v400); }
+.challenge-entry-who .type.alpha { background: var(--green-surface); color: var(--green); }
+
+.challenge-entry-status {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px;
+}
+.challenge-entry-status.upheld { background: var(--green-surface); color: var(--green); }
+.challenge-entry-status.reforged { background: rgba(139,92,246,0.08); color: var(--v400); }
+.challenge-entry-status.pending { background: var(--amber-surface); color: var(--amber); }
+
+.challenge-entry-text { font-size: 13px; color: var(--z500); line-height: 1.5; }
+.challenge-entry-evidence {
+  font-size: 12px; color: var(--z600); margin-top: 4px;
+  font-family: var(--mono);
+}
+.challenge-resolution {
+  margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04);
+  font-size: 12px; color: var(--z500); line-height: 1.5;
+}
+.challenge-resolution strong { color: var(--z300); font-weight: 500; }
+
+/* ══════════════════════════════════════════
+   CHALLENGE SUBMISSION MODAL
+   ══════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal {
+  width: 560px; max-height: 80vh; overflow-y: auto;
+  background: var(--z925); border: 1px solid var(--z800);
+  border-radius: 16px; padding: 32px;
+}
+.modal h2 {
+  font-size: 20px; font-weight: 600; color: var(--white);
+  margin-bottom: 4px;
+}
+.modal .modal-sub {
+  font-size: 14px; color: var(--z400); line-height: 1.6; margin-bottom: 24px;
+}
+.modal-axiom-ref {
+  padding: 12px 16px; border-radius: 8px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+  margin-bottom: 24px;
+}
+.modal-axiom-ref .ref-label {
+  font-family: var(--mono); font-size: 10px; color: var(--z600);
+  letter-spacing: 0.06em; margin-bottom: 4px;
+}
+.modal-axiom-ref .ref-text {
+  font-size: 13px; color: var(--z300); line-height: 1.5;
+}
+
+.form-group { margin-bottom: 20px; }
+.form-label {
+  font-size: 13px; font-weight: 500; color: var(--z200);
+  margin-bottom: 6px; display: block;
+}
+.form-hint {
+  font-size: 12px; color: var(--z600); margin-bottom: 8px;
+}
+.form-select {
+  width: 100%; padding: 10px 14px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--z800);
+  color: var(--z300); font-size: 14px; font-family: var(--sans);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2371717A' viewBox='0 0 256 256'%3E%3Cpath d='M213.66 101.66l-80 80a8 8 0 01-11.32 0l-80-80A8 8 0 0148 88h160a8 8 0 015.66 13.66z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+.form-textarea {
+  width: 100%; padding: 12px 14px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--z800);
+  color: var(--z300); font-size: 14px; font-family: var(--sans);
+  resize: vertical; min-height: 100px; line-height: 1.6;
+}
+.form-textarea::placeholder { color: var(--z700); }
+.form-input {
+  width: 100%; padding: 10px 14px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--z800);
+  color: var(--z300); font-size: 14px; font-family: var(--sans);
+}
+.form-input::placeholder { color: var(--z700); }
+
+.form-evidence-note {
+  padding: 12px 16px; border-radius: 8px;
+  background: rgba(139,92,246,0.04); border: 1px solid rgba(139,92,246,0.1);
+  margin-bottom: 20px;
+}
+.form-evidence-note p {
+  font-size: 13px; color: var(--z400); line-height: 1.5;
+}
+.form-evidence-note strong { color: var(--z300); font-weight: 500; }
+
+.modal-actions {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding-top: 16px; border-top: 1px solid var(--z900);
+}
+.modal-btn {
+  padding: 10px 20px; border-radius: 8px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  font-family: var(--sans); border: 1px solid;
+  transition: all 150ms;
+}
+.modal-btn.cancel {
+  background: transparent; color: var(--z400);
+  border-color: var(--z800);
+}
+.modal-btn.cancel:hover { color: var(--z200); border-color: var(--z600); }
+.modal-btn.submit {
+  background: var(--v500); color: var(--white);
+  border-color: var(--v500);
+}
+.modal-btn.submit:hover { opacity: 0.9; }
+
+.terms-note {
+  font-size: 11px; color: var(--z600); line-height: 1.5;
+  margin-top: 12px;
+}
+
+/* Footer */
+.footer {
+  padding: 48px; border-top: 1px solid var(--z900);
+  display: flex; justify-content: center; gap: 16px; align-items: center;
+}
+.footer .f-lp { font-size: 14px; font-weight: 600; color: var(--z600); }
+.footer .f-la { font-family: var(--mono); font-size: 14px; color: var(--z700); }
+.footer .f-meta { font-family: var(--mono); font-size: 11px; color: var(--z800); }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><span class="lp">Product</span><span class="la">.ai</span></a>
+    <div class="nav-links">
+      <a href="#">For Shoppers</a>
+      <a href="#" class="active">Truth Graph</a>
+      <a href="#">Codex</a>
+      <a href="#">Research</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="#">Truth Graph</a> <span style="color:var(--z700)">/</span>
+    <a href="#">Supplements</a> <span style="color:var(--z700)">/</span>
+    <span style="color:var(--z400)">Bioavailability</span>
+  </div>
+
+  <!-- Domain Header -->
+  <div class="domain-header">
+    <div class="section-label">Dietary Supplements - Axiom Domain</div>
+    <h1>Bioavailability</h1>
+    <p>How supplement form, delivery mechanism, and biochemistry determine what your body actually absorbs - independent of what the label claims.</p>
+    <div class="domain-stats">
+      <div class="domain-stat"><span class="num v">9</span><span class="lbl">axioms</span></div>
+      <div class="domain-stat"><span class="num g">7</span><span class="lbl">forged</span></div>
+      <div class="domain-stat"><span class="num a">1</span><span class="lbl">under review</span></div>
+      <div class="domain-stat"><span class="num w">4</span><span class="lbl">challenges received</span></div>
+    </div>
+  </div>
+
+  <!-- Axiom List -->
+  <div class="axiom-list">
+
+    <!-- ══════ AXIOM 1: Full detail with challenge history ══════ -->
+    <div class="axiom-card">
+      <div class="axiom-main">
+        <div class="axiom-top">
+          <span class="axiom-id">SUPP-BIO-001</span>
+          <span class="confidence forged"><span class="dot"></span> FORGED</span>
+        </div>
+
+        <div class="axiom-statement">Supplement form determines bioavailability more than dosage. Magnesium glycinate absorbs at 2.3x the rate of magnesium oxide despite identical label claims.</div>
+
+        <div class="axiom-physics">The chelation bond in glycinate protects the mineral through gastric acid (pH 1.5-3.5), enabling intestinal absorption. Oxide forms dissociate in the stomach, converting to insoluble hydroxide at intestinal pH. Bioavailability: glycinate 80% vs oxide 4%.</div>
+
+        <!-- Kill surface -->
+        <div class="kill-surface">
+          <div class="kill-surface-label">KILL SURFACE</div>
+          <div class="kill-surface-text">This axiom would be disproved by: a controlled crossover study (n>50) showing equivalent serum magnesium levels from oxide and glycinate at equal elemental doses, measured via 24-hour urinary excretion.</div>
+        </div>
+
+        <!-- Evidence -->
+        <div class="evidence-section">
+          <div class="evidence-label">EVIDENCE CHAIN</div>
+          <div class="evidence-list">
+            <div class="evidence-item">
+              <div class="ev-icon src">S</div>
+              <div class="ev-text">
+                <strong>ConsumerLab 2024 Magnesium Report:</strong> Tested 40 supplements. Oxide: 3-5% urinary recovery. Chelated forms: 18-24%.
+                <span class="ev-cite">consumerlab.com/reviews/magnesium/</span>
+              </div>
+            </div>
+            <div class="evidence-item">
+              <div class="ev-icon src">S</div>
+              <div class="ev-text">
+                <strong>Firoz & Graber (2001), J Am Coll Nutr:</strong> Crossover study comparing four magnesium preparations. Glycinate showed highest fractional absorption.
+                <span class="ev-cite">doi: 10.1080/07315724.2001.10719064</span>
+              </div>
+            </div>
+            <div class="evidence-item">
+              <div class="ev-icon arc">A</div>
+              <div class="ev-text">
+                <strong>Adversarial verification:</strong> Three independent research agents converged on glycinate > oxide bioavailability. No dissent. ChatGPT baseline test recommended oxide for "highest elemental magnesium" - failed to distinguish label dose from absorbed dose.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meta -->
+        <div class="axiom-meta">
+          <div class="axiom-meta-left">
+            <div class="axiom-meta-item"><span class="mono">Forged:</span> Feb 19, 2026</div>
+            <div class="axiom-meta-item"><span class="mono">Decay:</span> Evergreen</div>
+            <div class="axiom-meta-item"><span class="mono">Confidence:</span> 0.94</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHALLENGE BAR -->
+      <div class="challenge-bar">
+        <div class="challenge-bar-left">
+          <div class="challenge-count"><span class="num">2</span> challenges received</div>
+          <span style="color:var(--z700)">-</span>
+          <span style="font-size:12px;color:var(--z600);">Both upheld</span>
+        </div>
+        <button class="challenge-btn">
+          <svg width="12" height="12" viewBox="0 0 256 256" fill="currentColor"><path d="M140 180a12 12 0 11-24 0 12 12 0 0124 0zm36-108a60 60 0 01-32.78 53.51A8 8 0 00136 133v11a8 8 0 01-16 0v-16a8 8 0 018-8 44 44 0 10-44-44 8 8 0 01-16 0 60 60 0 0168-4z"/></svg>
+          Challenge this claim
+        </button>
+      </div>
+
+      <!-- CHALLENGE HISTORY -->
+      <div class="challenge-history">
+        <div class="challenge-history-label">CHALLENGE HISTORY</div>
+
+        <div class="challenge-entry">
+          <div class="challenge-entry-header">
+            <div class="challenge-entry-who">
+              <span class="type merchant">MERCHANT</span>
+              Nature's Bounty - via Merchant Portal
+            </div>
+            <span class="challenge-entry-status upheld">AXIOM UPHELD</span>
+          </div>
+          <div class="challenge-entry-text">"Our magnesium oxide products undergo USP dissolution testing and meet all label claims for elemental magnesium content."</div>
+          <div class="challenge-entry-evidence">Evidence submitted: USP dissolution test results (internal)</div>
+          <div class="challenge-resolution">
+            <strong>Resolution:</strong> Challenge evaluated. The submitted evidence confirms label accuracy for elemental content but does not address bioavailability (absorption rate). The axiom distinguishes between label dose and absorbed dose. USP dissolution testing measures release from tablet, not absorption by the body. Axiom stands. <span style="font-family:var(--mono);font-size:11px;color:var(--z600)">- Reviewed Mar 4, 2026</span>
+          </div>
+        </div>
+
+        <div class="challenge-entry">
+          <div class="challenge-entry-header">
+            <div class="challenge-entry-who">
+              <span class="type user">USER</span>
+              Anonymous contributor
+            </div>
+            <span class="challenge-entry-status upheld">AXIOM UPHELD</span>
+          </div>
+          <div class="challenge-entry-text">"The 2.3x figure seems specific. What's the exact source for this multiplier?"</div>
+          <div class="challenge-entry-evidence">No evidence submitted - clarification request</div>
+          <div class="challenge-resolution">
+            <strong>Resolution:</strong> Fair question. The 2.3x figure derives from the Firoz & Graber (2001) crossover study comparing fractional absorption rates. Source citation added to evidence chain. Axiom stands with improved sourcing. <span style="font-family:var(--mono);font-size:11px;color:var(--z600)">- Reviewed Feb 28, 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ AXIOM 2: Under review from merchant challenge ══════ -->
+    <div class="axiom-card">
+      <div class="axiom-main">
+        <div class="axiom-top">
+          <span class="axiom-id">SUPP-BIO-003</span>
+          <span class="confidence review"><span class="dot"></span> UNDER REVIEW</span>
+        </div>
+
+        <div class="axiom-statement">Liposomal delivery increases vitamin C bioavailability by 1.5-1.8x compared to standard ascorbic acid, but at 3-5x the cost per effective milligram - making it cost-ineffective for most consumers below 2g/day dosing.</div>
+
+        <div class="axiom-physics">Liposomal encapsulation protects ascorbic acid from gastric degradation and enables direct cellular uptake via phospholipid bilayer fusion. However, absorption advantage diminishes at lower doses where standard ascorbic acid already achieves 70-90% absorption.</div>
+
+        <div class="kill-surface">
+          <div class="kill-surface-label">KILL SURFACE</div>
+          <div class="kill-surface-text">Disproved by: pharmacokinetic study showing liposomal vitamin C achieves >2x serum levels vs standard at doses below 1g, with cost parity or advantage.</div>
+        </div>
+
+        <div class="axiom-meta">
+          <div class="axiom-meta-left">
+            <div class="axiom-meta-item"><span class="mono">Forged:</span> Mar 16, 2026</div>
+            <div class="axiom-meta-item"><span class="mono">Decay:</span> Seasonal</div>
+            <div class="axiom-meta-item"><span class="mono">Confidence:</span> 0.72</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="challenge-bar">
+        <div class="challenge-bar-left">
+          <div class="challenge-count"><span class="num" style="color:var(--amber)">1</span> active challenge</div>
+          <span style="color:var(--z700)">-</span>
+          <span style="font-size:12px;color:var(--amber);">Under review</span>
+        </div>
+        <button class="challenge-btn">
+          <svg width="12" height="12" viewBox="0 0 256 256" fill="currentColor"><path d="M140 180a12 12 0 11-24 0 12 12 0 0124 0zm36-108a60 60 0 01-32.78 53.51A8 8 0 00136 133v11a8 8 0 01-16 0v-16a8 8 0 018-8 44 44 0 10-44-44 8 8 0 01-16 0 60 60 0 0168-4z"/></svg>
+          Challenge this claim
+        </button>
+      </div>
+
+      <div class="challenge-history">
+        <div class="challenge-history-label">ACTIVE CHALLENGE</div>
+        <div class="challenge-entry">
+          <div class="challenge-entry-header">
+            <div class="challenge-entry-who">
+              <span class="type merchant">MERCHANT</span>
+              LivOn Laboratories - via Merchant Portal
+            </div>
+            <span class="challenge-entry-status pending">UNDER REVIEW</span>
+          </div>
+          <div class="challenge-entry-text">"Our published pharmacokinetic data (Davis et al., 2016, Nutr Metab Insights) demonstrates significantly higher plasma levels from liposomal vitamin C at the 1g dose point. The cost-effectiveness threshold should be 1g, not 2g."</div>
+          <div class="challenge-entry-evidence">Evidence: Published PK study (doi: 10.4137/NMI.S39764) + internal batch cost analysis showing $0.12/effective-mg at scale</div>
+          <div class="challenge-resolution">
+            <strong>Status:</strong> Evidence accepted for adversarial re-evaluation. The cited study is peer-reviewed and addresses the kill surface directly. Re-forge initiated Mar 18. Expected resolution by Mar 25. <span style="font-family:var(--mono);font-size:11px;color:var(--amber)">- In progress</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ AXIOM 3: Simple, no challenges yet ══════ -->
+    <div class="axiom-card">
+      <div class="axiom-main">
+        <div class="axiom-top">
+          <span class="axiom-id">SUPP-BIO-005</span>
+          <span class="confidence forged"><span class="dot"></span> FORGED</span>
+        </div>
+
+        <div class="axiom-statement">Fat-soluble vitamins (A, D, E, K) require co-ingestion with dietary fat for absorption. Taking them on an empty stomach reduces bioavailability by 50-80% depending on the vitamin and fat content of the meal.</div>
+
+        <div class="axiom-physics">Fat-soluble vitamins are incorporated into mixed micelles during digestion, which require bile salt emulsification of dietary lipids. Without adequate fat (minimum ~10-15g), micelle formation is insufficient for vitamin solubilization and transepithelial absorption.</div>
+
+        <div class="axiom-meta">
+          <div class="axiom-meta-left">
+            <div class="axiom-meta-item"><span class="mono">Forged:</span> Feb 19, 2026</div>
+            <div class="axiom-meta-item"><span class="mono">Decay:</span> Evergreen</div>
+            <div class="axiom-meta-item"><span class="mono">Confidence:</span> 0.97</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="challenge-bar">
+        <div class="challenge-bar-left">
+          <span style="font-size:12px;color:var(--z600);">No challenges received</span>
+        </div>
+        <button class="challenge-btn">
+          <svg width="12" height="12" viewBox="0 0 256 256" fill="currentColor"><path d="M140 180a12 12 0 11-24 0 12 12 0 0124 0zm36-108a60 60 0 01-32.78 53.51A8 8 0 00136 133v11a8 8 0 01-16 0v-16a8 8 0 018-8 44 44 0 10-44-44 8 8 0 01-16 0 60 60 0 0168-4z"/></svg>
+          Challenge this claim
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHALLENGE MODAL (shown as if user clicked "Challenge this claim")
+     ══════════════════════════════════════════ -->
+<div class="modal-overlay">
+  <div class="modal">
+    <h2>Challenge an axiom</h2>
+    <p class="modal-sub">Product.ai's intelligence improves when claims are tested. Submit evidence that challenges this axiom and our system will re-evaluate it.</p>
+
+    <div class="modal-axiom-ref">
+      <div class="ref-label">AXIOM SUPP-BIO-001</div>
+      <div class="ref-text">Supplement form determines bioavailability more than dosage. Magnesium glycinate absorbs at 2.3x the rate of magnesium oxide despite identical label claims.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">What's wrong with this claim?</label>
+      <select class="form-select">
+        <option>Select a reason...</option>
+        <option>Inaccurate - the claim is factually incorrect</option>
+        <option>Outdated - new evidence changes the conclusion</option>
+        <option>Missing nuance - the claim is true but incomplete</option>
+        <option>Missing entirely - there's a claim that should exist but doesn't</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Your evidence</label>
+      <div class="form-hint">Describe what's wrong and why. Be specific.</div>
+      <textarea class="form-textarea" placeholder="Example: The 2.3x multiplier overstates the difference. A 2023 meta-analysis (Smith et al.) found the range is 1.8-2.1x across all chelated forms, not specifically glycinate..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Source (required)</label>
+      <div class="form-hint">Link to peer-reviewed study, lab report, regulatory filing, or other verifiable source.</div>
+      <input class="form-input" type="url" placeholder="https://doi.org/10.1234/example">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Additional source (optional)</label>
+      <input class="form-input" type="url" placeholder="https://...">
+    </div>
+
+    <div class="form-evidence-note">
+      <p><strong>How challenges work:</strong> Your evidence enters our adversarial evaluation pipeline. If the evidence meets quality thresholds, the axiom is re-evaluated through independent verification. You'll receive the outcome at the email you provide. All evidence submitted becomes part of Product.ai's knowledge system.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Your email (for resolution notification)</label>
+      <input class="form-input" type="email" placeholder="you@example.com">
+    </div>
+
+    <div class="modal-actions">
+      <button class="modal-btn cancel">Cancel</button>
+      <button class="modal-btn submit">Submit Challenge</button>
+    </div>
+
+    <div class="terms-note">By submitting, you agree that evidence provided becomes part of Product.ai's knowledge system. Challenges are evaluated by our Axiomatic Intelligence system, not by individual reviewers. All challenge outcomes are published on the axiom page.</div>
+  </div>
+</div>
+
+</body>
+</html>

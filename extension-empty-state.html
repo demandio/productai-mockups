@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Extension - Empty State</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z850: #1F1F22; --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v800: #5A17B7;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1;
+  background: #0a0a0a; color: var(--z50);
+  display: flex; justify-content: center; align-items: flex-start;
+  min-height: 100vh; padding: 24px;
+}
+
+/* Browser frame */
+.browser {
+  width: 1280px; height: 820px; background: #1a1a1a;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 60px rgba(0,0,0,0.6);
+  display: flex; flex-direction: column; flex-shrink: 0;
+}
+
+/* Browser chrome */
+.browser-chrome {
+  height: 40px; background: #252525;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; padding: 0 12px; gap: 8px; flex-shrink: 0;
+}
+.traffic-lights { display: flex; gap: 6px; }
+.tl { width: 12px; height: 12px; border-radius: 50%; }
+.tl.r { background: #ff5f57; } .tl.y { background: #febc2e; } .tl.g { background: #28c840; }
+
+.tab-bar { display: flex; gap: 2px; margin-left: 12px; flex: 1; }
+.tab {
+  padding: 6px 16px; background: #1a1a1a; border-radius: 8px 8px 0 0;
+  font-size: 12px; color: var(--z400); display: flex; align-items: center; gap: 6px; max-width: 200px;
+}
+.tab.active { background: #2a2a2a; color: var(--z200); }
+.tab .tab-icon { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+.tab .tab-icon.gmail { background: #ea4335; }
+.tab .tab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tab .tab-close { font-size: 14px; color: var(--z600); margin-left: auto; }
+
+.chrome-actions { display: flex; gap: 4px; margin-left: auto; }
+.chrome-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; color: var(--z500);
+}
+.chrome-btn svg { width: 16px; height: 16px; }
+
+.ext-icon {
+  width: 28px; height: 28px; border-radius: 6px; background: var(--v500);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ext-icon svg { width: 14px; height: 14px; color: var(--white); }
+
+/* URL bar */
+.url-bar-row {
+  height: 36px; background: #2a2a2a;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex; align-items: center; padding: 0 12px; gap: 8px; flex-shrink: 0;
+}
+.nav-btn { color: var(--z600); }
+.nav-btn svg { width: 16px; height: 16px; }
+.url-field {
+  flex: 1; height: 26px; background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 13px;
+  padding: 0 12px; display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--z400);
+}
+.url-field .lock { color: var(--z600); }
+.url-field .lock svg { width: 12px; height: 12px; }
+.url-field .domain { color: var(--z300); font-weight: 500; }
+
+/* Main area */
+.main-area { flex: 1; display: flex; overflow: hidden; }
+
+/* Gmail page (left) */
+.page-content {
+  flex: 1; background: #f6f8fc; overflow-y: auto; font-family: Arial, sans-serif;
+}
+
+.gmail-header {
+  background: #fff; padding: 8px 16px; display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.gmail-logo { font-size: 22px; font-weight: 500; color: #5f6368; }
+.gmail-logo span { color: #ea4335; font-weight: 700; }
+.gmail-search {
+  flex: 1; height: 40px; background: #eaf1fb; border-radius: 8px;
+  display: flex; align-items: center; padding: 0 16px;
+  font-size: 14px; color: #5f6368;
+}
+
+.gmail-body { display: flex; height: calc(100% - 57px); }
+.gmail-sidebar {
+  width: 200px; padding: 8px; display: flex; flex-direction: column; gap: 2px;
+}
+.gmail-nav-item {
+  padding: 6px 16px; border-radius: 20px; font-size: 13px; color: #5f6368;
+}
+.gmail-nav-item.active {
+  background: #d3e3fd; color: #001d35; font-weight: 600;
+}
+
+.gmail-list { flex: 1; background: #fff; border-radius: 8px 0 0 0; }
+.gmail-toolbar {
+  padding: 6px 16px; border-bottom: 1px solid #e0e0e0;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: #5f6368;
+}
+.gmail-row {
+  padding: 8px 16px; border-bottom: 1px solid #f0f0f0;
+  display: flex; align-items: center; gap: 12px; font-size: 13px;
+}
+.gmail-row .gr-check { width: 16px; height: 16px; border: 1.5px solid #dadce0; border-radius: 2px; flex-shrink: 0; }
+.gmail-row .gr-star { color: #dadce0; font-size: 16px; flex-shrink: 0; }
+.gmail-row .gr-sender { width: 160px; color: #202124; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gmail-row .gr-subject { flex: 1; color: #202124; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gmail-row .gr-subject span { color: #5f6368; font-weight: 400; }
+.gmail-row .gr-date { font-size: 12px; color: #5f6368; flex-shrink: 0; }
+.gmail-row.unread .gr-sender { font-weight: 700; }
+.gmail-row.unread .gr-subject { font-weight: 600; }
+
+/* Side Panel */
+.side-panel {
+  width: 380px; background: var(--z950);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column; flex-shrink: 0;
+}
+
+.sp-header {
+  padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04); flex-shrink: 0;
+}
+.sp-logo { display: flex; align-items: baseline; }
+.sp-logo .sp-p { font-size: 15px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.sp-logo .sp-a { font-family: var(--mono); font-size: 15px; color: var(--v500); }
+.sp-actions { display: flex; gap: 4px; }
+.sp-btn {
+  width: 28px; height: 28px; border-radius: 6px; border: none;
+  background: rgba(255,255,255,0.04); color: var(--z500);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-btn svg { width: 15px; height: 15px; }
+
+.sp-content {
+  flex: 1; overflow-y: auto; padding: 24px 20px;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* Empty state content */
+.empty-icon {
+  width: 64px; height: 64px; border-radius: 20px;
+  background: rgba(139,92,246,0.06); border: 0.5px solid rgba(139,92,246,0.1);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.empty-icon svg { width: 28px; height: 28px; color: var(--v400); }
+
+.empty-title {
+  font-size: 16px; font-weight: 600; color: var(--z200);
+  margin-bottom: 6px; text-align: center;
+}
+
+.empty-desc {
+  font-size: 13px; color: var(--z500); text-align: center;
+  line-height: 1.5; max-width: 280px; margin-bottom: 24px;
+}
+
+/* Search input */
+.empty-search {
+  width: 100%; display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 10px 10px 10px 14px; margin-bottom: 24px;
+}
+.empty-search input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--sans); font-size: 13px; color: var(--white);
+}
+.empty-search input::placeholder { color: var(--z600); }
+.empty-search-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  background: var(--v500); color: var(--white);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.empty-search-btn svg { width: 14px; height: 14px; }
+
+/* Try asking section */
+.try-section {
+  width: 100%; margin-bottom: 24px;
+}
+.try-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--z700); margin-bottom: 8px;
+}
+.try-chip {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 14px; border-radius: 10px;
+  background: rgba(255,255,255,0.02); border: 0.5px solid rgba(255,255,255,0.06);
+  font-size: 13px; color: var(--z400); line-height: 1.4;
+  margin-bottom: 6px; cursor: pointer; transition: all 150ms;
+  font-family: var(--sans);
+}
+.try-chip:hover {
+  background: rgba(139,92,246,0.04); border-color: rgba(139,92,246,0.15);
+  color: var(--z300);
+}
+.try-chip .try-q { color: var(--z200); font-weight: 500; }
+
+/* Recent conversations */
+.recent-section {
+  width: 100%; margin-bottom: 16px;
+}
+.recent-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--z700); margin-bottom: 8px;
+}
+.recent-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 8px;
+  cursor: pointer; transition: background 150ms;
+  margin-bottom: 2px;
+}
+.recent-row:hover { background: rgba(255,255,255,0.03); }
+.recent-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.recent-info { flex: 1; min-width: 0; }
+.recent-name {
+  font-size: 13px; font-weight: 500; color: var(--z300);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.recent-date { font-size: 10px; font-family: var(--mono); color: var(--z700); }
+.recent-verdict {
+  font-size: 9px; font-family: var(--mono); font-weight: 600;
+  padding: 2px 6px; border-radius: 100px;
+}
+.recent-verdict.good { background: rgba(52,211,153,0.1); color: #34d399; }
+.recent-verdict.warn { background: rgba(251,191,36,0.1); color: #fbbf24; }
+
+/* Tip */
+.empty-tip {
+  width: 100%; padding: 12px 14px; border-radius: 10px;
+  background: rgba(139,92,246,0.03); border: 0.5px solid rgba(139,92,246,0.08);
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.tip-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(139,92,246,0.1);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  margin-top: 1px;
+}
+.tip-icon svg { width: 11px; height: 11px; color: var(--v400); }
+.tip-text { font-size: 12px; color: var(--z500); line-height: 1.5; }
+.tip-text strong { color: var(--z400); font-weight: 500; }
+
+/* Input at bottom */
+.sp-input-area {
+  padding: 10px 16px 14px;
+  border-top: 0.5px solid rgba(255,255,255,0.04); flex-shrink: 0;
+}
+.sp-input {
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 8px 8px 8px 14px;
+}
+.sp-input input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--sans); font-size: 13px; color: var(--white);
+}
+.sp-input input::placeholder { color: var(--z600); }
+.sp-input-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  background: var(--v500); color: var(--white);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-input-btn svg { width: 14px; height: 14px; }
+</style>
+</head>
+<body>
+
+<div class="browser">
+  <!-- Browser Chrome -->
+  <div class="browser-chrome">
+    <div class="traffic-lights">
+      <div class="tl r"></div><div class="tl y"></div><div class="tl g"></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab active">
+        <div class="tab-icon gmail"></div>
+        <span class="tab-title">Inbox (3) - michael@product.ai - Gmail</span>
+        <span class="tab-close">&times;</span>
+      </div>
+      <div class="tab">
+        <span class="tab-title">Google Docs</span>
+      </div>
+    </div>
+    <div class="chrome-actions">
+      <div class="chrome-btn">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><path d="M168 128a40 40 0 1 0-40 40"/></svg>
+      </div>
+      <div class="ext-icon">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+      </div>
+      <div class="chrome-btn">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><circle cx="128" cy="128" r="4" fill="currentColor"/><circle cx="128" cy="64" r="4" fill="currentColor"/><circle cx="128" cy="192" r="4" fill="currentColor"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- URL Bar -->
+  <div class="url-bar-row">
+    <div class="nav-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg></div>
+    <div class="nav-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></div>
+    <div class="url-field">
+      <span class="lock"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M208 80H176V56a48 48 0 0 0-96 0V80H48A16 16 0 0 0 32 96V208a16 16 0 0 0 16 16H208a16 16 0 0 0 16-16V96A16 16 0 0 0 208 80ZM96 56a32 32 0 0 1 64 0V80H96Z"/></svg></span>
+      <span class="domain">mail.google.com</span>/mail/u/0/#inbox
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-area">
+
+    <!-- Gmail Page -->
+    <div class="page-content">
+      <div class="gmail-header">
+        <div class="gmail-logo"><span>G</span>mail</div>
+        <div class="gmail-search">Search mail</div>
+      </div>
+      <div class="gmail-body">
+        <div class="gmail-sidebar">
+          <div class="gmail-nav-item active">Inbox</div>
+          <div class="gmail-nav-item">Starred</div>
+          <div class="gmail-nav-item">Snoozed</div>
+          <div class="gmail-nav-item">Sent</div>
+          <div class="gmail-nav-item">Drafts</div>
+        </div>
+        <div class="gmail-list">
+          <div class="gmail-toolbar">Select all &nbsp; | &nbsp; Archive &nbsp; | &nbsp; Delete &nbsp; | &nbsp; Mark as read</div>
+          <div class="gmail-row unread">
+            <div class="gr-check"></div>
+            <span class="gr-star">&#9734;</span>
+            <span class="gr-sender">Elena Madrigal</span>
+            <span class="gr-subject">Brand launch deck v3 - <span>Updated the competitive positioning slide per your notes...</span></span>
+            <span class="gr-date">10:42 AM</span>
+          </div>
+          <div class="gmail-row unread">
+            <div class="gr-check"></div>
+            <span class="gr-star">&#9734;</span>
+            <span class="gr-sender">Jess Ho</span>
+            <span class="gr-subject">Alloy alpha close-out - <span>Here's the gate assessment doc. 4/35 kill shots...</span></span>
+            <span class="gr-date">9:18 AM</span>
+          </div>
+          <div class="gmail-row unread">
+            <div class="gr-check"></div>
+            <span class="gr-star">&#9734;</span>
+            <span class="gr-sender">Bahar Schippel</span>
+            <span class="gr-subject">Phoenix docs - final round - <span>Attached are the revised Operating Agreement and...</span></span>
+            <span class="gr-date">8:55 AM</span>
+          </div>
+          <div class="gmail-row">
+            <div class="gr-check"></div>
+            <span class="gr-star">&#9734;</span>
+            <span class="gr-sender">Isaac Sornborger</span>
+            <span class="gr-subject">PYO deploy timeline - <span>We're on track for the Wednesday deploy. Kelli signed off...</span></span>
+            <span class="gr-date">Yesterday</span>
+          </div>
+          <div class="gmail-row">
+            <div class="gr-check"></div>
+            <span class="gr-star">&#9734;</span>
+            <span class="gr-sender">Amazon Order</span>
+            <span class="gr-subject">Your order has shipped - <span>Sony WH-1000XM5 Wireless Headphones...</span></span>
+            <span class="gr-date">Yesterday</span>
+          </div>
+          <div class="gmail-row">
+            <div class="gr-check"></div>
+            <span class="gr-star">&#9734;</span>
+            <span class="gr-sender">Bri Stanback</span>
+            <span class="gr-subject">QA crawl system update - <span>First pass results from the Playwright agent...</span></span>
+            <span class="gr-date">Mar 18</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Panel - Empty State -->
+    <div class="side-panel">
+      <div class="sp-header">
+        <div class="sp-logo">
+          <span class="sp-p">Product</span><span class="sp-a">.ai</span>
+        </div>
+        <div class="sp-actions">
+          <button class="sp-btn">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="sp-content">
+
+        <!-- Empty state hero -->
+        <div class="empty-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="116" cy="116" r="84"/>
+            <line x1="175.4" y1="175.4" x2="224" y2="224"/>
+          </svg>
+        </div>
+        <div class="empty-title">No product detected</div>
+        <div class="empty-desc">Navigate to a product page, or ask me anything about a product below.</div>
+
+        <!-- Search -->
+        <div class="empty-search">
+          <input type="text" placeholder="Search or paste a product URL...">
+          <button class="empty-search-btn">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg>
+          </button>
+        </div>
+
+        <!-- Try asking -->
+        <div class="try-section">
+          <div class="try-label">Try asking</div>
+          <div class="try-chip"><span class="try-q">Best noise-cancelling headphones under $300?</span></div>
+          <div class="try-chip"><span class="try-q">Is the Dyson V15 worth the price premium?</span></div>
+          <div class="try-chip"><span class="try-q">Compare MacBook Air M3 vs M4</span></div>
+        </div>
+
+        <!-- Recent -->
+        <div class="recent-section">
+          <div class="recent-label">Recent</div>
+          <div class="recent-row">
+            <div class="recent-icon">&#x1F3A7;</div>
+            <div class="recent-info">
+              <div class="recent-name">Sony WH-1000XM5</div>
+              <div class="recent-date">Today, 9:30 AM</div>
+            </div>
+            <span class="recent-verdict good">Recommended</span>
+          </div>
+          <div class="recent-row">
+            <div class="recent-icon">&#x1F6CF;</div>
+            <div class="recent-info">
+              <div class="recent-name">Purple Hybrid Premier</div>
+              <div class="recent-date">Yesterday</div>
+            </div>
+            <span class="recent-verdict warn">Caution</span>
+          </div>
+          <div class="recent-row">
+            <div class="recent-icon">&#x1F52A;</div>
+            <div class="recent-info">
+              <div class="recent-name">Victorinox Fibrox Chef's Knife</div>
+              <div class="recent-date">Mar 18</div>
+            </div>
+            <span class="recent-verdict good">Recommended</span>
+          </div>
+        </div>
+
+        <!-- Tip -->
+        <div class="empty-tip">
+          <div class="tip-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm0 192a88 88 0 1 1 88-88 88.1 88.1 0 0 1-88 88zm-8-80V80a8 8 0 0 1 16 0v56a8 8 0 0 1-16 0zm20 36a12 12 0 1 1-12-12 12 12 0 0 1 12 12z"/></svg>
+          </div>
+          <div class="tip-text"><strong>Tip:</strong> Navigate to any product page on Amazon, Best Buy, Target, or 400K+ other stores. The verdict loads automatically.</div>
+        </div>
+
+      </div>
+
+      <!-- Input -->
+      <div class="sp-input-area">
+        <div class="sp-input">
+          <input type="text" placeholder="Ask about any product...">
+          <button class="sp-input-btn">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

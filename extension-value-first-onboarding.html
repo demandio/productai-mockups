@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Extension - Value-First Side Panel Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v400: #A384FF; --v500: #8B5CF6;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1;
+  background: #0a0a0a; color: var(--z50);
+  min-height: 100vh; padding: 40px 24px 80px;
+}
+
+.page-header { max-width: 1200px; margin: 0 auto 48px; }
+.page-header h1 { font-size: 24px; font-weight: 600; color: var(--z50); margin-bottom: 8px; }
+.page-header p { font-size: 14px; color: var(--z400); line-height: 1.5; max-width: 640px; }
+
+.section-divider { border: none; border-top: 0.5px solid var(--z800); margin: 56px auto; max-width: 1200px; }
+.section-header { max-width: 1200px; margin: 0 auto 28px; }
+.section-header h2 { font-size: 18px; font-weight: 600; color: var(--z50); margin-bottom: 4px; }
+.section-header p { font-size: 13px; color: var(--z500); line-height: 1.5; }
+
+/* ── Browser frame ── */
+.browser {
+  width: 900px; height: 620px; background: #1a1a1a;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; flex-shrink: 0;
+}
+
+.browser-chrome {
+  height: 38px; background: #252525;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; padding: 0 12px; gap: 8px; flex-shrink: 0;
+}
+.tl-group { display: flex; gap: 6px; }
+.tl { width: 11px; height: 11px; border-radius: 50%; }
+.tl.r { background: #ff5f57; } .tl.y { background: #febc2e; } .tl.g { background: #28c840; }
+
+.tab {
+  padding: 5px 14px; background: #2a2a2a; border-radius: 7px 7px 0 0;
+  font-size: 11px; color: var(--z200); display: flex; align-items: center; gap: 5px;
+  margin-left: 8px;
+}
+.tab .tab-icon { width: 12px; height: 12px; border-radius: 2px; background: #f5a623; flex-shrink: 0; }
+.tab .tab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+
+.chrome-right { display: flex; gap: 4px; margin-left: auto; align-items: center; }
+.chrome-btn {
+  width: 26px; height: 26px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center; color: var(--z500);
+}
+.chrome-btn svg { width: 14px; height: 14px; }
+
+.ext-icon {
+  width: 26px; height: 26px; border-radius: 5px; background: var(--v500);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  position: relative;
+}
+.ext-icon svg { width: 12px; height: 12px; color: var(--white); }
+.ext-badge {
+  position: absolute; top: -2px; right: -2px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #34d399; border: 2px solid #252525;
+}
+
+.url-bar {
+  height: 34px; background: #2a2a2a;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex; align-items: center; padding: 0 12px; gap: 6px; flex-shrink: 0;
+}
+.url-field {
+  flex: 1; height: 24px; background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+  padding: 0 10px; display: flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--z400);
+}
+.url-field .domain { color: var(--z300); font-weight: 500; }
+
+.main-area { flex: 1; display: flex; overflow: hidden; }
+
+/* ── Merchant page ── */
+.merchant-page {
+  flex: 1; background: var(--white); overflow-y: auto; font-family: Arial, sans-serif;
+}
+
+.amz-nav { background: #131921; padding: 7px 14px; display: flex; align-items: center; gap: 14px; }
+.amz-logo { font-size: 18px; font-weight: 700; color: var(--white); font-family: Arial; }
+.amz-logo span { color: #f5a623; }
+.amz-search {
+  flex: 1; height: 28px; background: var(--white); border-radius: 5px;
+  display: flex; align-items: center; padding: 0 10px; font-size: 12px; color: #666;
+}
+.amz-sub { background: #232f3e; padding: 5px 14px; display: flex; gap: 14px; font-size: 11px; color: #ddd; }
+
+.amz-product { padding: 14px; display: flex; gap: 20px; }
+.amz-img {
+  width: 240px; height: 240px; background: #f8f8f8; border: 1px solid #eee; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; font-size: 80px; flex-shrink: 0;
+}
+.amz-info { flex: 1; }
+.amz-title { font-size: 16px; color: #0f1111; line-height: 22px; margin-bottom: 6px; }
+.amz-brand { font-size: 12px; color: #007185; margin-bottom: 6px; }
+.amz-stars { font-size: 13px; color: #de7921; margin-bottom: 10px; }
+.amz-price-box { background: #f0f2f2; border-radius: 6px; padding: 10px 14px; margin-bottom: 10px; }
+.amz-price { font-size: 24px; color: #0f1111; }
+.amz-btn-row { display: flex; flex-direction: column; gap: 5px; }
+.amz-btn {
+  padding: 7px 14px; border-radius: 18px; font-size: 12px; border: none; cursor: pointer;
+}
+.amz-btn.cart { background: #ffd814; color: #0f1111; }
+.amz-btn.buy { background: #ffa41c; color: #0f1111; }
+
+/* ── Side panel ── */
+.side-panel {
+  width: 380px; background: var(--z950);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column; flex-shrink: 0;
+  overflow: hidden;
+}
+
+.sp-header {
+  padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04); flex-shrink: 0;
+}
+.sp-logo { display: flex; align-items: baseline; }
+.sp-p { font-size: 15px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.sp-a { font-family: var(--mono); font-size: 15px; color: var(--v500); }
+.sp-header-left { display: flex; flex-direction: column; }
+.sp-from-sc {
+  font-family: var(--mono); font-size: 10px; color: var(--z700);
+  margin-top: 2px;
+}
+.sp-btn {
+  width: 28px; height: 28px; border-radius: 6px; border: none;
+  background: rgba(255,255,255,0.04); color: var(--z500);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-btn svg { width: 15px; height: 15px; }
+
+/* ── Analyzing state ── */
+.analyzing-content {
+  flex: 1; overflow-y: auto; padding: 20px 16px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+.analyzing-spinner {
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 2px solid rgba(139,92,246,0.15);
+  border-top-color: var(--v500);
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.analyzing-title {
+  font-size: 15px; font-weight: 600; color: var(--z200);
+  margin-bottom: 6px;
+}
+.analyzing-sub {
+  font-size: 13px; color: var(--z500); text-align: center; line-height: 1.5;
+  max-width: 280px; margin-bottom: 24px;
+}
+
+.analyzing-steps {
+  width: 100%; max-width: 280px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.analyzing-step {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px;
+}
+.step-icon {
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step-icon svg { width: 10px; height: 10px; }
+.step-icon.done { background: rgba(52,211,153,0.1); color: #34d399; }
+.step-icon.active { background: rgba(139,92,246,0.1); color: var(--v400); }
+.step-icon.pending { background: rgba(255,255,255,0.04); color: var(--z700); }
+.step-text.done { color: var(--z500); }
+.step-text.active { color: var(--z200); font-weight: 500; }
+.step-text.pending { color: var(--z700); }
+
+/* ── Verdict loaded ── */
+.sp-content-full {
+  flex: 1; overflow-y: auto; padding: 14px 16px;
+}
+
+/* Product detected */
+.sp-product { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.sp-thumb {
+  width: 48px; height: 48px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.sp-prod-name { font-size: 14px; font-weight: 500; color: var(--z200); line-height: 18px; margin-bottom: 2px; }
+.sp-prod-brand { font-size: 11px; color: var(--z600); }
+
+/* Verdict compact */
+.verdict-compact {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px; overflow: hidden; margin-bottom: 12px;
+}
+.vc-header {
+  padding: 10px 14px; display: flex; align-items: center; gap: 8px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+}
+.vc-header.good { background: rgba(52,211,153,0.04); border-bottom-color: rgba(52,211,153,0.08); }
+.vc-icon {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.vc-icon svg { width: 13px; height: 13px; }
+.vc-icon.good { background: rgba(52,211,153,0.12); color: #34d399; }
+.vc-title { font-size: 14px; font-weight: 600; color: var(--white); }
+.vc-sub { font-size: 10px; color: var(--z600); }
+
+.vc-body { padding: 10px 14px; }
+.vc-body p { font-size: 12px; color: var(--z400); line-height: 1.5; }
+
+/* Prices compact */
+.prices-compact { margin-bottom: 12px; }
+.sl { font-size: 9px; font-weight: 600; font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--z700); margin-bottom: 6px; }
+
+.pr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 10px; border-radius: 6px; margin-bottom: 3px;
+  font-size: 12px;
+}
+.pr.best { background: rgba(52,211,153,0.04); }
+.pr .mn { color: var(--z500); display: flex; align-items: center; gap: 4px; }
+.pr .mn .pd { width: 5px; height: 5px; border-radius: 50%; background: var(--v500); opacity: 0.6; }
+.pr .mp { font-family: var(--mono); font-weight: 600; color: var(--z300); }
+.pr.best .mn { color: #34d399; font-weight: 500; }
+.pr.best .mp { color: #34d399; }
+.pr .mc { font-family: var(--mono); font-size: 9px; color: #34d399; background: rgba(52,211,153,0.08); padding: 1px 5px; border-radius: 3px; }
+.pr.current { background: rgba(255,255,255,0.03); }
+.pr.current .mn { color: var(--z300); }
+.pr.current::after { content: 'You are here'; font-family: var(--mono); font-size: 9px; color: var(--z700); margin-left: 4px; }
+
+.footer-note {
+  padding-top: 6px; margin-top: 6px; border-top: 0.5px solid rgba(255,255,255,0.03);
+  font-size: 9px; color: #3f3f46; display: flex; align-items: center; gap: 4px;
+}
+.footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--v500); opacity: 0.4; flex-shrink: 0; }
+
+/* Action bar */
+.sp-act-row {
+  display: flex; gap: 6px; margin-bottom: 12px;
+}
+.sp-act {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 12px; border-radius: 100px;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; font-family: var(--sans); white-space: nowrap;
+}
+.sp-act svg { width: 13px; height: 13px; }
+.sp-act.primary {
+  background: rgba(139,92,246,0.08); border: 0.5px solid rgba(139,92,246,0.2);
+  color: var(--v400);
+}
+.sp-act.ghost {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  color: var(--z500);
+}
+.sp-act.green {
+  background: rgba(3,230,122,0.06); border: 0.5px solid rgba(3,230,122,0.15);
+  color: #34d399;
+}
+
+/* Input */
+.sp-input-area {
+  padding: 10px 16px 14px;
+  border-top: 0.5px solid rgba(255,255,255,0.04); flex-shrink: 0;
+}
+.sp-input {
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 8px 8px 8px 14px;
+}
+.sp-input input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--sans); font-size: 13px; color: var(--white);
+}
+.sp-input input::placeholder { color: var(--z600); }
+.sp-input-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  background: var(--v500); color: var(--white);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-input-btn svg { width: 14px; height: 14px; }
+
+/* ── Contextual sign-in overlay ── */
+.signin-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(9,9,11,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 20px 16px 16px;
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+}
+.signin-card {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px 16px 16px;
+}
+.signin-card-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(139,92,246,0.1); border: 0.5px solid rgba(139,92,246,0.15);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.signin-card-icon svg { width: 16px; height: 16px; color: var(--v400); }
+.signin-card-title {
+  font-size: 15px; font-weight: 600; color: var(--z50);
+  margin-bottom: 4px;
+}
+.signin-card-sub {
+  font-size: 13px; color: var(--z500); line-height: 1.5;
+  margin-bottom: 16px;
+}
+.signin-btn {
+  width: 100%; padding: 11px 16px; border-radius: 10px; border: none;
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  cursor: pointer; transition: all 150ms; margin-bottom: 8px;
+}
+.signin-btn.google { background: var(--white); color: #1f1f1f; }
+.signin-btn.google:hover { background: #f0f0f0; }
+.signin-btn.apple { background: var(--white); color: #1f1f1f; }
+.signin-btn.apple:hover { background: #f0f0f0; }
+.signin-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+.signin-email-link {
+  display: block; text-align: center; font-size: 13px; color: var(--z500);
+  cursor: pointer; padding: 6px 0; margin-bottom: 4px;
+  font-family: var(--sans);
+}
+.signin-dismiss {
+  display: block; text-align: center; font-size: 12px; color: var(--z600);
+  cursor: pointer; padding: 4px 0;
+  font-family: var(--sans);
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Value-First Side Panel Onboarding (Revised)</h1>
+  <p>The revised flow where the extension delivers value before requiring sign-in. Three steps: analyze without auth, deliver verdict without auth, prompt sign-in only when the user takes an action that requires it (Save, Watch Price). Value first. Auth second.</p>
+</div>
+
+<!-- ═══════════════════════ -->
+<!-- STEP 1: Analyzing       -->
+<!-- ═══════════════════════ -->
+<div class="section-header">
+  <h2>Step 1: First Product Page - Analyzing (No Sign-In)</h2>
+  <p>User navigates to a product page after install. Side panel opens and immediately starts analyzing. No sign-in gate. Value first.</p>
+</div>
+
+<div style="max-width: 900px; margin: 0 auto;">
+<div class="browser">
+  <div class="browser-chrome">
+    <div class="tl-group"><div class="tl r"></div><div class="tl y"></div><div class="tl g"></div></div>
+    <div class="tab">
+      <div class="tab-icon"></div>
+      <span class="tab-title">Sony WH-1000XM5 - Amazon</span>
+    </div>
+    <div class="chrome-right">
+      <div class="ext-icon">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+        <div class="ext-badge"></div>
+      </div>
+      <div class="chrome-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><circle cx="128" cy="128" r="4" fill="currentColor"/><circle cx="128" cy="64" r="4" fill="currentColor"/><circle cx="128" cy="192" r="4" fill="currentColor"/></svg></div>
+    </div>
+  </div>
+  <div class="url-bar">
+    <div class="url-field"><span class="domain">amazon.com</span>/dp/B0BSHV22YR/Sony-WH-1000XM5</div>
+  </div>
+  <div class="main-area">
+    <div class="merchant-page">
+      <div class="amz-nav">
+        <div class="amz-logo">amazon<span>.com</span></div>
+        <div class="amz-search">Search Amazon</div>
+      </div>
+      <div class="amz-sub"><span>Today's Deals</span><span>Buy Again</span><span>Customer Service</span></div>
+      <div class="amz-product">
+        <div class="amz-img">&#x1F3A7;</div>
+        <div class="amz-info">
+          <div class="amz-title">Sony WH-1000XM5 Wireless Noise Canceling Headphones</div>
+          <div class="amz-brand">Visit the Sony Store</div>
+          <div class="amz-stars">&#9733;&#9733;&#9733;&#9733;&#9734; 18,247 ratings</div>
+          <div class="amz-price-box"><div class="amz-price">$328.00</div></div>
+          <div class="amz-btn-row">
+            <button class="amz-btn cart">Add to Cart</button>
+            <button class="amz-btn buy">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Panel: Analyzing (No Auth) -->
+    <div class="side-panel">
+      <div class="sp-header">
+        <div class="sp-header-left">
+          <div class="sp-logo"><span class="sp-p">Product</span><span class="sp-a">.ai</span></div>
+          <div class="sp-from-sc">From the makers of SimplyCodes</div>
+        </div>
+        <div class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></div>
+      </div>
+      <div class="analyzing-content">
+        <div class="analyzing-spinner"></div>
+        <div class="analyzing-title">Analyzing this product</div>
+        <div class="analyzing-sub">Checking verified reviews, price history, and available codes across retailers.</div>
+        <div class="analyzing-steps">
+          <div class="analyzing-step">
+            <div class="step-icon done"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+            <span class="step-text done">Product identified</span>
+          </div>
+          <div class="analyzing-step">
+            <div class="step-icon done"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+            <span class="step-text done">Checking verified claims</span>
+          </div>
+          <div class="analyzing-step">
+            <div class="step-icon active"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-8 56a8 8 0 0 1 16 0v56a8 8 0 0 1-16 0zm8 104a12 12 0 1 1 12-12 12 12 0 0 1-12 12z"/></svg></div>
+            <span class="step-text active">Comparing prices across 4 retailers</span>
+          </div>
+          <div class="analyzing-step">
+            <div class="step-icon pending"><svg viewBox="0 0 256 256" fill="currentColor"><circle cx="128" cy="128" r="96" opacity="0.3"/></svg></div>
+            <span class="step-text pending">Finding verified codes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════ -->
+<!-- STEP 2: First Verdict   -->
+<!-- ═══════════════════════ -->
+<hr class="section-divider">
+
+<div class="section-header">
+  <h2>Step 2: First Verdict Delivered - No Sign-In Required</h2>
+  <p>The verdict loads. Full value delivered without authentication. The user experiences Product.ai's core intelligence before being asked for anything.</p>
+</div>
+
+<div style="max-width: 900px; margin: 0 auto;">
+<div class="browser">
+  <div class="browser-chrome">
+    <div class="tl-group"><div class="tl r"></div><div class="tl y"></div><div class="tl g"></div></div>
+    <div class="tab">
+      <div class="tab-icon"></div>
+      <span class="tab-title">Sony WH-1000XM5 - Amazon</span>
+    </div>
+    <div class="chrome-right">
+      <div class="ext-icon">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+        <div class="ext-badge"></div>
+      </div>
+      <div class="chrome-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><circle cx="128" cy="128" r="4" fill="currentColor"/><circle cx="128" cy="64" r="4" fill="currentColor"/><circle cx="128" cy="192" r="4" fill="currentColor"/></svg></div>
+    </div>
+  </div>
+  <div class="url-bar">
+    <div class="url-field"><span class="domain">amazon.com</span>/dp/B0BSHV22YR/Sony-WH-1000XM5</div>
+  </div>
+  <div class="main-area">
+    <div class="merchant-page">
+      <div class="amz-nav">
+        <div class="amz-logo">amazon<span>.com</span></div>
+        <div class="amz-search">Search Amazon</div>
+      </div>
+      <div class="amz-sub"><span>Today's Deals</span><span>Buy Again</span><span>Customer Service</span></div>
+      <div class="amz-product">
+        <div class="amz-img">&#x1F3A7;</div>
+        <div class="amz-info">
+          <div class="amz-title">Sony WH-1000XM5 Wireless Noise Canceling Headphones</div>
+          <div class="amz-brand">Visit the Sony Store</div>
+          <div class="amz-stars">&#9733;&#9733;&#9733;&#9733;&#9734; 18,247 ratings</div>
+          <div class="amz-price-box"><div class="amz-price">$328.00</div></div>
+          <div class="amz-btn-row">
+            <button class="amz-btn cart">Add to Cart</button>
+            <button class="amz-btn buy">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Panel: Verdict (No Auth) -->
+    <div class="side-panel">
+      <div class="sp-header">
+        <div class="sp-logo"><span class="sp-p">Product</span><span class="sp-a">.ai</span></div>
+        <div style="display: flex; gap: 4px;">
+          <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><polyline points="128 72 128 128 176 128"/></svg></button>
+          <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></button>
+        </div>
+      </div>
+      <div class="sp-content-full">
+
+        <div class="sp-product">
+          <div class="sp-thumb">&#x1F3A7;</div>
+          <div>
+            <div class="sp-prod-name">Sony WH-1000XM5</div>
+            <div class="sp-prod-brand">Sony - Wireless Noise Canceling</div>
+          </div>
+        </div>
+
+        <div class="verdict-compact">
+          <div class="vc-header good">
+            <div class="vc-icon good"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+            <div>
+              <div class="vc-title">Recommended</div>
+              <div class="vc-sub">Best ANC headphones for most people</div>
+            </div>
+          </div>
+          <div class="vc-body">
+            <p>Industry-leading noise cancellation with 30-hour battery. ANC measurably better than Bose at low frequencies. One caveat: call quality is mediocre (4/10 in wind).</p>
+          </div>
+        </div>
+
+        <div class="prices-compact">
+          <div class="sl">Best Prices</div>
+          <div class="pr best">
+            <span class="mn">Best Buy <span class="pd"></span></span>
+            <span><span class="mc">AUDIO20</span> <span class="mp">$262.40</span></span>
+          </div>
+          <div class="pr current">
+            <span class="mn">Amazon <span class="pd"></span></span>
+            <span class="mp">$328.00</span>
+          </div>
+          <div class="pr">
+            <span class="mn">B&H Photo</span>
+            <span class="mp">$328.00</span>
+          </div>
+          <div class="pr">
+            <span class="mn">Sony Direct</span>
+            <span class="mp">$349.99</span>
+          </div>
+          <div class="footer-note">
+            <span class="footer-dot"></span>
+            <span>Supports Product.ai's mission.</span>
+          </div>
+        </div>
+
+        <!-- Action bar -->
+        <div class="sp-act-row">
+          <div class="sp-act primary">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M168 224a8 8 0 0 1-13.9 5.4L128 200l-26.1 29.4A8 8 0 0 1 88 224V32a8 8 0 0 1 8-8h64a8 8 0 0 1 8 8z"/></svg>
+            Save
+          </div>
+          <div class="sp-act green">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 56C48 56 16 128 16 128s32 72 112 72 112-72 112-72-32-72-112-72z"/><circle cx="128" cy="128" r="32"/></svg>
+            Watch Price
+          </div>
+          <div class="sp-act ghost">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M216 112v96a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8v-96"/><polyline points="96 144 128 112 160 144"/><line x1="128" y1="112" x2="128" y2="24"/></svg>
+            Share
+          </div>
+        </div>
+      </div>
+
+      <div class="sp-input-area">
+        <div class="sp-input">
+          <input type="text" placeholder="Ask about this product...">
+          <button class="sp-input-btn"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════ -->
+<!-- STEP 3: Sign-In Prompt  -->
+<!-- ═══════════════════════ -->
+<hr class="section-divider">
+
+<div class="section-header">
+  <h2>Step 3: Sign-In Triggered by Save Action</h2>
+  <p>User taps 'Save' on the verdict. A contextual sign-in prompt appears - not a gate, but a service. 'Sign in to save this verdict.' The user has already experienced value.</p>
+</div>
+
+<div style="max-width: 900px; margin: 0 auto;">
+<div class="browser">
+  <div class="browser-chrome">
+    <div class="tl-group"><div class="tl r"></div><div class="tl y"></div><div class="tl g"></div></div>
+    <div class="tab">
+      <div class="tab-icon"></div>
+      <span class="tab-title">Sony WH-1000XM5 - Amazon</span>
+    </div>
+    <div class="chrome-right">
+      <div class="ext-icon">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+        <div class="ext-badge"></div>
+      </div>
+      <div class="chrome-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><circle cx="128" cy="128" r="4" fill="currentColor"/><circle cx="128" cy="64" r="4" fill="currentColor"/><circle cx="128" cy="192" r="4" fill="currentColor"/></svg></div>
+    </div>
+  </div>
+  <div class="url-bar">
+    <div class="url-field"><span class="domain">amazon.com</span>/dp/B0BSHV22YR/Sony-WH-1000XM5</div>
+  </div>
+  <div class="main-area">
+    <div class="merchant-page">
+      <div class="amz-nav">
+        <div class="amz-logo">amazon<span>.com</span></div>
+        <div class="amz-search">Search Amazon</div>
+      </div>
+      <div class="amz-sub"><span>Today's Deals</span><span>Buy Again</span><span>Customer Service</span></div>
+      <div class="amz-product">
+        <div class="amz-img">&#x1F3A7;</div>
+        <div class="amz-info">
+          <div class="amz-title">Sony WH-1000XM5 Wireless Noise Canceling Headphones</div>
+          <div class="amz-brand">Visit the Sony Store</div>
+          <div class="amz-stars">&#9733;&#9733;&#9733;&#9733;&#9734; 18,247 ratings</div>
+          <div class="amz-price-box"><div class="amz-price">$328.00</div></div>
+          <div class="amz-btn-row">
+            <button class="amz-btn cart">Add to Cart</button>
+            <button class="amz-btn buy">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Panel: Sign-in overlay triggered by Save -->
+    <div class="side-panel" style="position: relative;">
+      <div class="sp-header">
+        <div class="sp-logo"><span class="sp-p">Product</span><span class="sp-a">.ai</span></div>
+        <div style="display: flex; gap: 4px;">
+          <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><polyline points="128 72 128 128 176 128"/></svg></button>
+          <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></button>
+        </div>
+      </div>
+      <div class="sp-content-full">
+
+        <div class="sp-product">
+          <div class="sp-thumb">&#x1F3A7;</div>
+          <div>
+            <div class="sp-prod-name">Sony WH-1000XM5</div>
+            <div class="sp-prod-brand">Sony - Wireless Noise Canceling</div>
+          </div>
+        </div>
+
+        <div class="verdict-compact">
+          <div class="vc-header good">
+            <div class="vc-icon good"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+            <div>
+              <div class="vc-title">Recommended</div>
+              <div class="vc-sub">Best ANC headphones for most people</div>
+            </div>
+          </div>
+          <div class="vc-body">
+            <p>Industry-leading noise cancellation with 30-hour battery. ANC measurably better than Bose at low frequencies. One caveat: call quality is mediocre (4/10 in wind).</p>
+          </div>
+        </div>
+
+        <div class="prices-compact">
+          <div class="sl">Best Prices</div>
+          <div class="pr best">
+            <span class="mn">Best Buy <span class="pd"></span></span>
+            <span><span class="mc">AUDIO20</span> <span class="mp">$262.40</span></span>
+          </div>
+          <div class="pr current">
+            <span class="mn">Amazon <span class="pd"></span></span>
+            <span class="mp">$328.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contextual sign-in overlay -->
+      <div class="signin-overlay">
+        <div class="signin-card">
+          <div class="signin-card-icon">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M168 224a8 8 0 0 1-13.9 5.4L128 200l-26.1 29.4A8 8 0 0 1 88 224V32a8 8 0 0 1 8-8h64a8 8 0 0 1 8 8z"/></svg>
+          </div>
+          <div class="signin-card-title">Save this verdict</div>
+          <div class="signin-card-sub">Sign in to save verdicts, track prices, and get personalized results across devices.</div>
+          <button class="signin-btn google">
+            <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Continue with Google
+          </button>
+          <button class="signin-btn apple">
+            <svg viewBox="0 0 24 24" fill="#1f1f1f"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C3.79 16.17 4.36 9.23 8.7 8.97c1.26.07 2.13.72 2.88.75.98-.2 1.92-.77 2.98-.7 1.26.1 2.2.6 2.82 1.5-2.58 1.56-1.97 4.96.48 5.92-.57 1.56-1.32 3.1-2.82 4.84zM12.15 8.88C11.97 6.74 13.7 5 15.77 4.83c.3 2.41-2.18 4.2-3.62 4.05z"/></svg>
+            Continue with Apple
+          </button>
+          <span class="signin-email-link">Continue with email</span>
+          <span class="signin-dismiss">Not now</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

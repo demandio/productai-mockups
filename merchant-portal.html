@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai - Merchant Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v400: #A384FF; --v500: #8B5CF6;
+  --green: #34d399; --green-surface: rgba(52,211,153,0.06);
+  --amber: #CEAD50; --amber-surface: rgba(206,173,80,0.06);
+  --red: #f87171; --red-surface: rgba(248,113,113,0.06);
+  --blue: #6EB6FF; --blue-surface: rgba(110,182,255,0.06);
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: var(--z950); color: var(--white); line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+
+.layout { display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+  width: 260px; flex-shrink: 0; background: var(--z925);
+  border-right: 1px solid var(--z900); padding: 24px 0;
+  display: flex; flex-direction: column;
+}
+.sidebar-logo { display: flex; align-items: baseline; padding: 0 24px; margin-bottom: 4px; }
+.sidebar-logo .lp { font-size: 17px; font-weight: 600; color: var(--white); }
+.sidebar-logo .la { font-family: var(--mono); font-size: 17px; color: var(--v500); }
+.sidebar-sub {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--z600); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0 24px; margin-bottom: 28px;
+}
+
+.sidebar-section { margin-bottom: 24px; }
+.sidebar-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--z700); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0 24px; margin-bottom: 8px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 24px; font-size: 13px; font-weight: 500; color: var(--z500);
+  cursor: pointer; transition: all 150ms;
+}
+.sidebar-item:hover { color: var(--z300); background: rgba(255,255,255,0.02); }
+.sidebar-item.active { color: var(--v400); background: rgba(139,92,246,0.06); }
+.sidebar-item .badge {
+  margin-left: auto; font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 2px 6px; border-radius: 100px;
+}
+.sidebar-item .badge.amber { background: var(--amber-surface); color: var(--amber); }
+.sidebar-item .badge.green { background: var(--green-surface); color: var(--green); }
+.sidebar-item .badge.violet { background: rgba(139,92,246,0.08); color: var(--v400); }
+
+.sidebar-user {
+  margin-top: auto; padding: 16px 24px;
+  border-top: 1px solid var(--z900);
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-user-avatar {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(139,92,246,0.12); color: var(--v400);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.sidebar-user-name { font-size: 13px; font-weight: 500; color: var(--z300); }
+.sidebar-user-role { font-size: 11px; color: var(--z600); }
+
+/* Main */
+.main { flex: 1; padding: 32px 40px; max-width: 960px; }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 32px;
+}
+.topbar h1 { font-size: 24px; font-weight: 600; color: var(--white); letter-spacing: -0.02em; }
+.topbar-pill {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 4px 10px; border-radius: 100px; letter-spacing: 0.04em;
+}
+.topbar-pill.merchant { color: var(--v400); background: rgba(139,92,246,0.08); }
+
+/* Summary cards */
+.summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+.summary-card {
+  padding: 18px 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+}
+.summary-card .num { font-family: var(--mono); font-size: 28px; font-weight: 500; margin-bottom: 2px; }
+.summary-card .label { font-size: 12px; color: var(--z500); }
+
+/* Section headers */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-header h2 { font-size: 17px; font-weight: 600; color: var(--z200); }
+
+/* Product cards */
+.product-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 40px; }
+
+.product-card {
+  padding: 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+  display: flex; align-items: flex-start; gap: 16px;
+}
+
+.product-verdict {
+  width: 56px; height: 56px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-size: 14px; font-weight: 600;
+}
+.product-verdict.positive { background: var(--green-surface); color: var(--green); border: 1px solid rgba(52,211,153,0.15); }
+.product-verdict.caution { background: var(--amber-surface); color: var(--amber); border: 1px solid rgba(206,173,80,0.15); }
+.product-verdict.negative { background: var(--red-surface); color: var(--red); border: 1px solid rgba(248,113,113,0.15); }
+
+.product-info { flex: 1; }
+.product-name { font-size: 15px; font-weight: 500; color: var(--z200); margin-bottom: 2px; }
+.product-sku { font-family: var(--mono); font-size: 11px; color: var(--z600); margin-bottom: 6px; }
+.product-verdict-text { font-size: 13px; color: var(--z400); line-height: 1.5; margin-bottom: 8px; }
+
+.product-axioms-affecting {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;
+}
+.axiom-tag {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px;
+}
+.axiom-tag.negative { background: var(--red-surface); color: var(--red); }
+.axiom-tag.positive { background: var(--green-surface); color: var(--green); }
+.axiom-tag.neutral { background: rgba(255,255,255,0.04); color: var(--z500); }
+
+.product-actions { display: flex; gap: 8px; }
+.product-btn {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  font-family: var(--sans); border: 1px solid; transition: all 150ms;
+}
+.product-btn.challenge {
+  background: rgba(139,92,246,0.06); color: var(--v400);
+  border-color: rgba(139,92,246,0.15);
+}
+.product-btn.challenge:hover { background: rgba(139,92,246,0.12); }
+.product-btn.submit-data {
+  background: rgba(52,211,153,0.06); color: var(--green);
+  border-color: rgba(52,211,153,0.15);
+}
+.product-btn.submit-data:hover { background: rgba(52,211,153,0.12); }
+.product-btn.ghost {
+  background: transparent; color: var(--z500);
+  border-color: var(--z900);
+}
+.product-btn.ghost:hover { color: var(--z300); border-color: var(--z700); }
+
+/* Data submission section */
+.data-section { margin-bottom: 40px; }
+
+.data-channel-card {
+  padding: 24px; border-radius: 12px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+  margin-bottom: 12px;
+}
+.data-channel-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+}
+.data-channel-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.data-channel-icon.cert { background: var(--green-surface); color: var(--green); }
+.data-channel-icon.lab { background: rgba(139,92,246,0.08); color: var(--v400); }
+.data-channel-icon.clinical { background: var(--blue-surface); color: var(--blue); }
+.data-channel-name { font-size: 15px; font-weight: 500; color: var(--z200); }
+.data-channel-desc { font-size: 13px; color: var(--z400); line-height: 1.5; margin-bottom: 12px; }
+.data-channel-accepted {
+  font-family: var(--mono); font-size: 11px; color: var(--z600);
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.data-format {
+  padding: 2px 8px; border-radius: 4px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--z900);
+}
+.data-upload-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; color: var(--v400);
+  background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.15);
+  cursor: pointer; transition: all 150ms; font-family: var(--sans);
+  margin-top: 12px;
+}
+.data-upload-btn:hover { background: rgba(139,92,246,0.12); }
+
+/* Submission history */
+.submission-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 40px; }
+
+.submission-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--z900);
+}
+.submission-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+.submission-icon.accepted { background: var(--green-surface); color: var(--green); }
+.submission-icon.reviewing { background: var(--amber-surface); color: var(--amber); }
+.submission-icon.rejected { background: var(--red-surface); color: var(--red); }
+.submission-text { flex: 1; }
+.submission-text .desc { font-size: 13px; color: var(--z300); }
+.submission-text .meta { font-family: var(--mono); font-size: 11px; color: var(--z600); margin-top: 2px; }
+.submission-status {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+}
+.submission-status.accepted { background: var(--green-surface); color: var(--green); }
+.submission-status.reviewing { background: var(--amber-surface); color: var(--amber); }
+.submission-status.no-impact { background: rgba(255,255,255,0.04); color: var(--z500); }
+
+/* Value prop banner */
+.value-banner {
+  padding: 24px; border-radius: 12px;
+  background: rgba(139,92,246,0.03); border: 1px solid rgba(139,92,246,0.1);
+  margin-bottom: 40px;
+}
+.value-banner h3 { font-size: 16px; font-weight: 500; color: var(--z200); margin-bottom: 8px; }
+.value-banner p { font-size: 14px; color: var(--z400); line-height: 1.6; }
+.value-banner ul {
+  list-style: none; margin-top: 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.value-banner li {
+  font-size: 13px; color: var(--z400); padding-left: 16px; position: relative;
+}
+.value-banner li::before {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--v500);
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo"><span class="lp">Product</span><span class="la">.ai</span></div>
+    <div class="sidebar-sub">Merchant Portal</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <div class="sidebar-item active">
+        <span>Dashboard</span>
+      </div>
+      <div class="sidebar-item">
+        <span>My Products</span>
+        <span class="badge amber">2</span>
+      </div>
+      <div class="sidebar-item">
+        <span>Submit Data</span>
+      </div>
+      <div class="sidebar-item">
+        <span>Challenge History</span>
+        <span class="badge green">3</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Affiliate</div>
+      <div class="sidebar-item">
+        <span>S2S Attribution</span>
+      </div>
+      <div class="sidebar-item">
+        <span>Performance</span>
+      </div>
+      <div class="sidebar-item">
+        <span>Link Generator</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Resources</div>
+      <div class="sidebar-item">
+        <span>Data Submission Guide</span>
+      </div>
+      <div class="sidebar-item">
+        <span>How Axioms Work</span>
+      </div>
+      <div class="sidebar-item">
+        <span>API Documentation</span>
+      </div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">TB</div>
+      <div>
+        <div class="sidebar-user-name">Thorne Brands</div>
+        <div class="sidebar-user-role">Merchant Partner</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <div class="topbar">
+      <h1>Merchant Dashboard</h1>
+      <span class="topbar-pill merchant">MERCHANT PARTNER</span>
+    </div>
+
+    <!-- Value prop -->
+    <div class="value-banner">
+      <h3>Your products, accurately represented</h3>
+      <p>Product.ai doesn't promote merchants. We accurately represent products based on verified evidence. As a merchant partner, you have a direct channel to ensure your product data is current, complete, and fairly evaluated.</p>
+      <ul>
+        <li>Submit certifications, lab results, and clinical data directly into our intelligence system</li>
+        <li>Challenge axioms that affect your products with verifiable evidence</li>
+        <li>Track how your products are represented across verdicts</li>
+        <li>S2S attribution for affiliate commission tracking (no cookies)</li>
+      </ul>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-row">
+      <div class="summary-card">
+        <div class="num" style="color:var(--white)">12</div>
+        <div class="label">Products tracked</div>
+      </div>
+      <div class="summary-card">
+        <div class="num" style="color:var(--green)">8</div>
+        <div class="label">Positive verdicts</div>
+      </div>
+      <div class="summary-card">
+        <div class="num" style="color:var(--amber)">3</div>
+        <div class="label">Caution verdicts</div>
+      </div>
+      <div class="summary-card">
+        <div class="num" style="color:var(--red)">1</div>
+        <div class="label">Kill shot verdicts</div>
+      </div>
+    </div>
+
+    <!-- Products affected by axioms -->
+    <div class="section-header">
+      <h2>Products affected by axioms</h2>
+    </div>
+
+    <div class="product-list">
+      <div class="product-card">
+        <div class="product-verdict negative">KS</div>
+        <div class="product-info">
+          <div class="product-name">Thorne Basic Nutrients - Magnesium Oxide 400mg</div>
+          <div class="product-sku">SKU: THR-MG-OX-400</div>
+          <div class="product-verdict-text">Kill shot: Product uses oxide form with 4% bioavailability. Consumers absorb ~16mg of the labeled 400mg. Thorne's own glycinate products outperform this SKU.</div>
+          <div class="product-axioms-affecting">
+            <span class="axiom-tag negative">SUPP-BIO-001 (Bioavailability)</span>
+            <span class="axiom-tag neutral">SUPP-LABEL-003 (Label Accuracy)</span>
+          </div>
+          <div class="product-actions">
+            <button class="product-btn challenge">Challenge Axiom</button>
+            <button class="product-btn submit-data">Submit Lab Data</button>
+            <button class="product-btn ghost">View Full Verdict</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-verdict positive">&#10003;</div>
+        <div class="product-info">
+          <div class="product-name">Thorne Magnesium Bisglycinate 200mg</div>
+          <div class="product-sku">SKU: THR-MG-BG-200</div>
+          <div class="product-verdict-text">Recommended: Chelated form with verified bioavailability. NSF Certified for Sport. Third-party tested by ConsumerLab (passed, 2024).</div>
+          <div class="product-axioms-affecting">
+            <span class="axiom-tag positive">SUPP-BIO-001 (Bioavailability)</span>
+            <span class="axiom-tag positive">SUPP-VERIFY-001 (Third-Party Testing)</span>
+          </div>
+          <div class="product-actions">
+            <button class="product-btn submit-data">Update Certifications</button>
+            <button class="product-btn ghost">View Full Verdict</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-verdict caution">!</div>
+        <div class="product-info">
+          <div class="product-name">Thorne Vitamin D3 5000 IU</div>
+          <div class="product-sku">SKU: THR-VD3-5000</div>
+          <div class="product-verdict-text">Caution: Product is well-formulated but packaging does not mention K2 cofactor requirement. Axiom SUPP-BIO-005 (fat-soluble absorption) applies - no meal guidance on label.</div>
+          <div class="product-axioms-affecting">
+            <span class="axiom-tag negative">SUPP-BIO-005 (Fat-Soluble Absorption)</span>
+            <span class="axiom-tag neutral">SUPP-COFACTOR-002 (D3/K2 Pairing)</span>
+          </div>
+          <div class="product-actions">
+            <button class="product-btn challenge">Challenge Axiom</button>
+            <button class="product-btn submit-data">Submit Updated Label</button>
+            <button class="product-btn ghost">View Full Verdict</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data submission channels -->
+    <div class="data-section">
+      <div class="section-header">
+        <h2>Submit product data</h2>
+      </div>
+
+      <div class="data-channel-card">
+        <div class="data-channel-header">
+          <div class="data-channel-icon cert">&#10003;</div>
+          <div class="data-channel-name">Certifications & Testing</div>
+        </div>
+        <div class="data-channel-desc">Submit third-party certifications (USP, NSF, ConsumerLab), GMP audit results, and batch testing reports. These directly improve your product's representation in our intelligence system.</div>
+        <div class="data-channel-accepted">
+          <span class="data-format">PDF</span>
+          <span class="data-format">COA (Certificate of Analysis)</span>
+          <span class="data-format">NSF Listing ID</span>
+          <span class="data-format">USP Verification Mark</span>
+        </div>
+        <button class="data-upload-btn">Upload Certification</button>
+      </div>
+
+      <div class="data-channel-card">
+        <div class="data-channel-header">
+          <div class="data-channel-icon lab">&#9670;</div>
+          <div class="data-channel-name">Lab Results & Formulation Data</div>
+        </div>
+        <div class="data-channel-desc">Submit bioavailability studies, stability testing, dissolution profiles, and heavy metal assays. Independent lab results carry higher weight than internal testing.</div>
+        <div class="data-channel-accepted">
+          <span class="data-format">PDF</span>
+          <span class="data-format">HPLC Results</span>
+          <span class="data-format">Stability Data</span>
+          <span class="data-format">Dissolution Profile</span>
+        </div>
+        <button class="data-upload-btn">Upload Lab Results</button>
+      </div>
+
+      <div class="data-channel-card">
+        <div class="data-channel-header">
+          <div class="data-channel-icon clinical">&#9679;</div>
+          <div class="data-channel-name">Clinical Evidence</div>
+        </div>
+        <div class="data-channel-desc">Submit published clinical trials, pharmacokinetic studies, or efficacy data. Peer-reviewed publications carry the highest evidence weight. These can directly challenge or strengthen axioms affecting your products.</div>
+        <div class="data-channel-accepted">
+          <span class="data-format">DOI Link</span>
+          <span class="data-format">PubMed ID</span>
+          <span class="data-format">Clinical Trial Registry</span>
+          <span class="data-format">PDF Manuscript</span>
+        </div>
+        <button class="data-upload-btn">Submit Clinical Evidence</button>
+      </div>
+    </div>
+
+    <!-- Submission history -->
+    <div class="section-header">
+      <h2>Recent submissions</h2>
+    </div>
+
+    <div class="submission-list">
+      <div class="submission-item">
+        <div class="submission-icon accepted">&#10003;</div>
+        <div class="submission-text">
+          <div class="desc">NSF Certified for Sport verification for Magnesium Bisglycinate (THR-MG-BG-200)</div>
+          <div class="meta">Submitted Mar 2 - Accepted Mar 4 - Improved product verdict</div>
+        </div>
+        <span class="submission-status accepted">ACCEPTED</span>
+      </div>
+
+      <div class="submission-item">
+        <div class="submission-icon reviewing">&#9679;</div>
+        <div class="submission-text">
+          <div class="desc">ConsumerLab 2024 test results for Vitamin D3 5000 IU (THR-VD3-5000)</div>
+          <div class="meta">Submitted Mar 12 - Under evaluation</div>
+        </div>
+        <span class="submission-status reviewing">REVIEWING</span>
+      </div>
+
+      <div class="submission-item">
+        <div class="submission-icon accepted">&#10003;</div>
+        <div class="submission-text">
+          <div class="desc">Challenge: Axiom SUPP-BIO-001 application to bisglycinate vs glycinate distinction</div>
+          <div class="meta">Submitted Feb 28 - Axiom updated to specify "chelated forms" rather than "glycinate only"</div>
+        </div>
+        <span class="submission-status accepted">AXIOM UPDATED</span>
+      </div>
+
+      <div class="submission-item">
+        <div class="submission-icon rejected" style="background:rgba(255,255,255,0.04);color:var(--z500);">-</div>
+        <div class="submission-text">
+          <div class="desc">Challenge: Axiom SUPP-LABEL-003 does not apply to NSF-verified products</div>
+          <div class="meta">Submitted Feb 20 - Axiom applies to industry-wide statistics, not individual products</div>
+        </div>
+        <span class="submission-status no-impact">NO CHANGE</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

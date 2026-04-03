@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai - Partner Indicator Explorations</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    color: #e4e4e7;
+    font-family: 'DM Sans', sans-serif;
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    max-width: 1200px;
+    margin: 0 auto 48px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 8px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+    color: #a1a1aa;
+    line-height: 1.5;
+    max-width: 640px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .exploration {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .exploration-header {
+    padding: 20px 20px 16px;
+    border-bottom: 0.5px solid #27272a;
+  }
+
+  .exploration-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #8b5cf6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .exploration-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 4px;
+  }
+
+  .exploration-desc {
+    font-size: 12px;
+    color: #71717a;
+    line-height: 1.4;
+  }
+
+  .exploration-body {
+    padding: 20px;
+  }
+
+  /* -- Price comparison section (shared) -- */
+  .price-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .price-row:hover {
+    background: rgba(139, 92, 246, 0.06);
+  }
+
+  .price-row-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .merchant-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e4e4e7;
+    white-space: nowrap;
+  }
+
+  .price-row-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .price {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fafafa;
+  }
+
+  .price.best {
+    color: #4ade80;
+  }
+
+  .code-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    border: 0.5px solid rgba(74, 222, 128, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .you-are-here {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #a1a1aa;
+    background: rgba(161, 161, 170, 0.1);
+    border: 0.5px solid rgba(161, 161, 170, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* -- Approach A: Text Pill Tag -- */
+  .tag-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .tag-pill.muted {
+    color: #a1a1aa;
+    background: rgba(161, 161, 170, 0.08);
+    border: 0.5px solid rgba(161, 161, 170, 0.12);
+  }
+
+  /* -- Approach B: Icon Only -- */
+  .partner-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  /* -- Approach C: Left Border Accent -- */
+  .price-row.border-accent {
+    border-left: 2px solid rgba(139, 92, 246, 0.4);
+    padding-left: 12px;
+  }
+
+  /* -- Approach D: Warm Tint -- */
+  .tag-pill.warm {
+    color: #d4a574;
+    background: rgba(212, 165, 116, 0.08);
+    border: 0.5px solid rgba(212, 165, 116, 0.15);
+  }
+
+  /* -- Approach E: Mission pill -- */
+  .tag-pill.mission {
+    color: #8b5cf6;
+    background: rgba(139, 92, 246, 0.08);
+    border: 0.5px solid rgba(139, 92, 246, 0.15);
+  }
+
+  /* -- Section divider -- */
+  .section-divider {
+    border: none;
+    border-top: 0.5px solid #27272a;
+    margin: 48px auto;
+    max-width: 1200px;
+  }
+
+  .section-header {
+    max-width: 1200px;
+    margin: 0 auto 32px;
+  }
+
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 4px;
+  }
+
+  .section-header p {
+    font-size: 13px;
+    color: #71717a;
+  }
+
+  /* -- Footer explanation variants -- */
+  .footer-note {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 0.5px solid #1a1a1e;
+    font-size: 11px;
+    color: #52525b;
+    line-height: 1.4;
+  }
+
+  .footer-note a {
+    color: #71717a;
+    text-decoration: underline;
+    text-decoration-color: #3f3f46;
+    text-underline-offset: 2px;
+  }
+
+  /* -- Tooltip simulation -- */
+  .tooltip-demo {
+    position: relative;
+  }
+
+  .tooltip-bubble {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #27272a;
+    border: 0.5px solid #3f3f46;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #d4d4d8;
+    line-height: 1.4;
+    width: 240px;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .tooltip-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #27272a;
+  }
+
+  /* -- Verdict card context -- */
+  .verdict-card {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .verdict-bar {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 0.5px solid #27272a;
+  }
+
+  .verdict-bar.recommended {
+    background: rgba(74, 222, 128, 0.04);
+    border-bottom-color: rgba(74, 222, 128, 0.1);
+  }
+
+  .verdict-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .verdict-icon.green {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+
+  .verdict-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fafafa;
+  }
+
+  .verdict-body {
+    padding: 16px 20px;
+    font-size: 13px;
+    color: #a1a1aa;
+    line-height: 1.5;
+  }
+
+  .verdict-prices {
+    padding: 0 20px 20px;
+  }
+
+  /* -- Full card demo -- */
+  .full-demo {
+    max-width: 420px;
+  }
+
+  /* -- Comparison strip at bottom -- */
+  .comparison-strip {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 32px;
+  }
+
+  .strip-card {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .strip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #8b5cf6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .pros-cons h4 {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .pros-cons li {
+    font-size: 12px;
+    color: #a1a1aa;
+    line-height: 1.6;
+    list-style: none;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .pros-cons li::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    color: #4ade80;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .pros-cons .cons li::before {
+    content: '-';
+    color: #f87171;
+  }
+
+  /* SVG icons inline */
+  .icon-svg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Partner Indicator Explorations</h1>
+  <p>How should Product.ai visually indicate that a merchant link or price row earns affiliate revenue? Each approach below shows the same price comparison data with different disclosure treatments. Non-partner merchants are included to show contrast.</p>
+</div>
+
+<!-- ====== APPROACH A: Text Pill (Muted) ====== -->
+<div class="grid">
+
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Approach A</div>
+    <div class="exploration-title">Text Pill - "Partner"</div>
+    <div class="exploration-desc">Muted monospace pill tag. Same visual family as "You are here" and code badges. Metadata-weight, not status-weight.</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Price Comparison</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <span class="tag-pill muted">Partner</span>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <span class="tag-pill muted">Partner</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$44.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Dermstore</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Purchasing from a Partner supports Product.ai. <a href="#">How we make money</a>
+    </div>
+  </div>
+</div>
+
+<!-- ====== APPROACH B: Icon + Text Compact ====== -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Approach B</div>
+    <div class="exploration-title">Icon + Text Compact</div>
+    <div class="exploration-desc">Small icon (handshake/link glyph) paired with "Partner" text. More visual presence than pure text, still compact.</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Price Comparison</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <span class="tag-pill muted">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="vertical-align: -1px; margin-right: 3px;">
+            <path d="M10 6L6 10M8.5 4.5L11.293 1.707a1 1 0 011.414 0l1.586 1.586a1 1 0 010 1.414L11.5 7.5M7.5 11.5L4.707 14.293a1 1 0 01-1.414 0L1.707 12.707a1 1 0 010-1.414L4.5 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Partner
+        </span>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <span class="tag-pill muted">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="vertical-align: -1px; margin-right: 3px;">
+            <path d="M10 6L6 10M8.5 4.5L11.293 1.707a1 1 0 011.414 0l1.586 1.586a1 1 0 010 1.414L11.5 7.5M7.5 11.5L4.707 14.293a1 1 0 01-1.414 0L1.707 12.707a1 1 0 010-1.414L4.5 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Partner
+        </span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$44.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Dermstore</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Purchasing from a Partner supports Product.ai. <a href="#">How we make money</a>
+    </div>
+  </div>
+</div>
+
+<!-- ====== APPROACH C: Left Border Accent ====== -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Approach C</div>
+    <div class="exploration-title">Left Border Accent</div>
+    <div class="exploration-desc">Subtle violet left border on partner rows. No inline text. Explanation lives in footer. Cleanest in-row treatment.</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Price Comparison</div>
+
+    <div class="price-row border-accent" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row border-accent">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$44.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Dermstore</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <span style="display: inline-block; width: 12px; height: 2px; background: rgba(139, 92, 246, 0.4); vertical-align: middle; margin-right: 6px; border-radius: 1px;"></span>
+      Purchasing from highlighted retailers supports Product.ai. <a href="#">How we make money</a>
+    </div>
+  </div>
+</div>
+
+<!-- ====== APPROACH D: Mission-Aligned "Supports Product.ai" ====== -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Approach D</div>
+    <div class="exploration-title">Mission Framing - "Supports Product.ai"</div>
+    <div class="exploration-desc">Explicit mission language in the tag itself. Violet tint (brand color). More prominent, more intentional. Makes the affiliate relationship feel like a positive action.</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Price Comparison</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <span class="tag-pill mission">Supports Product.ai</span>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <span class="tag-pill mission">Supports Product.ai</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$44.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Dermstore</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Buying through these partners keeps Product.ai free. <a href="#">Learn more</a>
+    </div>
+  </div>
+</div>
+
+<!-- ====== APPROACH E: Warm Neutral "Brand Partner" ====== -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Approach E</div>
+    <div class="exploration-title">Warm Neutral - "Brand Partner"</div>
+    <div class="exploration-desc">Warm amber-gold tint. Distinct from all status colors. Feels premium/editorial, not transactional. "Brand Partner" sounds intentional, not accidental.</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Price Comparison</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <span class="tag-pill warm">Brand Partner</span>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <span class="tag-pill warm">Brand Partner</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$44.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Dermstore</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Brand Partners support Product.ai's mission. <a href="#">How we make money</a>
+    </div>
+  </div>
+</div>
+
+<!-- ====== APPROACH F: Icon Only (Minimal) ====== -->
+<div class="exploration">
+  <div class="exploration-header">
+    <div class="exploration-label">Approach F</div>
+    <div class="exploration-title">Icon Only (Minimal)</div>
+    <div class="exploration-desc">Tiny glyph only, no text. Maximum compression. Tooltip on hover/long-press. Relies on footer explanation. Best for tight spaces (380px extension panel).</div>
+  </div>
+  <div class="exploration-body">
+    <div class="price-section-label">Price Comparison</div>
+
+    <div class="price-row tooltip-demo" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="tooltip-bubble">Purchasing here supports Product.ai and keeps the product free for everyone.</div>
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0; opacity: 0.4;">
+          <circle cx="8" cy="8" r="6.5" stroke="#a1a1aa" stroke-width="1"/>
+          <path d="M5.5 8.5L7 10L10.5 6.5" stroke="#a1a1aa" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$38.25</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0; opacity: 0.4;">
+          <circle cx="8" cy="8" r="6.5" stroke="#a1a1aa" stroke-width="1"/>
+          <path d="M5.5 8.5L7 10L10.5 6.5" stroke="#a1a1aa" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$44.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">The Ordinary</span>
+        <span class="you-are-here">You are here</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Dermstore</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$45.00</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="vertical-align: -2px; margin-right: 4px; opacity: 0.4;">
+        <circle cx="8" cy="8" r="6.5" stroke="#a1a1aa" stroke-width="1"/>
+        <path d="M5.5 8.5L7 10L10.5 6.5" stroke="#a1a1aa" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Purchasing from marked retailers supports Product.ai. <a href="#">How we make money</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ====== FULL VERDICT CARD CONTEXT ====== -->
+<hr class="section-divider">
+
+<div class="section-header">
+  <h2>In Context: Full Verdict Card</h2>
+  <p>How the recommended approach (A) looks inside an actual verdict card with all modules visible.</p>
+</div>
+
+<div class="comparison-strip">
+
+<div class="verdict-card full-demo">
+  <div class="verdict-bar recommended">
+    <div class="verdict-icon green">&#10003;</div>
+    <div class="verdict-text">Recommended</div>
+  </div>
+  <div class="verdict-body">
+    The CeraVe PM Facial Moisturizing Lotion is well-formulated with ceramides and niacinamide at effective concentrations. Lightweight, non-comedogenic, and well-tolerated across skin types. Independent dermatologist consensus is strong.
+  </div>
+  <div class="verdict-prices">
+    <div class="price-section-label">Best Prices</div>
+
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <span class="tag-pill muted">Partner</span>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price best">$13.59</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Amazon</span>
+        <span class="tag-pill muted">Partner</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$14.63</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Target</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$15.99</span>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">CVS</span>
+      </div>
+      <div class="price-row-right">
+        <span class="price">$16.49</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Purchasing from a Partner supports Product.ai. <a href="#">How we make money</a>
+    </div>
+  </div>
+</div>
+
+<div class="strip-card">
+  <div class="strip-label">Evaluation Notes</div>
+  <div class="pros-cons">
+    <div>
+      <h4>Strengths</h4>
+      <ul>
+        <li>Accessible - transparent, honest, screen-reader ready</li>
+        <li>Same visual weight as existing metadata tags</li>
+        <li>Works at 380px extension width</li>
+        <li>Non-apologetic tone in footer</li>
+        <li>Clear contrast: Partner rows vs non-partner rows</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Tradeoffs</h4>
+      <ul>
+        <li>Adds horizontal content to already-dense rows</li>
+        <li>When most merchants are partners, tags may feel repetitive</li>
+        <li>"Partner" is generic - could mean many things</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>

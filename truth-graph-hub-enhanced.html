@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dietary Supplements Buying Guide - Truth Graph | Product.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v400: #A384FF; --v500: #8B5CF6;
+  --green: #34d399; --green-surface: rgba(52,211,153,0.06);
+  --amber: #CEAD50; --amber-surface: rgba(206,173,80,0.06);
+  --red: #f87171; --red-surface: rgba(248,113,113,0.06);
+  --blue: #6EB6FF; --blue-surface: rgba(110,182,255,0.06);
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0; background: var(--black); color: var(--white); line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+.nav { position: sticky; top: 0; z-index: 100; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--z900); }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.nav-logo { display: flex; align-items: baseline; }
+.nav-logo .lp { font-size: 17px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.nav-logo .la { font-family: var(--mono); font-size: 17px; color: var(--v500); }
+.nav-links { display: flex; gap: 24px; }
+.nav-links a { font-size: 13px; color: var(--z500); transition: color 150ms; }
+.nav-links a:hover { color: var(--z300); }
+.nav-links a.active { color: var(--v500); }
+.breadcrumb { max-width: 1280px; margin: 0 auto; padding: 16px 48px 0; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--z600); }
+.breadcrumb a { color: var(--z500); transition: color 150ms; }
+.breadcrumb a:hover { color: var(--z300); }
+.section-label { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--v500); margin-bottom: 12px; }
+.section-label::before { content: ''; width: 8px; height: 8px; background: var(--v500); transform: rotate(45deg); }
+.hero { position: relative; padding: 48px 0 64px; overflow: hidden; }
+.hero-glow { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 900px; height: 600px; background: radial-gradient(ellipse at center, rgba(109,40,217,0.04) 0%, transparent 65%); pointer-events: none; }
+.hero h1 { font-size: 48px; font-weight: 500; color: var(--white); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 16px; max-width: 780px; }
+.hero-desc { font-size: 16px; color: var(--z400); line-height: 1.7; max-width: 680px; margin-bottom: 32px; }
+.hero-cta { display: inline-flex; align-items: center; padding: 12px 24px; background: var(--v500); color: var(--white); font-size: 14px; font-weight: 500; border-radius: 8px; transition: opacity 150ms; margin-bottom: 40px; }
+.hero-cta:hover { opacity: 0.9; }
+.stats-row { display: flex; flex-wrap: wrap; gap: 48px; }
+.stat-item { display: flex; flex-direction: column; gap: 2px; }
+.stat-value { font-family: var(--mono); font-weight: 500; font-size: 30px; }
+.stat-value.violet { color: var(--v500); }
+.stat-value.white { color: var(--white); }
+.stat-value.green { color: var(--green); }
+.stat-label { font-family: var(--mono); font-size: 12px; color: var(--z400); text-transform: uppercase; letter-spacing: 0.08em; }
+.section { padding: 80px 0; border-top: 1px solid var(--z900); }
+.guides-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+@media (max-width: 1024px) { .guides-grid { grid-template-columns: repeat(2, 1fr); } }
+.guide-card { padding: 20px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--z900); transition: border-color 150ms; display: flex; flex-direction: column; gap: 8px; }
+.guide-card:hover { border-color: var(--z700); }
+.guide-card h3 { font-size: 15px; font-weight: 500; color: var(--white); }
+.guide-card p { font-size: 13px; color: var(--z400); line-height: 1.5; flex: 1; }
+.guide-card .guide-meta { font-family: var(--mono); font-size: 11px; color: var(--z600); display: flex; align-items: center; gap: 6px; }
+.guide-card .guide-meta .dot { width: 4px; height: 4px; border-radius: 50%; }
+.guide-card .guide-meta .dot.live { background: var(--green); }
+.guide-card .guide-meta .dot.soon { background: var(--z600); }
+.guide-card.coming-soon { opacity: 0.5; pointer-events: none; }
+.axiom-list { display: flex; flex-direction: column; gap: 12px; max-width: 800px; }
+.axiom-card { padding: 20px 24px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--z900); cursor: pointer; transition: border-color 150ms; }
+.axiom-card:hover { border-color: var(--z700); }
+.axiom-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.axiom-domain { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--z600); letter-spacing: 0.06em; }
+.confidence-badge { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 100px; }
+.confidence-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.confidence-badge.forged { color: var(--green); background: var(--green-surface); }
+.confidence-badge.review { color: var(--amber); background: var(--amber-surface); }
+.axiom-statement { font-size: 15px; font-weight: 500; color: var(--z200); line-height: 1.5; margin-bottom: 8px; }
+.axiom-physics { font-family: var(--mono); font-size: 13px; color: var(--z500); line-height: 1.5; padding-left: 12px; border-left: 2px solid rgba(139,92,246,0.15); margin-bottom: 12px; }
+.axiom-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--z900); }
+.axiom-meta-line { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--z600); flex-wrap: wrap; }
+.axiom-expand-hint { font-family: var(--mono); font-size: 11px; color: var(--z600); transition: color 150ms; }
+.axiom-card:hover .axiom-expand-hint { color: var(--z400); }
+.evidence-chain { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--z900); display: none; }
+.axiom-card.open .evidence-chain { display: block; }
+.evidence-row { display: flex; gap: 12px; margin-bottom: 12px; }
+.evidence-row:last-child { margin-bottom: 0; }
+.evidence-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-family: var(--mono); font-size: 10px; font-weight: 600; }
+.evidence-icon.src { background: var(--blue-surface); color: var(--blue); }
+.evidence-icon.test { background: var(--green-surface); color: var(--green); }
+.evidence-icon.chal { background: var(--amber-surface); color: var(--amber); }
+.evidence-text { font-size: 13px; color: var(--z400); line-height: 1.5; }
+.evidence-text strong { color: var(--z300); font-weight: 500; }
+.evidence-cite { font-family: var(--mono); font-size: 11px; color: var(--z600); display: block; margin-top: 2px; }
+.evidence-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 768px) { .evidence-cards { grid-template-columns: 1fr; } }
+.ev-card { padding: 24px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--z900); }
+.ev-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(139,92,246,0.08); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--v400); margin-bottom: 12px; }
+.ev-card h3 { font-size: 15px; font-weight: 500; color: var(--white); margin-bottom: 6px; }
+.ev-card p { font-size: 13px; color: var(--z400); line-height: 1.5; }
+.axiom-tree-link { padding: 48px 0; border-top: 1px solid var(--z900); }
+.atl-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.atl-inner h2 { font-size: 18px; font-weight: 500; color: var(--white); margin-bottom: 4px; }
+.atl-inner p { font-size: 14px; color: var(--z400); }
+.atl-btn { display: inline-flex; align-items: center; padding: 10px 20px; border: 1px solid var(--z800); color: var(--z300); font-size: 14px; font-weight: 500; border-radius: 8px; transition: all 150ms; white-space: nowrap; }
+.atl-btn:hover { border-color: var(--z600); color: var(--white); background: var(--z900); }
+.bottom-cta { padding: 80px 0; border-top: 1px solid var(--z900); }
+.cta-box { max-width: 720px; margin: 0 auto; text-align: center; padding: 56px; border-radius: 16px; border: 1px solid var(--z900); background: var(--z950); }
+.cta-box h2 { font-size: 24px; font-weight: 500; color: var(--white); letter-spacing: -0.02em; margin-bottom: 12px; }
+.cta-box p { font-size: 16px; color: var(--z400); line-height: 1.7; max-width: 480px; margin: 0 auto 32px; }
+.cta-box .ghost-btn { display: inline-flex; align-items: center; padding: 12px 24px; border: 1px solid var(--z800); color: var(--z300); font-size: 14px; font-weight: 500; border-radius: 8px; transition: all 150ms; }
+.cta-box .ghost-btn:hover { border-color: var(--z600); color: var(--white); background: var(--z900); }
+.footer { padding: 48px; border-top: 1px solid var(--z900); display: flex; justify-content: center; align-items: center; gap: 16px; }
+.footer .f-lp { font-size: 14px; font-weight: 600; color: var(--z600); }
+.footer .f-la { font-family: var(--mono); font-size: 14px; color: var(--z700); }
+.footer .f-meta { font-family: var(--mono); font-size: 11px; color: var(--z800); }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><span class="lp">Product</span><span class="la">.ai</span></a>
+    <div class="nav-links">
+      <a href="#">For Shoppers</a>
+      <a href="#" class="active">Truth Graph</a>
+      <a href="#">Codex</a>
+      <a href="#">Research</a>
+      <a href="#">Join</a>
+    </div>
+  </div>
+</div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a href="#">Product.ai</a> <span style="color:var(--z700)">/</span>
+  <a href="#">Truth Graph</a> <span style="color:var(--z700)">/</span>
+  <span style="color:var(--z400)">Dietary Supplements</span>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="container" style="position:relative;">
+    <div class="section-label">Biochemistry, Bioavailability, Safety</div>
+    <h1>What matters when buying supplements - and what doesn't.</h1>
+    <p class="hero-desc">Everything you need to know before spending money on dietary supplements. 8 deep-dive guides backed by 56 verified claims. Named, versioned, and challengeable.</p>
+    <a href="#" class="hero-cta">Read the Label Accuracy Guide &#8594;</a>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-value violet">4/8</span>
+        <span class="stat-label">Topics Covered</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value white">56</span>
+        <span class="stat-label">Verified Claims</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value white">Mar 2026</span>
+        <span class="stat-label">Last Updated</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value green">12</span>
+        <span class="stat-label">Challenges Resolved</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DEEP DIVE GUIDES (existing) ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Deep Dive Guides</div>
+    <h2 style="font-size:30px;font-weight:500;color:var(--white);margin-bottom:12px;">Choose a topic to go deep.</h2>
+    <p style="font-size:16px;color:var(--z400);max-width:680px;line-height:1.7;margin-bottom:40px;">Every guide is backed by verified axioms. We name our claims, publish what would disprove them, and update when the evidence changes.</p>
+    <div class="guides-grid">
+      <a href="#" class="guide-card"><h3>Label Accuracy</h3><p>Why 89% of supplement labels are inaccurate and how to identify the 11% you can trust.</p><span class="guide-meta"><span class="dot live"></span>12 axioms - 4 min read</span></a>
+      <a href="#" class="guide-card"><h3>Bioavailability</h3><p>Why the form of a supplement matters more than the dose on the label.</p><span class="guide-meta"><span class="dot live"></span>9 axioms - 5 min read</span></a>
+      <a href="#" class="guide-card"><h3>Safety & Interactions</h3><p>The supplements that can hurt you, the drugs they interact with, and what the ER data shows.</p><span class="guide-meta"><span class="dot live"></span>8 axioms - 6 min read</span></a>
+      <a href="#" class="guide-card"><h3>Third-Party Testing</h3><p>USP vs NSF vs ConsumerLab: what each certification means and what it doesn't.</p><span class="guide-meta"><span class="dot live"></span>7 axioms - 3 min read</span></a>
+      <div class="guide-card coming-soon"><h3>Protein Supplements</h3><p>Protein spiking, amino acid padding, and how to verify you're getting what you paid for.</p><span class="guide-meta"><span class="dot soon"></span>Coming soon</span></div>
+      <div class="guide-card coming-soon"><h3>Vitamin D & Cofactors</h3><p>Why D3 without K2 and magnesium is incomplete, and optimal dosing by blood level.</p><span class="guide-meta"><span class="dot soon"></span>Coming soon</span></div>
+      <div class="guide-card coming-soon"><h3>Pre-Workout & Energy</h3><p>DMAA risks, caffeine dosing, and the ingredients that actually have evidence behind them.</p><span class="guide-meta"><span class="dot soon"></span>Coming soon</span></div>
+      <div class="guide-card coming-soon"><h3>Buying Strategy</h3><p>DTC vs Amazon economics, subscription traps, and when to pay more for a supplement.</p><span class="guide-meta"><span class="dot soon"></span>Coming soon</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ OPEN & CHALLENGEABLE (system trust, no expert panels) ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Open & Challengeable</div>
+    <h2 style="font-size:30px;font-weight:500;color:var(--white);margin-bottom:12px;">Every claim can be challenged. By anyone.</h2>
+    <p style="font-size:16px;color:var(--z400);max-width:680px;line-height:1.7;margin-bottom:40px;">Our intelligence gets stronger when people push back. Consumers, researchers, and merchants can challenge any axiom with evidence. If the evidence holds up, the axiom changes. If it doesn't, the axiom stands stronger. Here are some of the claims powering our supplement recommendations.</p>
+
+    <div class="axiom-list">
+
+      <!-- Axiom 1: Forged, challenged twice, stood -->
+      <div class="axiom-card open" onclick="this.classList.toggle('open')">
+        <div class="axiom-top">
+          <span class="axiom-domain">BIOAVAILABILITY</span>
+          <span class="confidence-badge forged"><span class="dot"></span> FORGED</span>
+        </div>
+        <div class="axiom-statement">Supplement form determines bioavailability more than dosage. Magnesium glycinate absorbs at 2.3x the rate of magnesium oxide despite identical label claims.</div>
+        <div class="axiom-physics">The chelation bond in glycinate protects the mineral through gastric acid (pH 1.5-3.5), enabling intestinal absorption. Oxide dissociates in the stomach, converting to insoluble hydroxide. Bioavailability: glycinate 80% vs oxide 4%.</div>
+        <div class="axiom-footer">
+          <div class="axiom-meta-line">
+            <span style="font-family:var(--mono);font-size:11px;">SUPP-BIO-001</span>
+            <span style="color:var(--z700)">-</span>
+            <span>Forged Feb 2026</span>
+            <span style="color:var(--z700)">-</span>
+            <span style="color:var(--green)">2 challenges resolved, axiom stands</span>
+          </div>
+          <span class="axiom-expand-hint">&#9654; Evidence</span>
+        </div>
+        <div class="evidence-chain">
+          <div class="evidence-row">
+            <div class="evidence-icon src">S</div>
+            <div class="evidence-text"><strong>ConsumerLab 2024 Magnesium Report:</strong> Tested 40 supplements. Oxide: 3-5% urinary recovery. Chelated forms: 18-24%.<span class="evidence-cite">consumerlab.com/reviews/magnesium/</span></div>
+          </div>
+          <div class="evidence-row">
+            <div class="evidence-icon src">S</div>
+            <div class="evidence-text"><strong>Firoz & Graber (2001), J Am Coll Nutr:</strong> Crossover study comparing four magnesium preparations. Chelated forms showed highest fractional absorption.<span class="evidence-cite">doi: 10.1080/07315724.2001.10719064</span></div>
+          </div>
+          <div class="evidence-row">
+            <div class="evidence-icon test">T</div>
+            <div class="evidence-text"><strong>Adversarial verification:</strong> Three independent research agents converged on the bioavailability differential. ChatGPT baseline recommended oxide citing "highest elemental magnesium" - failed to distinguish label dose from absorbed dose.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Axiom 2: Under review from merchant challenge -->
+      <div class="axiom-card" onclick="this.classList.toggle('open')">
+        <div class="axiom-top">
+          <span class="axiom-domain">ECONOMICS</span>
+          <span class="confidence-badge review"><span class="dot"></span> UNDER REVIEW</span>
+        </div>
+        <div class="axiom-statement">DTC supplement brands command 30-50% affiliate commissions vs 1-3% on Amazon, creating a structural incentive for review sites to recommend DTC brands regardless of product quality.</div>
+        <div class="axiom-footer">
+          <div class="axiom-meta-line">
+            <span style="font-family:var(--mono);font-size:11px;">SUPP-ECON-002</span>
+            <span style="color:var(--z700)">-</span>
+            <span style="color:var(--amber)">1 active challenge from a merchant partner</span>
+          </div>
+          <span class="axiom-expand-hint">&#9654; Challenge details</span>
+        </div>
+        <div class="evidence-chain">
+          <div class="evidence-row">
+            <div class="evidence-icon chal">C</div>
+            <div class="evidence-text"><strong>Merchant challenge:</strong> "Commission rates are accurate but the conclusion is over-broad. Several DTC brands deliver pharmaceutical-grade formulations with third-party verification that justify recommendation independent of commission structure."<span class="evidence-cite" style="color:var(--amber);">Evidence submitted: NSF certification data + ConsumerLab reports. Re-evaluation in progress.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Axiom 3: Clean, no challenges -->
+      <div class="axiom-card" onclick="this.classList.toggle('open')">
+        <div class="axiom-top">
+          <span class="axiom-domain">SAFETY</span>
+          <span class="confidence-badge forged"><span class="dot"></span> FORGED</span>
+        </div>
+        <div class="axiom-statement">Supplements cause 23,000 ER visits per year in the US. Risk concentrates in weight loss (25%), energy/bodybuilding (20%), and heart health (15%).</div>
+        <div class="axiom-footer">
+          <div class="axiom-meta-line">
+            <span style="font-family:var(--mono);font-size:11px;">SUPP-SAFE-001</span>
+            <span style="color:var(--z700)">-</span>
+            <span>Forged Feb 2026</span>
+            <span style="color:var(--z700)">-</span>
+            <span>No challenges</span>
+          </div>
+          <span class="axiom-expand-hint">&#9654; Evidence</span>
+        </div>
+        <div class="evidence-chain">
+          <div class="evidence-row">
+            <div class="evidence-icon src">S</div>
+            <div class="evidence-text"><strong>NEJM 2015 (Geller et al.):</strong> Prospective surveillance of 63 EDs. 23,005 annual visits. Hospitalization rate: 2,154/year.<span class="evidence-cite">doi: 10.1056/NEJMsa1504267</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Axiom 4: Label accuracy -->
+      <div class="axiom-card" onclick="this.classList.toggle('open')">
+        <div class="axiom-top">
+          <span class="axiom-domain">LABEL ACCURACY</span>
+          <span class="confidence-badge forged"><span class="dot"></span> FORGED</span>
+        </div>
+        <div class="axiom-statement">Third-party testing reveals 89% of supplement performance labels contain inaccurate claims. Products marketed as "clinically dosed" frequently contain 40-60% of the stated active ingredient.</div>
+        <div class="axiom-footer">
+          <div class="axiom-meta-line">
+            <span style="font-family:var(--mono);font-size:11px;">SUPP-LABEL-003</span>
+            <span style="color:var(--z700)">-</span>
+            <span>Forged Feb 2026</span>
+            <span style="color:var(--z700)">-</span>
+            <span style="color:var(--green)">1 challenge resolved</span>
+          </div>
+          <span class="axiom-expand-hint">&#9654; Evidence</span>
+        </div>
+        <div class="evidence-chain">
+          <div class="evidence-row">
+            <div class="evidence-icon src">S</div>
+            <div class="evidence-text"><strong>Labdoor 2023-2024:</strong> 1,400+ supplements tested. Mean label accuracy: 73%. Protein supplements: 19.4g actual vs 40g claimed.<span class="evidence-cite">labdoor.com/rankings</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW WE VERIFY (existing) ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">How We Verify</div>
+    <h2 style="font-size:30px;font-weight:500;color:var(--white);margin-bottom:12px;">Not opinions. Named, versioned claims.</h2>
+    <p style="font-size:16px;color:var(--z400);max-width:680px;line-height:1.7;margin-bottom:40px;">Every axiom in the Truth Graph follows three rules that separate verified knowledge from content marketing.</p>
+    <div class="evidence-cards">
+      <div class="ev-card"><div class="ev-icon">&#9670;</div><h3>Named & Versioned</h3><p>Every claim carries a unique ID, confidence level, and decay rate. Nothing hides behind "experts say" or "studies show."</p></div>
+      <div class="ev-card"><div class="ev-icon">&#9888;</div><h3>Kill Surface</h3><p>Every axiom publishes the exact evidence that would disprove it. If we cannot define how a claim dies, we do not publish it.</p></div>
+      <div class="ev-card"><div class="ev-icon">&#10003;</div><h3>Adversarial Verification</h3><p>Claims survive red-team review before earning FORGED status. Probable and hypothetical axioms are labeled honestly.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ AXIOM TREE LINK (existing) ═══════════ -->
+<div class="axiom-tree-link">
+  <div class="container">
+    <div class="atl-inner">
+      <div>
+        <h2>Want to see the raw axioms?</h2>
+        <p>Browse every verified claim with confidence levels, decay rates, and kill surfaces. Challenge any claim with evidence.</p>
+      </div>
+      <a href="#" class="atl-btn">View Axiom Index</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ BOTTOM CTA (existing) ═══════════ -->
+<section class="bottom-cta">
+  <div class="container">
+    <div class="cta-box">
+      <h2>Need a specific answer? Ask Product.ai about supplements.</h2>
+      <p>Every response grounded in 56 verified axioms.</p>
+      <a href="#" class="ghost-btn">Ask Product.ai &#8594;</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <span class="f-lp">Product</span><span class="f-la">.ai</span>
+  <span style="color:var(--z800)">-</span>
+  <span class="f-meta">Truth Graph - Dietary Supplements</span>
+</div>
+
+</body>
+</html>

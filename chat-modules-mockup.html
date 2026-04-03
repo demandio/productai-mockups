@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Mobile - Chat Modules Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7;
+  --z300: #D4D4D8; --z400: #A1A1AA; --z450: #898992; --z500: #71717A;
+  --z600: #52525B; --z700: #3F3F46; --z750: #333338; --z800: #27272A;
+  --z850: #1F1F22; --z900: #18181B; --z925: #101013; --z950: #09090B;
+  --black: #000000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v800: #5A17B7;
+  --g300: #03FF88; --g500: #03E67A; --g600: #02C869;
+  --a300: #CEAD50;
+  --r400: #F64B4B;
+  --b300: #6EB6FF;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { scrollbar-width: none; -ms-overflow-style: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: #080808; color: var(--z50);
+  display: flex; justify-content: center; align-items: flex-start;
+  min-height: 100vh; padding: 32px;
+}
+body::-webkit-scrollbar { display: none; }
+.phone {
+  width: 390px; height: 844px; background: var(--z950);
+  border-radius: 52px; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 2px 4px rgba(0,0,0,0.4),
+    0 12px 40px rgba(0,0,0,0.6), 0 40px 100px -20px rgba(0,0,0,0.8);
+  flex-shrink: 0;
+}
+.island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 124px; height: 36px; background: var(--black); border-radius: 20px; z-index: 100; }
+.home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; border-radius: 100px; background: rgba(255,255,255,0.15); z-index: 100; }
+.status { position: absolute; top: 16px; left: 32px; right: 32px;
+  display: flex; justify-content: space-between; align-items: center; z-index: 90; }
+.status .time { font-size: 16px; font-weight: 600; color: var(--white); }
+.status .sys { display: flex; gap: 5px; }
+.status .sys svg { width: 16px; height: 16px; fill: var(--white); }
+.app { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
+
+/* Header */
+.hdr {
+  padding: 58px 14px 0; height: 100px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-shrink: 0;
+  background: rgba(9,9,11,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  z-index: 50; padding-bottom: 10px;
+}
+.h-l { display: flex; align-items: center; gap: 10px; }
+.h-back {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.h-back svg { width: 18px; height: 18px; }
+.h-t .ht-n { font-size: 16px; font-weight: 600; color: var(--white); }
+.h-t .ht-d { font-size: 10px; font-family: var(--mono); color: var(--z600); letter-spacing: 0.04em; }
+.h-r { display: flex; gap: 4px; }
+.h-btn {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.h-btn svg { width: 18px; height: 18px; }
+
+/* Thread */
+.thread { flex: 1; overflow-y: auto; padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 16px; }
+.thread::-webkit-scrollbar { display: none; }
+
+/* Msgs */
+.msg { display: flex; flex-direction: column; max-width: 100%; }
+.msg.user { align-items: flex-end; }
+.msg.ai { align-items: flex-start; }
+.u-bub {
+  background: var(--v500); color: var(--white);
+  border-radius: 20px 20px 4px 20px; padding: 12px 16px;
+  font-size: 15px; line-height: 21px; max-width: 85%;
+}
+.ai-w { max-width: 95%; display: flex; flex-direction: column; gap: 8px; }
+.ai-lbl { display: flex; align-items: center; gap: 6px; padding: 0 2px; }
+.ai-av {
+  width: 20px; height: 20px; border-radius: 5px;
+  background: linear-gradient(135deg, var(--v800), var(--v500));
+  display: flex; align-items: center; justify-content: center;
+}
+.ai-av svg { width: 12px; height: 12px; color: var(--white); }
+.ai-nm { font-size: 11px; font-weight: 600; color: var(--z500); }
+.ai-txt { font-size: 15px; line-height: 22px; color: var(--z300); padding: 0 2px; }
+.ai-txt strong { color: var(--z200); font-weight: 500; }
+.hl { color: var(--v400); font-family: var(--mono); font-weight: 500; font-size: 14px; }
+.hl-g { color: #34d399; font-family: var(--mono); font-weight: 500; font-size: 14px; }
+.hl-w { color: var(--a300); font-family: var(--mono); font-weight: 500; font-size: 14px; }
+
+.ts { text-align: center; padding: 4px 0 8px; }
+.ts span { font-size: 10px; font-family: var(--mono); color: var(--z700); }
+
+/* ── MODULE: Link Paste ── */
+.u-link-wrap { max-width: 85%; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.u-link-card {
+  width: 260px;
+  background: var(--z900); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px 14px 4px 14px; overflow: hidden;
+}
+.u-link-img {
+  height: 100px; background: linear-gradient(135deg, #2a1f0a, #1a150a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; border-bottom: 0.5px solid rgba(255,255,255,0.05);
+}
+.u-link-info { padding: 10px 12px; }
+.u-link-title { font-size: 13px; font-weight: 500; color: var(--z200); margin-bottom: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.u-link-url { font-size: 10px; font-family: var(--mono); color: var(--z600); }
+.u-link-cap {
+  background: var(--v500); color: var(--white);
+  border-radius: 14px 14px 4px 14px; padding: 8px 14px; font-size: 14px;
+}
+
+/* ── MODULE: Multi-Product Grid ── */
+.prod-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.pg-card {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 12px;
+  cursor: pointer; transition: border-color 200ms;
+  display: flex; flex-direction: column;
+}
+.pg-card:active { border-color: rgba(255,255,255,0.12); }
+.pg-card.pick { border-color: rgba(3,230,122,0.2); }
+
+.pg-emoji { font-size: 28px; margin-bottom: 8px; }
+.pg-name { font-size: 13px; font-weight: 500; color: var(--z200); line-height: 17px; margin-bottom: 2px; }
+.pg-brand { font-size: 10px; color: var(--z600); margin-bottom: 6px; }
+.pg-price { font-size: 14px; font-weight: 600; font-family: var(--mono); color: var(--z300); margin-bottom: 4px; }
+.pg-tag {
+  display: inline-flex; align-self: flex-start;
+  padding: 2px 6px; border-radius: 100px;
+  font-size: 9px; font-weight: 600;
+}
+.pg-tag.pick { background: rgba(3,230,122,0.08); color: #34d399; }
+.pg-tag.solid { background: rgba(139,92,246,0.08); color: var(--v400); }
+.pg-tag.budget { background: rgba(206,173,80,0.08); color: var(--a300); }
+
+/* ── MODULE: Positive Verdict ── */
+.pv {
+  background: rgba(3,230,122,0.02);
+  border: 0.5px solid rgba(3,230,122,0.1);
+  border-radius: 16px; overflow: hidden;
+}
+.pv::before {
+  content: ''; display: block; height: 0.5px;
+  background: linear-gradient(90deg, transparent 10%, rgba(3,230,122,0.3) 50%, transparent 90%);
+}
+.pv-hd {
+  padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 0.5px solid rgba(3,230,122,0.06);
+}
+.pv-ic {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(3,230,122,0.1); color: #34d399;
+  display: flex; align-items: center; justify-content: center;
+}
+.pv-ic svg { width: 18px; height: 18px; }
+.pv-tb .pv-t { font-size: 16px; font-weight: 600; color: #34d399; }
+.pv-tb .pv-s { font-size: 11px; color: var(--z600); margin-top: 1px; }
+
+.pv-bd { padding: 14px 16px; }
+.pv-bd p { font-size: 14px; line-height: 20px; color: var(--z400); }
+.pv-bd p + p { margin-top: 8px; }
+
+/* ── MODULE: Pros / Cons ── */
+.proscons {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.pc-col h5 {
+  font-size: 10px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.pc-col.pros h5 { color: #34d399; }
+.pc-col.cons h5 { color: var(--a300); }
+.pc-item {
+  display: flex; gap: 5px; padding: 3px 0;
+  font-size: 12px; line-height: 16px; color: var(--z500);
+}
+.pc-item .pc-dot { margin-top: 5px; width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
+.pros .pc-dot { background: #34d399; }
+.cons .pc-dot { background: var(--a300); }
+
+/* ── MODULE: Price History ── */
+.price-hist {
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.02);
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+}
+.ph-label {
+  font-size: 9px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--z700); margin-bottom: 8px;
+}
+.ph-chart {
+  display: flex; align-items: flex-end; gap: 3px;
+  height: 40px; margin-bottom: 6px;
+}
+.ph-bar {
+  flex: 1; border-radius: 1.5px; background: rgba(255,255,255,0.06);
+  transition: background 150ms; min-width: 0;
+}
+.ph-bar.now { background: #34d399; }
+.ph-bar.low { background: rgba(3,230,122,0.25); }
+.ph-bar.high { background: rgba(248,113,113,0.2); }
+.ph-range {
+  display: flex; justify-content: space-between;
+  font-size: 10px; font-family: var(--mono); color: var(--z700);
+}
+.ph-current {
+  display: flex; align-items: baseline; gap: 6px; margin-top: 6px;
+}
+.ph-current .phc-price { font-size: 16px; font-weight: 600; font-family: var(--mono); color: #34d399; }
+.ph-current .phc-note { font-size: 11px; color: var(--z600); }
+.ph-current .phc-code {
+  font-size: 10px; font-family: var(--mono); color: #34d399;
+  background: rgba(3,230,122,0.08); padding: 2px 6px; border-radius: 100px; font-weight: 500;
+}
+
+/* Verdict actions */
+.v-acts {
+  padding: 10px 16px;
+  display: flex; gap: 6px;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+}
+.va {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 11px; border-radius: 100px;
+  font-size: 11px; font-weight: 500; cursor: pointer;
+  font-family: var(--sans); white-space: nowrap;
+}
+.va svg { width: 12px; height: 12px; }
+.va.primary { background: rgba(3,230,122,0.06); border: 0.5px solid rgba(3,230,122,0.15); color: #34d399; }
+.va.ghost { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06); color: var(--z500); }
+.va.violet { background: rgba(139,92,246,0.06); border: 0.5px solid rgba(139,92,246,0.15); color: var(--v400); }
+
+/* ── MODULE: Honest Gap ── */
+.gap-card {
+  background: rgba(206,173,80,0.03);
+  border: 0.5px solid rgba(206,173,80,0.1);
+  border-radius: 14px; padding: 14px;
+}
+.gap-hd {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.gap-ic {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: rgba(206,173,80,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--a300);
+}
+.gap-ic svg { width: 14px; height: 14px; }
+.gap-title { font-size: 13px; font-weight: 600; color: var(--a300); }
+.gap-body { font-size: 13px; line-height: 18px; color: var(--z500); }
+.gap-body strong { color: var(--z400); font-weight: 500; }
+
+/* ── MODULE: Deal Found Alert ── */
+.deal-alert {
+  background: rgba(3,230,122,0.04);
+  border: 0.5px solid rgba(3,230,122,0.15);
+  border-radius: 14px; padding: 12px 14px;
+  position: relative; overflow: hidden;
+}
+.deal-alert::before {
+  content: ''; position: absolute; top: 0; left: 10%; right: 10%;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(3,230,122,0.3), transparent);
+}
+.deal-hd {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+}
+.deal-hd .deal-tag {
+  font-size: 10px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.06em; text-transform: uppercase; color: #34d399;
+  display: flex; align-items: center; gap: 4px;
+}
+.deal-hd .deal-dot { width: 4px; height: 4px; border-radius: 50%; background: #34d399;
+  animation: dp 2s ease-in-out infinite; }
+@keyframes dp { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.deal-body { font-size: 13px; line-height: 18px; color: var(--z400); }
+.deal-price {
+  display: flex; align-items: baseline; gap: 8px; margin-top: 6px;
+}
+.deal-price .dp-now { font-size: 17px; font-weight: 600; font-family: var(--mono); color: #34d399; }
+.deal-price .dp-was { font-size: 12px; font-family: var(--mono); color: var(--z700); text-decoration: line-through; }
+.deal-price .dp-code { font-size: 10px; font-family: var(--mono); color: #34d399;
+  background: rgba(3,230,122,0.08); padding: 2px 6px; border-radius: 100px; }
+
+/* ── MODULE: Pro Gate ── */
+.pro-gate {
+  background: rgba(139,92,246,0.04);
+  border: 0.5px solid rgba(139,92,246,0.12);
+  border-radius: 16px; padding: 20px 16px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.pro-gate::before {
+  content: ''; position: absolute; top: 0; left: 15%; right: 15%;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(139,92,246,0.35), transparent);
+}
+.pro-gate .pg-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(139,92,246,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--v400); margin: 0 auto 10px;
+}
+.pro-gate .pg-icon svg { width: 20px; height: 20px; }
+.pro-gate .pg-title { font-size: 15px; font-weight: 600; color: var(--z200); margin-bottom: 4px; }
+.pro-gate .pg-desc { font-size: 13px; color: var(--z500); line-height: 18px; margin-bottom: 12px; }
+.pro-gate .pg-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 24px; border-radius: 100px;
+  background: var(--v500); color: var(--white);
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 0 16px -4px rgba(139,92,246,0.4);
+  border: none; font-family: var(--sans);
+}
+.pro-gate .pg-remaining {
+  font-size: 11px; font-family: var(--mono); color: var(--z700);
+  margin-top: 8px;
+}
+
+/* ── MODULE: Got It Confirmation ── */
+.got-it {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px;
+  background: rgba(3,230,122,0.04);
+  border: 0.5px solid rgba(3,230,122,0.1);
+  border-radius: 100px;
+  align-self: flex-end;
+}
+.got-it .gi-check { color: #34d399; flex-shrink: 0; }
+.got-it .gi-check svg { width: 16px; height: 16px; }
+.got-it .gi-text { font-size: 13px; color: #34d399; font-weight: 500; }
+
+/* ── MODULE: Thinking ── */
+.thinking {
+  display: flex; align-items: center; gap: 8px; padding: 0 2px;
+}
+.think-dots { display: flex; gap: 4px; }
+.think-dots span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--v400);
+  animation: tk 1.4s ease-in-out infinite;
+}
+.think-dots span:nth-child(2) { animation-delay: 0.2s; }
+.think-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes tk { 0%,80%,100% { opacity: 0.15; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+.think-text { font-size: 12px; color: var(--z600); font-style: italic; }
+
+/* Chips */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 0 4px; }
+.chip {
+  padding: 8px 13px; background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.08); border-radius: 100px;
+  font-size: 13px; color: var(--z400); white-space: nowrap; cursor: pointer;
+}
+
+/* Input */
+.dock {
+  flex-shrink: 0; padding: 8px 14px 0;
+  background: rgba(9,9,11,0.92); backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-top: 0.5px solid rgba(255,255,255,0.05); z-index: 50;
+}
+.irow {
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 22px; padding: 8px 10px 8px 16px;
+  display: flex; align-items: flex-end; gap: 4px;
+}
+.irow textarea {
+  flex: 1; font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  font-size: 15px; line-height: 21px; color: var(--white);
+  border: none; background: none; outline: none; resize: none;
+  min-height: 21px; padding: 3px 0;
+}
+.irow textarea::placeholder { color: var(--z600); }
+.ibtns { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.ibtn {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ibtn svg { width: 18px; height: 18px; }
+.ibtn.p { background: none; color: var(--z500); }
+.ibtn.v { background: none; color: var(--z500); }
+.ibtn.s { background: var(--v500); color: var(--white); box-shadow: 0 0 10px -2px rgba(139,92,246,0.35); }
+.kh { padding: 8px 0 30px; }
+.partner-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #8b5cf6; opacity: 0.6; margin-left: 4px; vertical-align: middle; }
+.partner-footer { margin-top: 8px; padding-top: 8px; border-top: 0.5px solid rgba(255,255,255,0.04); font-size: 10px; color: #3f3f46; display: flex; align-items: center; gap: 5px; }
+.partner-footer-dot { width: 5px; height: 5px; border-radius: 50%; background: #8b5cf6; opacity: 0.4; flex-shrink: 0; }
+.partner-footer a { color: #52525b; text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+
+  <div class="status">
+    <span class="time">7:18</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <div class="app">
+
+    <div class="hdr">
+      <div class="h-l">
+        <button class="h-back">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg>
+        </button>
+        <div class="h-t">
+          <span class="ht-n">Birthday Gift Ideas</span>
+          <span class="ht-d">Multiple categories</span>
+        </div>
+      </div>
+      <div class="h-r">
+        <button class="h-btn">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="4" fill="currentColor"/><circle cx="128" cy="64" r="4" fill="currentColor"/><circle cx="128" cy="192" r="4" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="thread">
+
+      <div class="ts"><span>Today, 7:02 PM</span></div>
+
+      <!-- User -->
+      <div class="msg user">
+        <div class="u-bub">My husband's birthday is next week. He's really into cooking. Budget is $200 max. What would actually impress him?</div>
+      </div>
+
+      <!-- AI - Multi-product recommendations -->
+      <div class="msg ai">
+        <div class="ai-w">
+          <div class="ai-lbl">
+            <div class="ai-av"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+            <span class="ai-nm">Product.ai</span>
+          </div>
+          <div class="ai-txt">Based on the cooking gear in your household (you own a Breville Barista Express and a Ninja air fryer), here are four ideas that <strong>complement what he already has</strong>:</div>
+
+          <!-- MODULE: Multi-Product Grid -->
+          <div class="prod-grid">
+            <div class="pg-card pick">
+              <div class="pg-emoji">&#x1F52A;</div>
+              <div class="pg-name">Victorinox Fibrox Chef's Knife</div>
+              <div class="pg-brand">Victorinox - 8"</div>
+              <div class="pg-price">$52</div>
+              <div class="pg-tag pick">Top Pick</div>
+            </div>
+            <div class="pg-card">
+              <div class="pg-emoji">&#x1F6E0;</div>
+              <div class="pg-name">Thermapen ONE Instant Thermometer</div>
+              <div class="pg-brand">ThermoWorks</div>
+              <div class="pg-price">$105</div>
+              <div class="pg-tag solid">Pro Gear</div>
+            </div>
+            <div class="pg-card">
+              <div class="pg-emoji">&#x1F96A;</div>
+              <div class="pg-name">Lodge Cast Iron Skillet</div>
+              <div class="pg-brand">Lodge - 12"</div>
+              <div class="pg-price">$36</div>
+              <div class="pg-tag budget">Budget Pick</div>
+            </div>
+            <div class="pg-card">
+              <div class="pg-emoji">&#x1F4D6;</div>
+              <div class="pg-name">Salt Fat Acid Heat</div>
+              <div class="pg-brand">Samin Nosrat</div>
+              <div class="pg-price">$22</div>
+              <div class="pg-tag budget">Add-On</div>
+            </div>
+          </div>
+
+          <div class="ai-txt">The Victorinox is the answer most people don't expect. Professional chefs reach for it over $300 knives. Want me to go deeper on any of these?</div>
+
+          <div class="chips">
+            <div class="chip">Tell me more about the knife</div>
+            <div class="chip">He already has a good knife</div>
+            <div class="chip">What about a combo gift?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User -->
+      <div class="msg user">
+        <div class="u-bub">The knife sounds interesting. Tell me more about it.</div>
+      </div>
+
+      <!-- AI - Positive Verdict (green) -->
+      <div class="msg ai">
+        <div class="ai-w">
+          <div class="ai-lbl">
+            <div class="ai-av"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+            <span class="ai-nm">Product.ai</span>
+          </div>
+
+          <!-- MODULE: Positive Verdict Card -->
+          <div class="pv">
+            <div class="pv-hd">
+              <div class="pv-ic">
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg>
+              </div>
+              <div class="pv-tb">
+                <div class="pv-t">Highly Recommended</div>
+                <div class="pv-s">Victorinox Fibrox Pro Chef's Knife 8" - $52</div>
+              </div>
+            </div>
+            <div class="pv-bd">
+              <p>This knife <strong>outperforms blades 5-6x its price</strong> in blind cutting tests. It's the CIA's (Culinary Institute of America) standard-issue knife for students who will go on to work in Michelin-starred kitchens.</p>
+              <p>The Fibrox handle is textured for wet-hand grip - most premium knives have smooth handles that get slippery. Edge retention is strong for <span class="hl-g">6-8 months</span> of home use before needing a hone.</p>
+
+              <!-- MODULE: Pros/Cons -->
+              <div class="proscons">
+                <div class="pc-col pros">
+                  <h5>Strengths</h5>
+                  <div class="pc-item"><span class="pc-dot"></span> Cuts as well as $300 knives in blind tests</div>
+                  <div class="pc-item"><span class="pc-dot"></span> Textured grip, won't slip when wet</div>
+                  <div class="pc-item"><span class="pc-dot"></span> Dishwasher safe (rare for quality knives)</div>
+                  <div class="pc-item"><span class="pc-dot"></span> If he chips it, $52 to replace</div>
+                </div>
+                <div class="pc-col cons">
+                  <h5>Tradeoffs</h5>
+                  <div class="pc-item"><span class="pc-dot"></span> Not a "luxury unboxing" - plastic handle, simple packaging</div>
+                  <div class="pc-item"><span class="pc-dot"></span> Stamped blade, not forged (lighter feel)</div>
+                  <div class="pc-item"><span class="pc-dot"></span> No bolster - some cooks prefer the weight</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MODULE: Price History -->
+            <div class="price-hist">
+              <div class="ph-label">90-Day Price History</div>
+              <div class="ph-chart">
+                <div class="ph-bar" style="height:70%;"></div>
+                <div class="ph-bar" style="height:70%;"></div>
+                <div class="ph-bar" style="height:75%;"></div>
+                <div class="ph-bar" style="height:70%;"></div>
+                <div class="ph-bar" style="height:65%;"></div>
+                <div class="ph-bar" style="height:70%;"></div>
+                <div class="ph-bar high" style="height:90%;"></div>
+                <div class="ph-bar high" style="height:95%;"></div>
+                <div class="ph-bar" style="height:80%;"></div>
+                <div class="ph-bar" style="height:70%;"></div>
+                <div class="ph-bar" style="height:65%;"></div>
+                <div class="ph-bar low" style="height:50%;"></div>
+                <div class="ph-bar" style="height:55%;"></div>
+                <div class="ph-bar" style="height:60%;"></div>
+                <div class="ph-bar" style="height:65%;"></div>
+                <div class="ph-bar" style="height:60%;"></div>
+                <div class="ph-bar" style="height:55%;"></div>
+                <div class="ph-bar now" style="height:55%;"></div>
+              </div>
+              <div class="ph-range">
+                <span>Dec 18</span>
+                <span>Jan</span>
+                <span>Feb</span>
+                <span>Now</span>
+              </div>
+              <div class="ph-current">
+                <span class="phc-price">$52.00</span>
+                <span class="phc-note">Near 90-day low ($47)</span>
+                <span class="phc-code">KITCHEN10</span>
+              </div>
+            </div>
+
+            <div class="v-acts">
+              <div class="va primary">
+                <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg>
+                View at Amazon <span class="partner-dot"></span>
+              </div>
+              <div class="va ghost">
+                <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M168 224a8 8 0 0 1-13.9 5.4L128 200l-26.1 29.4A8 8 0 0 1 88 224V32a8 8 0 0 1 8-8h64a8 8 0 0 1 8 8z"/></svg>
+                Save
+              </div>
+              <div class="va ghost">
+                <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M216 112v96a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8v-96"/><polyline points="96 144 128 112 160 144"/><line x1="128" y1="112" x2="128" y2="24"/></svg>
+                Share
+              </div>
+            </div>
+            <div class="partner-footer">
+              <span class="partner-footer-dot"></span>
+              <span>Brand partner - Product.ai may earn a commission. <a href="#">Learn more</a></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- User - Link paste -->
+      <div class="msg user">
+        <div class="u-link-wrap">
+          <div class="u-link-card">
+            <div class="u-link-img">&#x1F52A;</div>
+            <div class="u-link-info">
+              <div class="u-link-title">Miyabi Kaizen II Chef's Knife 8"</div>
+              <div class="u-link-url">williams-sonoma.com/products/miy...</div>
+            </div>
+          </div>
+          <div class="u-link-cap">What about this one? It's $199</div>
+        </div>
+      </div>
+
+      <!-- AI - Honest Gap -->
+      <div class="msg ai">
+        <div class="ai-w">
+          <div class="ai-lbl">
+            <div class="ai-av"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+            <span class="ai-nm">Product.ai</span>
+          </div>
+
+          <!-- MODULE: Honest Gap -->
+          <div class="gap-card">
+            <div class="gap-hd">
+              <div class="gap-ic">
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+              </div>
+              <span class="gap-title">Limited Data</span>
+            </div>
+            <div class="gap-body">I don't have deep verified data on the Miyabi Kaizen II specifically. What I can tell you: <strong>Miyabi is Zwilling's Japanese line</strong>, VG10 steel holds an edge longer than the Victorinox, and the fit/finish is premium. But I can't verify the specific claims about this model's edge geometry or HRC hardness rating. Review aggregation shows <strong>4.8/5 across 340 reviews</strong> but I haven't verified these independently.</div>
+          </div>
+
+          <div class="ai-txt">Honest take: if this is a <strong>gift and presentation matters</strong>, the Miyabi in a wooden box is a dramatically better unboxing experience than the Victorinox in a plastic sleeve. If pure cutting performance per dollar matters, the Victorinox wins. Both are good knives.</div>
+
+          <div class="chips">
+            <div class="chip">Which would YOU gift?</div>
+            <div class="chip">Can I combo both under $200?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User -->
+      <div class="msg user">
+        <div class="u-bub">Good point about the unboxing. Let me get the Victorinox - it's the smarter buy and I'll pair it with the cookbook.</div>
+      </div>
+
+      <!-- MODULE: Deal Found Alert -->
+      <div class="msg ai">
+        <div class="ai-w">
+          <div class="ai-lbl">
+            <div class="ai-av"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+            <span class="ai-nm">Product.ai</span>
+          </div>
+
+          <div class="deal-alert">
+            <div class="deal-hd">
+              <div class="deal-tag"><span class="deal-dot"></span> Deal Found</div>
+            </div>
+            <div class="deal-body">Amazon has a bundle: Victorinox 8" Chef's Knife + Salt Fat Acid Heat for $68 (normally $74 separate). Ships Prime.</div>
+            <div class="deal-price">
+              <span class="dp-now">$68.00</span>
+              <span class="dp-was">$74.00</span>
+              <span class="dp-code">bundle price</span>
+            </div>
+          </div>
+
+          <div class="v-acts" style="padding: 4px 0;">
+            <div class="va primary">
+              <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg>
+              View bundle on Amazon <span class="partner-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE: Got It Confirmation -->
+      <div class="msg user">
+        <div class="got-it">
+          <span class="gi-check"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></span>
+          <span class="gi-text">Bought the bundle on Amazon</span>
+        </div>
+      </div>
+
+      <!-- AI response to purchase -->
+      <div class="msg ai">
+        <div class="ai-w">
+          <div class="ai-lbl">
+            <div class="ai-av"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+            <span class="ai-nm">Product.ai</span>
+          </div>
+          <div class="ai-txt">Great pick. Added both to your household products. One tip: the Fibrox edge comes sharp from the factory but a quick honing rod pass before first use aligns the micro-serrations. No cutting board flex with this one - it'll mark soft boards.</div>
+        </div>
+      </div>
+
+      <!-- Spacer for scroll -->
+      <div style="height: 16px;"></div>
+
+      <!--
+      ═══════════════════════════════════════
+      MODULE: Pro Gate (separate section below,
+      shown as what a FREE user would see
+      after hitting their limit)
+      ═══════════════════════════════════════
+      -->
+
+    </div>
+
+    <div class="dock">
+      <div class="irow">
+        <textarea rows="1" placeholder="Ask a follow-up..."></textarea>
+        <div class="ibtns">
+          <button class="ibtn p">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M208 56H180.3L166.6 36A8 8 0 0 0 160 32H96a8 8 0 0 0-6.6 3.5L75.7 56H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V72a16 16 0 0 0-16-16z"/><circle cx="128" cy="128" r="40"/></svg>
+          </button>
+          <button class="ibtn v">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="88" y="24" width="80" height="144" rx="40"/><line x1="128" y1="200" x2="128" y2="232"/><path d="M199.6 136a72 72 0 0 1-143.2 0"/></svg>
+          </button>
+          <button class="ibtn s">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="kh"></div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

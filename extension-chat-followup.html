@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Extension - Chat Follow-Up</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z850: #1F1F22; --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v400: #A384FF; --v500: #8B5CF6;
+  --a300: #CEAD50; --r400: #F64B4B;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1;
+  background: #0a0a0a; color: var(--z50);
+  display: flex; justify-content: center; align-items: flex-start;
+  min-height: 100vh; padding: 24px; gap: 32px; flex-wrap: wrap;
+}
+
+/* Panel frame */
+.panel-frame {
+  width: 380px; height: 780px; background: var(--z950);
+  border: 0.5px solid rgba(255,255,255,0.08); border-radius: 10px;
+  display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.4);
+}
+
+.frame-label {
+  text-align: center; font-family: var(--mono); font-size: 11px; color: var(--z600);
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;
+}
+
+/* Header */
+.sp-header {
+  padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04); flex-shrink: 0;
+}
+.sp-logo { display: flex; align-items: baseline; }
+.sp-p { font-size: 15px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.sp-a { font-family: var(--mono); font-size: 15px; color: var(--v500); }
+
+.sp-actions { display: flex; gap: 4px; align-items: center; }
+.sp-btn {
+  width: 28px; height: 28px; border-radius: 6px; border: none;
+  background: rgba(255,255,255,0.04); color: var(--z500);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-btn svg { width: 15px; height: 15px; }
+
+/* Back to verdict button */
+.sp-back {
+  display: flex; align-items: center; gap: 4px;
+  padding: 5px 10px; border-radius: 6px; border: none;
+  background: rgba(255,255,255,0.04); color: var(--z500);
+  font-family: var(--sans); font-size: 11px; font-weight: 500;
+  cursor: pointer; transition: all 150ms;
+}
+.sp-back:hover { background: rgba(255,255,255,0.06); color: var(--z400); }
+.sp-back svg { width: 12px; height: 12px; }
+
+/* Product context bar */
+.sp-ctx {
+  padding: 10px 16px; border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  background: rgba(255,255,255,0.015);
+}
+.sp-ctx-thumb {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.sp-ctx-info { flex: 1; min-width: 0; }
+.sp-ctx-name {
+  font-size: 12px; font-weight: 500; color: var(--z300);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sp-ctx-verdict {
+  font-size: 9px; font-family: var(--mono); font-weight: 600;
+  padding: 1px 5px; border-radius: 100px;
+}
+.sp-ctx-verdict.good { background: rgba(52,211,153,0.1); color: #34d399; }
+
+/* Chat content */
+.sp-chat { flex: 1; overflow-y: auto; padding: 14px 16px; }
+
+/* Messages */
+.msg { margin-bottom: 14px; }
+.msg-user {
+  display: flex; justify-content: flex-end; margin-bottom: 14px;
+}
+.msg-user-bubble {
+  background: var(--z800); border-radius: 14px 14px 4px 14px;
+  padding: 8px 14px; font-size: 13px; color: var(--z200);
+  max-width: 85%; line-height: 1.4;
+}
+
+.msg-ai-label {
+  font-family: var(--mono); font-size: 9px; color: var(--v500);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 4px; padding-left: 2px;
+}
+
+.msg-ai-body {
+  font-size: 13px; color: var(--z400); line-height: 1.6;
+}
+.msg-ai-body p { margin-bottom: 8px; }
+.msg-ai-body p:last-child { margin-bottom: 0; }
+.msg-ai-body strong { color: var(--z300); font-weight: 500; }
+
+.hl { color: var(--v400); font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.hl-g { color: #34d399; font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.hl-w { color: var(--a300); font-family: var(--mono); font-weight: 500; font-size: 12px; }
+
+/* Inline comparison table */
+.msg-table {
+  width: 100%; margin: 8px 0;
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 10px; overflow: hidden;
+  font-size: 11px;
+}
+.msg-table-head {
+  display: grid; grid-template-columns: 1.2fr 1fr 1fr;
+  background: rgba(255,255,255,0.03);
+  padding: 6px 10px; gap: 8px;
+  font-family: var(--mono); font-weight: 600; color: var(--z600);
+  text-transform: uppercase; letter-spacing: 0.04em; font-size: 9px;
+}
+.msg-table-row {
+  display: grid; grid-template-columns: 1.2fr 1fr 1fr;
+  padding: 6px 10px; gap: 8px;
+  border-top: 0.5px solid rgba(255,255,255,0.03);
+  color: var(--z400); line-height: 1.4;
+}
+.msg-table-row .cell-label { color: var(--z500); font-weight: 500; }
+.msg-table-row .cell-good { color: #34d399; }
+.msg-table-row .cell-warn { color: var(--a300); }
+.msg-table-row .cell-bad { color: var(--r400); }
+
+/* Follow-up chips */
+.followup-chips {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;
+}
+.chip {
+  font-size: 11px; color: var(--v400);
+  background: rgba(139,92,246,0.04); border: 0.5px solid rgba(139,92,246,0.12);
+  border-radius: 100px; padding: 5px 10px; cursor: pointer;
+  font-family: var(--sans); transition: all 150ms;
+}
+.chip:hover { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.2); }
+
+/* Typing indicator */
+.typing {
+  display: flex; gap: 4px; padding: 8px 0;
+}
+.typing-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--z700);
+  animation: typing 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(1); }
+  40% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Input */
+.sp-input-area {
+  padding: 10px 16px 14px;
+  border-top: 0.5px solid rgba(255,255,255,0.04); flex-shrink: 0;
+}
+.sp-input {
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 8px 8px 8px 14px;
+}
+.sp-input input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--sans); font-size: 13px; color: var(--white);
+}
+.sp-input input::placeholder { color: var(--z600); }
+.sp-input-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  background: var(--v500); color: var(--white);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-input-btn svg { width: 14px; height: 14px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ -->
+<!-- PANEL 1: Mid-conversation          -->
+<!-- ═══════════════════════════════════ -->
+<div>
+<div class="frame-label">Follow-Up Conversation</div>
+<div class="panel-frame">
+  <div class="sp-header">
+    <div class="sp-logo"><span class="sp-p">Product</span><span class="sp-a">.ai</span></div>
+    <div class="sp-actions">
+      <button class="sp-back">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg>
+        Verdict
+      </button>
+      <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></button>
+    </div>
+  </div>
+
+  <!-- Product context bar -->
+  <div class="sp-ctx">
+    <div class="sp-ctx-thumb">&#x1F3A7;</div>
+    <div class="sp-ctx-info">
+      <div class="sp-ctx-name">Sony WH-1000XM5</div>
+    </div>
+    <span class="sp-ctx-verdict good">Recommended</span>
+  </div>
+
+  <div class="sp-chat">
+
+    <!-- User question 1 -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">How does the ANC compare to the Bose QC Ultra specifically?</div>
+    </div>
+
+    <!-- AI response 1 -->
+    <div class="msg">
+      <div class="msg-ai-label">Product.ai</div>
+      <div class="msg-ai-body">
+        <p>The Sony wins on raw noise cancellation but Bose wins on adaptability:</p>
+        <div class="msg-table">
+          <div class="msg-table-head">
+            <span></span>
+            <span>Sony XM5</span>
+            <span>Bose QC Ultra</span>
+          </div>
+          <div class="msg-table-row">
+            <span class="cell-label">Low freq ANC</span>
+            <span class="cell-good">38dB reduction</span>
+            <span>34dB reduction</span>
+          </div>
+          <div class="msg-table-row">
+            <span class="cell-label">Mid freq ANC</span>
+            <span>22dB reduction</span>
+            <span class="cell-good">24dB reduction</span>
+          </div>
+          <div class="msg-table-row">
+            <span class="cell-label">Wind handling</span>
+            <span class="cell-bad">Poor (4/10)</span>
+            <span class="cell-good">Good (8/10)</span>
+          </div>
+          <div class="msg-table-row">
+            <span class="cell-label">Adaptive modes</span>
+            <span>Auto NC Optimizer</span>
+            <span class="cell-good">CustomTune (ear-shaped)</span>
+          </div>
+          <div class="msg-table-row">
+            <span class="cell-label">Call quality</span>
+            <span class="cell-warn">Mediocre</span>
+            <span class="cell-good">Excellent</span>
+          </div>
+        </div>
+        <p><strong>Bottom line:</strong> For office/commute noise, Sony is measurably better at the frequencies that matter (airplane hum, HVAC). For outdoor use or calls, Bose handles wind and voice significantly better.</p>
+      </div>
+    </div>
+
+    <!-- User question 2 -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">I work from home and take a lot of video calls. Which one should I actually get?</div>
+    </div>
+
+    <!-- AI response 2 -->
+    <div class="msg">
+      <div class="msg-ai-label">Product.ai</div>
+      <div class="msg-ai-body">
+        <p>For video calls from home, <strong>get the Bose QC Ultra</strong>. Here's why:</p>
+        <p>Your main noise source is household ambient (kids, appliances, neighbors) - mid-frequency range where Bose is slightly better. And call quality is the deciding factor: Sony's mic picks up keyboard clicks and room echo that Bose's beamforming array suppresses.</p>
+        <p>The Sony only wins if you're commuting on a plane or train regularly. For a home office, you'd be paying for low-frequency ANC you don't need while missing the call quality you do.</p>
+        <p>Best price right now: <span class="hl-g">$349 at Best Buy</span> vs $379 direct from Bose.</p>
+      </div>
+      <div class="followup-chips">
+        <div class="chip">Any wired alternatives?</div>
+        <div class="chip">Bose vs AirPods Max?</div>
+        <div class="chip">Show me the Bose verdict</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sp-input-area">
+    <div class="sp-input">
+      <input type="text" placeholder="Ask a follow-up...">
+      <button class="sp-input-btn"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg></button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- PANEL 2: Typing / loading state     -->
+<!-- ═══════════════════════════════════ -->
+<div>
+<div class="frame-label">Loading & Typing States</div>
+<div class="panel-frame">
+  <div class="sp-header">
+    <div class="sp-logo"><span class="sp-p">Product</span><span class="sp-a">.ai</span></div>
+    <div class="sp-actions">
+      <button class="sp-back">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg>
+        Verdict
+      </button>
+      <button class="sp-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></button>
+    </div>
+  </div>
+
+  <div class="sp-ctx">
+    <div class="sp-ctx-thumb">&#x1F3A7;</div>
+    <div class="sp-ctx-info">
+      <div class="sp-ctx-name">Sony WH-1000XM5</div>
+    </div>
+    <span class="sp-ctx-verdict good">Recommended</span>
+  </div>
+
+  <div class="sp-chat">
+
+    <!-- Previous context -->
+    <div class="msg-user">
+      <div class="msg-user-bubble">How does the ANC compare to the Bose QC Ultra specifically?</div>
+    </div>
+
+    <div class="msg">
+      <div class="msg-ai-label">Product.ai</div>
+      <div class="msg-ai-body">
+        <p>The Sony wins on raw noise cancellation but Bose wins on adaptability. For office/commute noise, Sony is measurably better at the frequencies that matter. For outdoor use or calls, Bose handles wind and voice significantly better.</p>
+      </div>
+    </div>
+
+    <div class="msg-user">
+      <div class="msg-user-bubble">What about the AirPods Max? I'm in the Apple ecosystem</div>
+    </div>
+
+    <!-- Typing indicator -->
+    <div class="msg">
+      <div class="msg-ai-label">Product.ai</div>
+      <div class="typing">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sp-input-area">
+    <div class="sp-input">
+      <input type="text" placeholder="Ask a follow-up..." disabled style="opacity: 0.5;">
+      <button class="sp-input-btn" style="opacity: 0.5;"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg></button>
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

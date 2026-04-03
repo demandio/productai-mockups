@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Extension - Side Panel Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+body::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z450: #898992; --z500: #71717A; --z600: #52525B; --z700: #3F3F46;
+  --z750: #333338; --z800: #27272A; --z850: #1F1F22; --z900: #18181B;
+  --z925: #101013; --z950: #09090B; --black: #000000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v800: #5A17B7;
+  --g300: #03FF88; --g500: #03E67A; --g600: #02C869;
+  --a300: #CEAD50;
+  --r400: #F64B4B;
+  --b300: #6EB6FF;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { scrollbar-width: none; font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { scrollbar-width: none; -ms-overflow-style: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: #0a0a0a; color: var(--z50);
+  display: flex; justify-content: center; align-items: flex-start;
+  min-height: 100vh; padding: 24px;
+}
+
+/* ── Browser Frame ── */
+.browser {
+  width: 1280px; height: 820px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 60px rgba(0,0,0,0.6);
+  display: flex; flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* ── Browser Chrome ── */
+.browser-chrome {
+  height: 40px;
+  background: #252525;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.traffic-lights { display: flex; gap: 6px; }
+.tl { width: 12px; height: 12px; border-radius: 50%; }
+.tl.r { background: #ff5f57; }
+.tl.y { background: #febc2e; }
+.tl.g { background: #28c840; }
+
+.tab-bar {
+  display: flex; gap: 2px; margin-left: 12px; flex: 1;
+}
+.tab {
+  padding: 6px 16px;
+  background: #1a1a1a;
+  border-radius: 8px 8px 0 0;
+  font-size: 12px; color: var(--z400);
+  display: flex; align-items: center; gap: 6px;
+  max-width: 200px;
+}
+.tab.active { background: #2a2a2a; color: var(--z200); }
+.tab .tab-icon { width: 14px; height: 14px; border-radius: 3px; background: #f5a623; flex-shrink: 0; }
+.tab .tab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tab .tab-close { font-size: 14px; color: var(--z600); margin-left: auto; cursor: pointer; }
+
+.chrome-actions {
+  display: flex; gap: 4px; margin-left: auto;
+}
+.chrome-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--z500); cursor: pointer;
+}
+.chrome-btn svg { width: 16px; height: 16px; }
+
+/* Extension icon in toolbar */
+.ext-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--v500);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+.ext-icon svg { width: 14px; height: 14px; color: var(--white); }
+.ext-icon .ext-badge {
+  position: absolute; top: -2px; right: -2px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #34d399;
+  border: 2px solid #252525;
+}
+
+/* ── URL Bar ── */
+.url-bar-row {
+  height: 36px;
+  background: #2a2a2a;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex; align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.nav-btn { color: var(--z600); cursor: pointer; }
+.nav-btn svg { width: 16px; height: 16px; }
+.url-field {
+  flex: 1; height: 26px;
+  background: #1a1a1a; border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 13px; padding: 0 12px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--z400);
+}
+.url-field .lock { color: var(--z600); }
+.url-field .lock svg { width: 12px; height: 12px; }
+.url-field .domain { color: var(--z300); font-weight: 500; }
+
+/* ── Main Content Area ── */
+.main-area {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ── Merchant Page (left side) ── */
+.merchant {
+  flex: 1;
+  background: var(--white);
+  overflow-y: auto;
+  position: relative;
+}
+.merchant::-webkit-scrollbar { width: 8px; }
+.merchant::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+/* Fake Amazon page */
+.amz-nav {
+  background: #131921;
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 16px;
+}
+.amz-logo {
+  font-size: 20px; font-weight: 700; color: var(--white);
+  font-family: Arial, sans-serif; letter-spacing: -0.02em;
+}
+.amz-logo span { color: #f5a623; }
+.amz-search {
+  flex: 1; height: 32px;
+  background: var(--white); border-radius: 6px;
+  display: flex; align-items: center; padding: 0 12px;
+  font-size: 13px; color: #666;
+}
+.amz-cart { color: var(--white); font-size: 13px; }
+
+.amz-sub-nav {
+  background: #232f3e; padding: 6px 16px;
+  display: flex; gap: 16px;
+  font-size: 12px; color: #ddd; font-family: Arial, sans-serif;
+}
+
+.amz-breadcrumb {
+  padding: 8px 16px;
+  font-size: 11px; color: #007185;
+  font-family: Arial, sans-serif;
+}
+
+.amz-product {
+  padding: 16px;
+  display: flex; gap: 24px;
+  font-family: Arial, sans-serif;
+}
+.amz-product-img {
+  width: 320px; height: 320px;
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 120px;
+  flex-shrink: 0;
+}
+.amz-product-info { flex: 1; }
+.amz-title {
+  font-size: 20px; color: #0f1111; line-height: 28px;
+  margin-bottom: 4px;
+}
+.amz-brand-link { font-size: 13px; color: #007185; margin-bottom: 8px; }
+.amz-rating-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.amz-stars { color: #de7921; font-size: 14px; }
+.amz-rating-count { font-size: 13px; color: #007185; }
+.amz-bought { font-size: 13px; color: #333; margin-bottom: 12px; }
+
+.amz-price-box {
+  padding: 12px 16px;
+  background: #f0f2f2; border-radius: 8px;
+  margin-bottom: 12px;
+}
+.amz-price-label { font-size: 12px; color: #565959; }
+.amz-price {
+  font-size: 28px; color: #0f1111;
+  font-family: Arial, sans-serif;
+}
+.amz-price .amz-price-frac { font-size: 14px; vertical-align: super; }
+.amz-list-price { font-size: 13px; color: #565959; margin-top: 4px; }
+.amz-list-price s { color: #565959; }
+.amz-savings { font-size: 13px; color: #cc0c39; }
+
+.amz-prime {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 8px;
+}
+.amz-prime-badge {
+  background: #232f3e; color: #00a8e1;
+  padding: 2px 8px; border-radius: 3px;
+  font-size: 12px; font-weight: 700;
+}
+.amz-delivery { font-size: 13px; color: #0f1111; }
+
+.amz-stock { font-size: 14px; color: #007600; margin-bottom: 12px; font-weight: 500; }
+
+.amz-buy-box { display: flex; flex-direction: column; gap: 6px; }
+.amz-btn {
+  padding: 8px 16px; border-radius: 20px;
+  font-size: 13px; border: none; cursor: pointer;
+  font-family: Arial, sans-serif;
+}
+.amz-btn.cart { background: #ffd814; color: #0f1111; }
+.amz-btn.buy { background: #ffa41c; color: #0f1111; }
+
+/* ── Side Panel (right side) ── */
+.side-panel {
+  width: 380px;
+  background: var(--z950);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Side Panel Header */
+.sp-header {
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  flex-shrink: 0;
+}
+.sp-logo { display: flex; align-items: baseline; }
+.sp-logo .sp-p { font-size: 15px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.sp-logo .sp-a { font-family: var(--mono); font-size: 15px; color: var(--v500); }
+.sp-actions { display: flex; gap: 4px; }
+.sp-btn {
+  width: 28px; height: 28px; border-radius: 6px; border: none;
+  background: rgba(255,255,255,0.04); color: var(--z500);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.sp-btn svg { width: 15px; height: 15px; }
+
+/* Side Panel Content */
+.sp-content {
+  flex: 1; overflow-y: auto; padding: 14px 16px;
+}
+.sp-content::-webkit-scrollbar { width: 4px; }
+.sp-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+/* Product Detected */
+.sp-product {
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-bottom: 12px;
+}
+.sp-thumb {
+  width: 56px; height: 56px; border-radius: 10px;
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; flex-shrink: 0;
+}
+.sp-prod-info { flex: 1; min-width: 0; }
+.sp-prod-info h3 {
+  font-size: 14px; font-weight: 500; color: var(--z200);
+  line-height: 18px; margin-bottom: 2px;
+}
+.sp-prod-info .sp-brand { font-size: 11px; color: var(--z600); }
+
+/* Depth Bar */
+.sp-depth {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-radius: 10px;
+  margin-bottom: 12px; font-size: 11px; font-weight: 500;
+}
+.sp-depth svg { width: 13px; height: 13px; flex-shrink: 0; }
+.sp-depth.deep {
+  background: rgba(139,92,246,0.06); border: 0.5px solid rgba(139,92,246,0.1);
+  color: var(--v400);
+}
+.sp-depth span { font-family: var(--mono); }
+
+/* Verdict */
+.sp-verdict {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 14px; overflow: hidden; margin-bottom: 12px;
+}
+.sp-v-header {
+  padding: 12px 14px; display: flex; align-items: center; gap: 8px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+}
+.sp-v-icon {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.sp-v-icon svg { width: 15px; height: 15px; }
+.sp-v-icon.good { background: rgba(3,230,122,0.1); color: #34d399; }
+.sp-v-icon.warn { background: rgba(206,173,80,0.1); color: var(--a300); }
+.sp-v-icon.bad { background: rgba(248,113,113,0.1); color: var(--r400); }
+.sp-v-title { font-size: 14px; font-weight: 600; color: var(--white); }
+.sp-v-sub { font-size: 10px; color: var(--z600); margin-top: 1px; }
+
+.sp-v-body { padding: 12px 14px; }
+.sp-v-body p { font-size: 13px; line-height: 19px; color: var(--z400); }
+.hl { color: var(--v400); font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.hl-g { color: #34d399; font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.hl-w { color: var(--a300); font-family: var(--mono); font-weight: 500; font-size: 12px; }
+
+/* Evidence */
+.sp-ev { margin-top: 8px; padding-top: 8px; border-top: 0.5px solid rgba(255,255,255,0.04); }
+.ev-row { display: flex; gap: 6px; padding: 4px 0; }
+.ev-dot { width: 3px; border-radius: 1.5px; flex-shrink: 0; margin-top: 3px; }
+.ev-dot.hi { background: #34d399; }
+.ev-dot.md { background: var(--v400); }
+.ev-txt { font-size: 11px; line-height: 15px; color: var(--z500); }
+.ev-txt .cf { font-family: var(--mono); font-size: 9px; color: var(--z700); }
+
+/* Pros/Cons compact */
+.sp-proscons {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-top: 8px; padding-top: 8px;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+}
+.spc-col h5 {
+  font-size: 9px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.spc-col.pros h5 { color: #34d399; }
+.spc-col.cons h5 { color: var(--a300); }
+.spc-item {
+  display: flex; gap: 4px; padding: 2px 0;
+  font-size: 11px; line-height: 14px; color: var(--z500);
+}
+.spc-item .spc-d { width: 3px; height: 3px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.pros .spc-d { background: #34d399; }
+.cons .spc-d { background: var(--a300); }
+
+/* Prices */
+.sp-prices {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 14px; overflow: hidden; margin-bottom: 12px;
+}
+.sp-pr-label {
+  padding: 10px 14px 6px;
+  font-size: 9px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--z700);
+}
+.sp-pr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 14px; border-bottom: 0.5px solid rgba(255,255,255,0.03);
+  cursor: pointer; transition: background 150ms;
+}
+.sp-pr:last-child { border-bottom: none; }
+.sp-pr:hover { background: rgba(255,255,255,0.02); }
+.sp-pr .mn { font-size: 13px; color: var(--z500); display: flex; align-items: center; gap: 4px; }
+.sp-pr .mr { display: flex; align-items: baseline; gap: 6px; }
+.sp-pr .mp { font-size: 13px; font-weight: 600; font-family: var(--mono); color: var(--z300); }
+.sp-pr .mc {
+  font-size: 9px; font-family: var(--mono); color: #34d399;
+  background: rgba(3,230,122,0.08); padding: 2px 6px; border-radius: 100px; font-weight: 500;
+}
+.sp-pr .arrow { color: var(--z800); }
+.sp-pr .arrow svg { width: 12px; height: 12px; }
+.sp-pr.best .mn { color: #34d399; font-weight: 500; }
+.sp-pr.best .mp { color: #34d399; }
+.sp-pr.current .mn { color: var(--z300); }
+.sp-pr.current::after {
+  content: 'You are here';
+  font-size: 9px; font-family: var(--mono); color: var(--z700);
+  margin-left: 4px;
+}
+
+/* Partner dot */
+.partner-dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--v500); opacity: 0.6; flex-shrink: 0;
+}
+.sp-partner-footer {
+  padding: 6px 14px 10px;
+  border-top: 0.5px solid rgba(255,255,255,0.03);
+  font-size: 9px; color: #3f3f46;
+  display: flex; align-items: center; gap: 4px;
+}
+.sp-partner-footer-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--v500); opacity: 0.4; flex-shrink: 0;
+}
+.sp-partner-footer a { color: var(--z600); text-decoration: underline; text-decoration-color: var(--z700); text-underline-offset: 2px; }
+
+/* Price History Compact */
+.sp-hist {
+  padding: 8px 14px 10px;
+  border-top: 0.5px solid rgba(255,255,255,0.03);
+}
+.sp-hist-label {
+  font-size: 9px; font-family: var(--mono); color: var(--z700);
+  letter-spacing: 0.06em; margin-bottom: 4px;
+}
+.sp-hist-chart {
+  display: flex; align-items: flex-end; gap: 2px; height: 24px;
+}
+.sp-hbar {
+  flex: 1; border-radius: 1px; background: rgba(255,255,255,0.05); min-width: 0;
+}
+.sp-hbar.now { background: var(--v400); }
+.sp-hbar.low { background: rgba(3,230,122,0.2); }
+.sp-hist-range {
+  display: flex; justify-content: space-between;
+  font-size: 9px; font-family: var(--mono); color: var(--z800);
+  margin-top: 3px;
+}
+
+/* Actions */
+.sp-act-row {
+  display: flex; gap: 6px; margin-bottom: 12px;
+}
+.sp-act {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 12px; border-radius: 100px;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; font-family: var(--sans); white-space: nowrap;
+}
+.sp-act svg { width: 13px; height: 13px; }
+.sp-act.primary {
+  background: rgba(139,92,246,0.08); border: 0.5px solid rgba(139,92,246,0.2);
+  color: var(--v400);
+}
+.sp-act.ghost {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  color: var(--z500);
+}
+.sp-act.green {
+  background: rgba(3,230,122,0.06); border: 0.5px solid rgba(3,230,122,0.15);
+  color: #34d399;
+}
+
+/* Alternative */
+.sp-alt {
+  background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 12px;
+  border-left: 2px solid #34d399;
+  margin-bottom: 12px;
+}
+.sp-alt-tag {
+  font-size: 9px; font-weight: 700; font-family: var(--mono);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: #34d399; margin-bottom: 4px;
+}
+.sp-alt h4 { font-size: 13px; font-weight: 500; color: var(--z200); margin-bottom: 2px; }
+.sp-alt .alt-why { font-size: 11px; color: var(--z500); line-height: 15px; margin-bottom: 4px; }
+.sp-alt .alt-pr { display: flex; align-items: baseline; gap: 6px; }
+.sp-alt .alt-price { font-size: 14px; font-weight: 600; font-family: var(--mono); color: var(--z200); }
+.sp-alt .alt-deal { font-size: 10px; font-family: var(--mono); color: #34d399; }
+
+/* Section Label */
+.sp-sec {
+  font-size: 9px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--z700); padding: 8px 0 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.sp-sec .ssl { flex: 1; height: 0.5px; background: rgba(255,255,255,0.03); }
+
+/* Chat Input */
+.sp-input-area {
+  padding: 10px 16px 14px;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+  flex-shrink: 0;
+}
+.sp-input {
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 8px 8px 8px 14px;
+}
+.sp-input input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1;
+  font-size: 13px; color: var(--white);
+}
+.sp-input input::placeholder { color: var(--z600); }
+.sp-input-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.sp-input-btn svg { width: 14px; height: 14px; }
+.sp-input-btn.send { background: var(--v500); color: var(--white); }
+</style>
+</head>
+<body>
+
+<div class="browser">
+
+  <!-- Browser Chrome -->
+  <div class="browser-chrome">
+    <div class="traffic-lights">
+      <div class="tl r"></div><div class="tl y"></div><div class="tl g"></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab active">
+        <div class="tab-icon"></div>
+        <span class="tab-title">Sony WH-1000XM5 Wireless... - Amazon</span>
+        <span class="tab-close">&times;</span>
+      </div>
+      <div class="tab">
+        <span class="tab-title">Gmail</span>
+      </div>
+    </div>
+    <div class="chrome-actions">
+      <div class="chrome-btn">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><path d="M168 128a40 40 0 1 0-40 40"/></svg>
+      </div>
+      <div class="ext-icon">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+        <div class="ext-badge"></div>
+      </div>
+      <div class="chrome-btn">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="4" fill="currentColor"/><circle cx="128" cy="64" r="4" fill="currentColor"/><circle cx="128" cy="192" r="4" fill="currentColor"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- URL Bar -->
+  <div class="url-bar-row">
+    <div class="nav-btn">
+      <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg>
+    </div>
+    <div class="nav-btn">
+      <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg>
+    </div>
+    <div class="url-field">
+      <span class="lock"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M208 80H176V56a48 48 0 0 0-96 0V80H48A16 16 0 0 0 32 96V208a16 16 0 0 0 16 16H208a16 16 0 0 0 16-16V96A16 16 0 0 0 208 80ZM96 56a32 32 0 0 1 64 0V80H96Z"/></svg></span>
+      <span class="domain">amazon.com</span>/dp/B0BSHV22YR/Sony-WH-1000XM5-Headphones
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-area">
+
+    <!-- Merchant Page -->
+    <div class="merchant">
+      <div class="amz-nav">
+        <div class="amz-logo">amazon<span>.com</span></div>
+        <div class="amz-search">Search Amazon</div>
+        <div class="amz-cart">Cart (2)</div>
+      </div>
+      <div class="amz-sub-nav">
+        <span>Today's Deals</span><span>Buy Again</span><span>Browsing History</span><span>Customer Service</span>
+      </div>
+      <div class="amz-breadcrumb">
+        Electronics > Headphones, Earbuds & Accessories > Over-Ear Headphones
+      </div>
+      <div class="amz-product">
+        <div class="amz-product-img">&#x1F3A7;</div>
+        <div class="amz-product-info">
+          <div class="amz-title">Sony WH-1000XM5 Wireless Industry Leading Noise Canceling Headphones with Auto Noise Canceling Optimizer</div>
+          <div class="amz-brand-link">Visit the Sony Store</div>
+          <div class="amz-rating-row">
+            <span class="amz-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            <span class="amz-rating-count">18,247 ratings</span>
+          </div>
+          <div class="amz-bought">50K+ bought in past month</div>
+          <div class="amz-price-box">
+            <div class="amz-price-label">Price:</div>
+            <div class="amz-price">$<span style="font-size:28px;">328</span><span class="amz-price-frac">00</span></div>
+            <div class="amz-list-price"><s>$399.99</s> List Price</div>
+            <div class="amz-savings">You save: $71.99 (18%)</div>
+          </div>
+          <div class="amz-prime">
+            <span class="amz-prime-badge">prime</span>
+            <span class="amz-delivery">FREE delivery <b>Thursday, March 20</b></span>
+          </div>
+          <div class="amz-stock">In Stock</div>
+          <div class="amz-buy-box">
+            <button class="amz-btn cart">Add to Cart</button>
+            <button class="amz-btn buy">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Panel -->
+    <div class="side-panel">
+      <div class="sp-header">
+        <div class="sp-logo">
+          <span class="sp-p">Product</span><span class="sp-a">.ai</span>
+        </div>
+        <div class="sp-actions">
+          <button class="sp-btn">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><polyline points="128 72 128 128 176 128"/></svg>
+          </button>
+          <button class="sp-btn">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="sp-content">
+
+        <!-- Product Detected -->
+        <div class="sp-product">
+          <div class="sp-thumb">&#x1F3A7;</div>
+          <div class="sp-prod-info">
+            <h3>Sony WH-1000XM5</h3>
+            <div class="sp-brand">Sony - Wireless Noise Canceling</div>
+          </div>
+        </div>
+
+        <!-- Depth -->
+        <div class="sp-depth deep">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          Deep analysis - <span>Audio L3</span>
+        </div>
+
+        <!-- Verdict -->
+        <div class="sp-verdict">
+          <div class="sp-v-header">
+            <div class="sp-v-icon good">
+              <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg>
+            </div>
+            <div>
+              <div class="sp-v-title">Recommended</div>
+              <div class="sp-v-sub">Best ANC headphones for most people</div>
+            </div>
+          </div>
+          <div class="sp-v-body">
+            <p>Industry-leading noise cancellation with <span class="hl-g">30-hour battery</span>. ANC performance measurably better than Bose QC Ultra at low frequencies. Multipoint connection works seamlessly across Apple and Android.</p>
+            <p style="margin-top:6px;">One caveat: <strong>call quality is mediocre</strong> (<span class="hl-w">4/10</span> in wind). If calls are your primary use case, the Bose QC Ultra is the better pick.</p>
+
+            <!-- Evidence -->
+            <div class="sp-ev">
+              <div class="ev-row">
+                <div class="ev-dot hi"></div>
+                <div class="ev-txt">ANC reduces ambient noise by 38dB at 200Hz vs Bose QC Ultra at 34dB. <span class="cf">94% confidence</span></div>
+              </div>
+              <div class="ev-row">
+                <div class="ev-dot md"></div>
+                <div class="ev-txt">Thermal throttling under sustained use is minimal - no measurable ANC degradation after 4 hours. <span class="cf">89% confidence</span></div>
+              </div>
+            </div>
+
+            <!-- Pros/Cons -->
+            <div class="sp-proscons">
+              <div class="spc-col pros">
+                <h5>Strengths</h5>
+                <div class="spc-item"><span class="spc-d"></span> Best-in-class ANC</div>
+                <div class="spc-item"><span class="spc-d"></span> 30hr battery, fast charge</div>
+                <div class="spc-item"><span class="spc-d"></span> Multipoint Bluetooth</div>
+                <div class="spc-item"><span class="spc-d"></span> Lightweight (250g)</div>
+              </div>
+              <div class="spc-col cons">
+                <h5>Tradeoffs</h5>
+                <div class="spc-item"><span class="spc-d"></span> Call quality in wind</div>
+                <div class="spc-item"><span class="spc-d"></span> No aptX, LDAC only</div>
+                <div class="spc-item"><span class="spc-d"></span> Headband creaks at 6mo+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="sp-act-row">
+          <div class="sp-act primary">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M168 224a8 8 0 0 1-13.9 5.4L128 200l-26.1 29.4A8 8 0 0 1 88 224V32a8 8 0 0 1 8-8h64a8 8 0 0 1 8 8z"/></svg>
+            Save
+          </div>
+          <div class="sp-act green">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 56C48 56 16 128 16 128s32 72 112 72 112-72 112-72-32-72-112-72z"/><circle cx="128" cy="128" r="32"/></svg>
+            Watch price
+          </div>
+          <div class="sp-act ghost">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M216 112v96a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8v-96"/><polyline points="96 144 128 112 160 144"/><line x1="128" y1="112" x2="128" y2="24"/></svg>
+            Share
+          </div>
+        </div>
+
+        <!-- Prices -->
+        <div class="sp-prices">
+          <div class="sp-pr-label">Best Prices</div>
+          <div class="sp-pr best">
+            <span class="mn">Best Buy <span class="partner-dot"></span></span>
+            <div class="mr">
+              <span class="mc">AUDIO20</span>
+              <span class="mp">$278.00</span>
+              <span class="arrow"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></span>
+            </div>
+          </div>
+          <div class="sp-pr current">
+            <span class="mn">Amazon <span class="partner-dot"></span></span>
+            <div class="mr">
+              <span class="mp">$328.00</span>
+            </div>
+          </div>
+          <div class="sp-pr">
+            <span class="mn">B&H Photo</span>
+            <div class="mr">
+              <span class="mp">$328.00</span>
+              <span class="arrow"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></span>
+            </div>
+          </div>
+          <div class="sp-pr">
+            <span class="mn">Sony Direct</span>
+            <div class="mr">
+              <span class="mp">$349.99</span>
+              <span class="arrow"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></span>
+            </div>
+          </div>
+          <div class="sp-hist">
+            <div class="sp-hist-label">90-day price (Amazon)</div>
+            <div class="sp-hist-chart">
+              <div class="sp-hbar" style="height:80%;"></div>
+              <div class="sp-hbar" style="height:85%;"></div>
+              <div class="sp-hbar" style="height:90%;"></div>
+              <div class="sp-hbar" style="height:85%;"></div>
+              <div class="sp-hbar" style="height:80%;"></div>
+              <div class="sp-hbar" style="height:75%;"></div>
+              <div class="sp-hbar" style="height:70%;"></div>
+              <div class="sp-hbar low" style="height:55%;"></div>
+              <div class="sp-hbar" style="height:60%;"></div>
+              <div class="sp-hbar" style="height:70%;"></div>
+              <div class="sp-hbar" style="height:75%;"></div>
+              <div class="sp-hbar" style="height:80%;"></div>
+              <div class="sp-hbar now" style="height:78%;"></div>
+            </div>
+            <div class="sp-hist-range"><span>Dec</span><span>Jan</span><span>Feb</span><span>Now</span></div>
+          </div>
+          <div class="sp-partner-footer">
+            <span class="sp-partner-footer-dot"></span>
+            <span>Supports Product.ai's mission. <a href="#">Learn more</a></span>
+          </div>
+        </div>
+
+        <!-- Alternative -->
+        <div class="sp-sec">If calls matter <span class="ssl"></span></div>
+
+        <div class="sp-alt">
+          <div class="sp-alt-tag">Better for Calls</div>
+          <h4>Bose QuietComfort Ultra</h4>
+          <div class="alt-why">Call quality 8/10 vs Sony's 4/10. ANC slightly weaker at low frequencies but better wind handling. Heavier at 310g.</div>
+          <div class="alt-pr">
+            <span class="alt-price">$349.00</span>
+            <span class="alt-deal">Best Buy</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Chat Input -->
+      <div class="sp-input-area">
+        <div class="sp-input">
+          <input type="text" placeholder="Ask about this product...">
+          <button class="sp-input-btn send">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

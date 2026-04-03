@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Mobile - My Radar Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7;
+  --z300: #D4D4D8; --z400: #A1A1AA; --z450: #898992; --z500: #71717A;
+  --z600: #52525B; --z700: #3F3F46; --z750: #333338; --z800: #27272A;
+  --z850: #1F1F22; --z900: #18181B; --z925: #101013; --z950: #09090B;
+  --black: #000000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v800: #5A17B7;
+  --g300: #03FF88; --g500: #03E67A; --g600: #02C869;
+  --a300: #CEAD50; --a500: #8C6E01;
+  --r400: #F64B4B;
+  --b300: #6EB6FF; --b500: #0175C9;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { scrollbar-width: none; -ms-overflow-style: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: #080808; color: var(--z50);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; padding: 32px;
+}
+body::-webkit-scrollbar { display: none; }
+.phone {
+  width: 390px; height: 844px; background: var(--z950);
+  border-radius: 52px; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 2px 4px rgba(0,0,0,0.4),
+    0 12px 40px rgba(0,0,0,0.6), 0 40px 100px -20px rgba(0,0,0,0.8);
+  flex-shrink: 0;
+}
+.island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 124px; height: 36px; background: var(--black); border-radius: 20px; z-index: 100; }
+.home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; border-radius: 100px; background: rgba(255,255,255,0.15); z-index: 100; }
+.status { position: absolute; top: 16px; left: 32px; right: 32px;
+  display: flex; justify-content: space-between; align-items: center; z-index: 90; }
+.status .time { font-size: 16px; font-weight: 600; color: var(--white); }
+.status .sys { display: flex; gap: 5px; }
+.status .sys svg { width: 16px; height: 16px; fill: var(--white); }
+.app { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
+
+/* Header */
+.page-hdr {
+  padding: 58px 20px 0; height: 108px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-shrink: 0;
+  background: rgba(9,9,11,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  z-index: 50; padding-bottom: 12px;
+}
+.ph-l { display: flex; align-items: center; gap: 10px; }
+.ph-back {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ph-back svg { width: 18px; height: 18px; }
+.ph-title { font-size: 18px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.ph-r { display: flex; gap: 4px; }
+.ph-btn {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ph-btn svg { width: 18px; height: 18px; }
+
+/* Filters */
+.filters {
+  padding: 12px 20px;
+  display: flex; gap: 6px;
+  flex-shrink: 0; overflow-x: auto;
+}
+.filters::-webkit-scrollbar { display: none; }
+.ft {
+  padding: 7px 14px; border-radius: 100px;
+  font-size: 13px; font-weight: 500; color: var(--z500);
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.ft.active {
+  background: rgba(139,92,246,0.1);
+  border-color: rgba(139,92,246,0.25);
+  color: var(--v400);
+}
+
+/* List */
+.list { flex: 1; overflow-y: auto; padding: 4px 20px 40px; }
+.list::-webkit-scrollbar { display: none; }
+
+/* Section */
+.sec {
+  font-size: 10px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--z700); padding: 14px 0 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sec .sl { flex: 1; height: 0.5px; background: rgba(255,255,255,0.03); }
+
+/* ── Radar Card Base ── */
+.rc {
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 14px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 200ms;
+  position: relative;
+}
+.rc:active { border-color: rgba(255,255,255,0.12); }
+
+.rc-main { padding: 14px; }
+
+.rc-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+/* Signal Tags */
+.sig {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.sig .dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.sig.price-drop { color: #34d399; }
+.sig.price-drop .dot { background: #34d399; }
+.sig.restock { color: var(--b300); }
+.sig.restock .dot { background: var(--b300); }
+.sig.new-release { color: var(--v400); }
+.sig.new-release .dot { background: var(--v400); }
+.sig.reorder { color: var(--a300); }
+.sig.reorder .dot { background: var(--a300); }
+.sig.deal { color: #34d399; }
+.sig.deal .dot { background: #34d399; }
+.sig.verdict-update { color: var(--v400); }
+.sig.verdict-update .dot { background: var(--v400); }
+
+.rc-time {
+  font-size: 10px; font-family: var(--mono); color: var(--z700);
+}
+
+/* Product Row */
+.rc-product {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.rc-thumb {
+  width: 44px; height: 44px; border-radius: 9px;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.05);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.rc-info { flex: 1; min-width: 0; }
+.rc-info h4 {
+  font-size: 14px; font-weight: 500; color: var(--z200);
+  line-height: 18px; margin-bottom: 2px;
+}
+.rc-info p {
+  font-size: 12px; color: var(--z600); line-height: 16px;
+}
+
+/* Price Drop Detail */
+.rc-price-detail {
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.015);
+  border-top: 0.5px solid rgba(255,255,255,0.03);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.rc-pd-left { display: flex; align-items: baseline; gap: 8px; }
+.rc-pd-now {
+  font-size: 20px; font-weight: 600; font-family: var(--mono); color: #34d399;
+}
+.rc-pd-was {
+  font-size: 13px; font-family: var(--mono); color: var(--z700);
+  text-decoration: line-through;
+}
+.rc-pd-pct {
+  font-size: 11px; font-weight: 600; font-family: var(--mono);
+  color: #34d399; background: rgba(3,230,122,0.08);
+  padding: 2px 7px; border-radius: 100px;
+}
+.rc-pd-right { text-align: right; }
+.rc-pd-merchant {
+  font-size: 11px; color: var(--z500); font-weight: 500;
+}
+.rc-pd-code {
+  font-size: 10px; font-family: var(--mono); color: #34d399;
+  margin-top: 2px;
+}
+
+/* Action Row */
+.rc-actions {
+  padding: 8px 14px;
+  display: flex; gap: 6px;
+  border-top: 0.5px solid rgba(255,255,255,0.03);
+}
+.rc-act {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 11px;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 100px;
+  font-size: 11px; font-weight: 500; color: var(--z500);
+  cursor: pointer; font-family: var(--sans);
+  transition: all 150ms; white-space: nowrap;
+}
+.rc-act svg { width: 12px; height: 12px; }
+.rc-act.primary {
+  background: rgba(3,230,122,0.06);
+  border-color: rgba(3,230,122,0.15);
+  color: #34d399;
+}
+.rc-act.violet {
+  background: rgba(139,92,246,0.06);
+  border-color: rgba(139,92,246,0.15);
+  color: var(--v400);
+}
+
+/* ── Special Card Borders ── */
+.rc.hit {
+  border-color: rgba(3,230,122,0.15);
+}
+.rc.hit::before {
+  content: '';
+  position: absolute; top: 0; left: 15%; right: 15%;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(3,230,122,0.3), transparent);
+}
+.rc.blue-glow {
+  border-color: rgba(107,182,255,0.12);
+}
+.rc.blue-glow::before {
+  content: '';
+  position: absolute; top: 0; left: 15%; right: 15%;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(107,182,255,0.25), transparent);
+}
+.rc.violet-glow {
+  border-color: rgba(139,92,246,0.12);
+}
+.rc.violet-glow::before {
+  content: '';
+  position: absolute; top: 0; left: 15%; right: 15%;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(139,92,246,0.25), transparent);
+}
+.rc.amber-glow {
+  border-color: rgba(206,173,80,0.12);
+}
+.rc.amber-glow::before {
+  content: '';
+  position: absolute; top: 0; left: 15%; right: 15%;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(206,173,80,0.25), transparent);
+}
+
+/* Context Note */
+.rc-context {
+  padding: 8px 14px;
+  border-top: 0.5px solid rgba(255,255,255,0.03);
+  display: flex; align-items: flex-start; gap: 6px;
+}
+.rc-context svg { width: 12px; height: 12px; color: var(--z700); flex-shrink: 0; margin-top: 2px; }
+.rc-context span {
+  font-size: 11px; line-height: 15px; color: var(--z600);
+}
+.rc-context .hl-g { color: #34d399; font-family: var(--mono); font-weight: 500; font-size: 10px; }
+
+/* Personalization Note */
+.rc-personal {
+  padding: 6px 14px 10px;
+  display: flex; align-items: center; gap: 5px;
+}
+.rc-personal svg { width: 11px; height: 11px; color: var(--v400); flex-shrink: 0; }
+.rc-personal span {
+  font-size: 10px; color: var(--v400); font-weight: 500;
+}
+.partner-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #8b5cf6; opacity: 0.6; margin-left: 4px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+
+  <div class="status">
+    <span class="time">2:50</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <div class="app">
+
+    <div class="page-hdr">
+      <div class="ph-l">
+        <button class="ph-back">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg>
+        </button>
+        <span class="ph-title">My Radar</span>
+      </div>
+      <div class="ph-r">
+        <button class="ph-btn">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><circle cx="128" cy="128" r="36"/><line x1="128" y1="32" x2="128" y2="56"/><line x1="128" y1="200" x2="128" y2="224"/><line x1="32" y1="128" x2="56" y2="128"/><line x1="200" y1="128" x2="224" y2="128"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div class="ft active">All</div>
+      <div class="ft">Verdicts</div>
+      <div class="ft">Price Drops</div>
+      <div class="ft">Restocks</div>
+      <div class="ft">New Releases</div>
+      <div class="ft">Reorder</div>
+    </div>
+
+    <div class="list">
+
+      <!-- TODAY - Axiom-native signals lead -->
+      <div class="sec">Today <span class="sl"></span></div>
+
+      <!-- Verdict Updated - HERO (axiom-native: only Product.ai can do this) -->
+      <div class="rc violet-glow">
+        <div class="rc-main">
+          <div class="rc-top">
+            <div class="sig verdict-update"><span class="dot"></span> Verdict Updated</div>
+            <span class="rc-time">3h ago</span>
+          </div>
+          <div class="rc-product">
+            <div class="rc-thumb">&#x1F373;</div>
+            <div class="rc-info">
+              <h4>Ninja Foodi DZ201</h4>
+              <p>Verdict changed: Recommended &#x2192; Caution</p>
+            </div>
+          </div>
+        </div>
+        <div class="rc-context">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8 188.1L149.4 36.2a24 24 0 0 0-42.8 0L19.2 188.1a23.9 23.9 0 0 0 21.4 35.9h174.8a23.9 23.9 0 0 0 21.4-35.9zM120 104a8 8 0 0 1 16 0v40a8 8 0 0 1-16 0zm8 88a12 12 0 1 1 12-12 12 12 0 0 1-12 12z"/></svg>
+          <span>New owner reports confirm basket coating degradation after 12-18 months. Previously unverified Wirecutter claim now at 78% confidence. We downgraded this product.</span>
+        </div>
+        <div class="rc-personal">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>You own this product. Purchased Aug 2025 - monitor for coating issues.</span>
+        </div>
+        <div class="rc-actions">
+          <div class="rc-act violet">View updated verdict</div>
+          <div class="rc-act violet">See alternatives</div>
+        </div>
+      </div>
+
+      <!-- Reorder Alert - axiom-native (intelligence about Caution + alternative) -->
+      <div class="rc amber-glow">
+        <div class="rc-main">
+          <div class="rc-top">
+            <div class="sig reorder"><span class="dot"></span> Reorder Soon</div>
+            <span class="rc-time">5h ago</span>
+          </div>
+          <div class="rc-product">
+            <div class="rc-thumb">&#x1F9F4;</div>
+            <div class="rc-info">
+              <h4>CeraVe Skin Renewing Retinol Serum</h4>
+              <p>~80% used based on purchase date (Jan 12)</p>
+            </div>
+          </div>
+        </div>
+        <div class="rc-context">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8 188.1L149.4 36.2a24 24 0 0 0-42.8 0L19.2 188.1a23.9 23.9 0 0 0 21.4 35.9h174.8a23.9 23.9 0 0 0 21.4-35.9zM120 104a8 8 0 0 1 16 0v40a8 8 0 0 1-16 0zm8 88a12 12 0 1 1 12-12 12 12 0 0 1-12 12z"/></svg>
+          <span>Remember: this product was flagged Caution (underdosed at 0.3%). The La Roche-Posay Retinaldehyde you saved is a stronger alternative.</span>
+        </div>
+        <div class="rc-actions">
+          <div class="rc-act violet">Switch to saved alternative</div>
+          <div class="rc-act">Reorder anyway</div>
+        </div>
+      </div>
+
+      <!-- THIS WEEK - Commodity signals with contextual intelligence -->
+      <div class="sec">This Week <span class="sl"></span></div>
+
+      <!-- Price Drop - Hit Target -->
+      <div class="rc hit">
+        <div class="rc-main">
+          <div class="rc-top">
+            <div class="sig price-drop"><span class="dot"></span> Price Drop</div>
+            <span class="rc-time">2d ago</span>
+          </div>
+          <div class="rc-product">
+            <div class="rc-thumb">&#x2615;</div>
+            <div class="rc-info">
+              <h4>KitchenAid Artisan Stand Mixer</h4>
+              <p>Lowest price in 12 months</p>
+            </div>
+          </div>
+        </div>
+        <div class="rc-price-detail">
+          <div class="rc-pd-left">
+            <span class="rc-pd-now">$279</span>
+            <span class="rc-pd-was">$399</span>
+            <span class="rc-pd-pct">-30%</span>
+          </div>
+          <div class="rc-pd-right">
+            <div class="rc-pd-merchant">Williams Sonoma <span class="partner-dot"></span></div>
+            <div class="rc-pd-code">verified 2d ago</div>
+          </div>
+        </div>
+        <div class="rc-personal">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>You saved this Feb 28. Your target was $250 - this is close.</span>
+        </div>
+        <div class="rc-actions">
+          <div class="rc-act primary">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg>
+            View at Williams Sonoma
+          </div>
+          <div class="rc-act">Dismiss</div>
+        </div>
+      </div>
+
+      <!-- Restock -->
+      <div class="rc blue-glow">
+        <div class="rc-main">
+          <div class="rc-top">
+            <div class="sig restock"><span class="dot"></span> Back in Stock</div>
+            <span class="rc-time">3d ago</span>
+          </div>
+          <div class="rc-product">
+            <div class="rc-thumb">&#x1F9F4;</div>
+            <div class="rc-info">
+              <h4>La Roche-Posay Retinaldehyde Serum</h4>
+              <p>Restocked at Ulta. Out of stock for 3 weeks.</p>
+            </div>
+          </div>
+        </div>
+        <div class="rc-context">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>Your <span class="hl-g">SKINCARE15</span> code still works. $37.80 after discount.</span>
+        </div>
+        <div class="rc-actions">
+          <div class="rc-act primary">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg>
+            View at Ulta
+          </div>
+          <div class="rc-act violet">Chat about this</div>
+        </div>
+      </div>
+
+      <!-- New Release -->
+      <div class="rc violet-glow">
+        <div class="rc-main">
+          <div class="rc-top">
+            <div class="sig new-release"><span class="dot"></span> New Release</div>
+            <span class="rc-time">4d ago</span>
+          </div>
+          <div class="rc-product">
+            <div class="rc-thumb">&#x1F45F;</div>
+            <div class="rc-info">
+              <h4>Brooks Glycerin 22</h4>
+              <p>Successor to the Glycerin 21 you own</p>
+            </div>
+          </div>
+        </div>
+        <div class="rc-context">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>Updated cushioning compound. Early data suggests 15% better durability past 400 miles. Your Glycerin 21 is at ~320 miles.</span>
+        </div>
+        <div class="rc-personal">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>At your weekly mileage, you'll need new shoes in ~4 weeks.</span>
+        </div>
+        <div class="rc-actions">
+          <div class="rc-act violet">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="40" y="40" width="176" height="176" rx="8"/><line x1="128" y1="40" x2="128" y2="216"/><line x1="40" y1="128" x2="216" y2="128"/></svg>
+            Compare 21 vs 22
+          </div>
+          <div class="rc-act">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 56C48 56 16 128 16 128s32 72 112 72 112-72 112-72-32-72-112-72z"/><circle cx="128" cy="128" r="32"/></svg>
+            Watch price
+          </div>
+        </div>
+      </div>
+
+      <!-- EARLIER -->
+      <div class="sec">Earlier <span class="sl"></span></div>
+
+      <!-- Price Drop (smaller) -->
+      <div class="rc hit">
+        <div class="rc-main">
+          <div class="rc-top">
+            <div class="sig price-drop"><span class="dot"></span> Price Drop</div>
+            <span class="rc-time">1w ago</span>
+          </div>
+          <div class="rc-product">
+            <div class="rc-thumb">&#x1F3A7;</div>
+            <div class="rc-info">
+              <h4>Sony WH-1000XM5</h4>
+              <p>$50 below what you paid</p>
+            </div>
+          </div>
+        </div>
+        <div class="rc-price-detail">
+          <div class="rc-pd-left">
+            <span class="rc-pd-now">$278</span>
+            <span class="rc-pd-was">$328</span>
+            <span class="rc-pd-pct">-15%</span>
+          </div>
+          <div class="rc-pd-right">
+            <div class="rc-pd-merchant">Best Buy <span class="partner-dot"></span></div>
+          </div>
+        </div>
+        <div class="rc-personal">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>You already own these. Good gift price or second pair.</span>
+        </div>
+        <div class="rc-actions">
+          <div class="rc-act">Dismiss</div>
+        </div>
+      </div>
+
+      <!-- Deal Alert -->
+      <div class="rc">
+        <div class="rc-main">
+          <div class="rc-top">
+            <div class="sig deal"><span class="dot"></span> Seasonal Deal</div>
+            <span class="rc-time">1w ago</span>
+          </div>
+          <div class="rc-product">
+            <div class="rc-thumb">&#x1F9F4;</div>
+            <div class="rc-info">
+              <h4>Sephora Spring Sale Preview</h4>
+              <p>15-20% off starts April 4. Covers your saved skincare items.</p>
+            </div>
+          </div>
+        </div>
+        <div class="rc-context">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm-4 48a12 12 0 1 1-12 12 12 12 0 0 1 12-12zm12 112a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 0 16z"/></svg>
+          <span>Drunk Elephant Protini ($68) would drop to ~$54-58. Below your $55 target.</span>
+        </div>
+        <div class="rc-actions">
+          <div class="rc-act">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><polyline points="128 72 128 128 176 128"/></svg>
+            Remind me April 4
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

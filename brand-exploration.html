@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skincare Category Brand Exploration</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #0A0A0A; color: #E4E4E7; line-height: 1.6; }
+
+.page-header {
+  max-width: 1200px; margin: 0 auto; padding: 60px 48px 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.page-header .meta {
+  font-family: 'DM Mono', monospace; font-size: 11px; color: #71717A;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;
+}
+.page-header h1 {
+  font-size: 36px; font-weight: 600; color: #FFF; letter-spacing: -0.03em;
+  line-height: 1.15; margin-bottom: 12px;
+}
+.page-header p { font-size: 16px; color: #A1A1AA; max-width: 720px; line-height: 1.7; }
+
+.context-bar {
+  max-width: 1200px; margin: 0 auto; padding: 24px 48px;
+  display: flex; gap: 32px; flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.context-item { display: flex; flex-direction: column; gap: 2px; }
+.context-item .label { font-family: 'DM Mono', monospace; font-size: 10px; color: #52525B; letter-spacing: 0.08em; text-transform: uppercase; }
+.context-item .value { font-size: 13px; color: #D4D4D8; font-weight: 500; }
+
+/* ── Brand Candidates ── */
+.candidates {
+  max-width: 1200px; margin: 0 auto; padding: 48px;
+  display: flex; flex-direction: column; gap: 48px;
+}
+
+.candidate {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.candidate-header {
+  padding: 40px 48px;
+  display: flex; gap: 48px; align-items: flex-start;
+}
+.candidate-brand { flex: 1; }
+.candidate-rank {
+  font-family: 'DM Mono', monospace; font-size: 11px; color: #71717A;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.candidate-rank .rec {
+  padding: 2px 8px; border-radius: 100px; font-size: 9px;
+  font-weight: 600; letter-spacing: 0.1em;
+}
+.candidate-name { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 8px; }
+.candidate-tagline { font-size: 15px; font-weight: 400; margin-bottom: 16px; }
+.candidate-desc { font-size: 14px; color: #A1A1AA; line-height: 1.7; max-width: 520px; }
+.candidate-palette {
+  display: flex; flex-direction: column; gap: 12px;
+  min-width: 280px;
+}
+.palette-row { display: flex; gap: 8px; }
+.swatch {
+  width: 48px; height: 48px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+  position: relative;
+}
+.swatch .hex {
+  position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; color: #52525B; white-space: nowrap;
+}
+.palette-label { font-family: 'DM Mono', monospace; font-size: 10px; color: #52525B; letter-spacing: 0.06em; }
+
+.candidate-reasoning {
+  padding: 0 48px 32px;
+}
+.reasoning-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.reason-card {
+  padding: 16px 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.reason-card .title {
+  font-size: 12px; font-weight: 600; color: #D4D4D8; margin-bottom: 4px;
+}
+.reason-card .text { font-size: 12px; color: #71717A; line-height: 1.5; }
+
+/* ── Sample UI Previews ── */
+.candidate-preview {
+  padding: 32px 48px 48px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.preview-label {
+  font-family: 'DM Mono', monospace; font-size: 10px; color: #52525B;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px;
+}
+.preview-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+
+/* ── Mini Preview Cards ── */
+.mini-preview {
+  border-radius: 12px; overflow: hidden;
+  height: 280px; position: relative;
+}
+.mini-preview .preview-title {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 12px 16px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.7);
+}
+
+/* ══ STRATUM ══ */
+.candidate-stratum .candidate-header { background: linear-gradient(135deg, #1a1f1c 0%, #0f1210 100%); }
+.candidate-stratum .candidate-name { color: #C8D8CE; }
+.candidate-stratum .candidate-tagline { color: #5B8C6C; }
+.candidate-stratum .candidate-rank .rec { background: rgba(91,140,108,0.15); color: #5B8C6C; }
+
+.stratum-nav-preview {
+  background: #FAFAF7;
+  padding: 16px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #E8E5DE;
+  border-radius: 12px 12px 0 0;
+}
+.stratum-nav-logo {
+  font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600;
+  color: #2D3B32; letter-spacing: -0.02em;
+}
+.stratum-nav-logo span { color: #5B8C6C; font-weight: 400; }
+.stratum-nav-links { display: flex; gap: 16px; font-size: 11px; color: #8A8A7F; }
+.stratum-content-preview {
+  background: #FAFAF7; padding: 24px 20px; flex: 1;
+  border-radius: 0 0 12px 12px;
+}
+.stratum-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+  color: #3D7A52; background: rgba(61,122,82,0.08);
+  padding: 3px 8px; border-radius: 100px; margin-bottom: 8px;
+}
+.stratum-badge .dot { width: 4px; height: 4px; border-radius: 50%; background: #3D7A52; }
+.stratum-heading {
+  font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
+  color: #1A1A18; letter-spacing: -0.01em; margin-bottom: 4px;
+}
+.stratum-body { font-size: 11px; color: #6B6B63; line-height: 1.5; }
+.stratum-card-mini {
+  margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+  background: #F0EDE6; border: 1px solid #E0DCD4;
+}
+.stratum-card-mini .label { font-size: 9px; color: #8A8A7F; font-weight: 500; margin-bottom: 2px; }
+.stratum-card-mini .val { font-size: 13px; color: #1A1A18; font-weight: 600; }
+
+/* ══ PEEL ══ */
+.candidate-peel .candidate-header { background: linear-gradient(135deg, #1f1a1c 0%, #120f10 100%); }
+.candidate-peel .candidate-name { color: #E8C4B8; }
+.candidate-peel .candidate-tagline { color: #C07B6B; }
+.candidate-peel .candidate-rank .rec { background: rgba(192,123,107,0.15); color: #C07B6B; }
+
+.peel-nav-preview {
+  background: #FFF9F6;
+  padding: 16px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #F0E4DE;
+  border-radius: 12px 12px 0 0;
+}
+.peel-nav-logo {
+  font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500;
+  color: #2A1F1C; letter-spacing: -0.01em;
+}
+.peel-nav-logo span { font-style: italic; color: #C07B6B; }
+.peel-nav-links { display: flex; gap: 16px; font-size: 11px; color: #9A8A84; }
+.peel-content-preview {
+  background: #FFF9F6; padding: 24px 20px; flex: 1;
+  border-radius: 0 0 12px 12px;
+}
+.peel-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+  color: #B5634F; background: rgba(181,99,79,0.08);
+  padding: 3px 8px; border-radius: 100px; margin-bottom: 8px;
+}
+.peel-badge .dot { width: 4px; height: 4px; border-radius: 50%; background: #B5634F; }
+.peel-heading {
+  font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 500;
+  color: #1A1512; margin-bottom: 4px;
+}
+.peel-body { font-size: 11px; color: #7A6E68; line-height: 1.5; }
+.peel-card-mini {
+  margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+  background: #F5EBE4; border: 1px solid #E8DDD5;
+}
+.peel-card-mini .label { font-size: 9px; color: #9A8A84; font-weight: 500; margin-bottom: 2px; }
+.peel-card-mini .val { font-size: 13px; color: #2A1F1C; font-weight: 600; }
+
+/* ══ GLOW CHECK ══ */
+.candidate-glowcheck .candidate-header { background: linear-gradient(135deg, #1a1c1f 0%, #0f1012 100%); }
+.candidate-glowcheck .candidate-name { color: #B8D4E8; }
+.candidate-glowcheck .candidate-tagline { color: #4A8BA8; }
+.candidate-glowcheck .candidate-rank .rec { background: rgba(74,139,168,0.15); color: #4A8BA8; }
+
+.gc-nav-preview {
+  background: #F7FAFB;
+  padding: 16px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #DEE8EC;
+  border-radius: 12px 12px 0 0;
+}
+.gc-nav-logo {
+  font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600;
+  color: #1A2832; letter-spacing: -0.01em;
+}
+.gc-nav-logo span { color: #4A8BA8; }
+.gc-nav-links { display: flex; gap: 16px; font-size: 11px; color: #7A9AA8; }
+.gc-content-preview {
+  background: #F7FAFB; padding: 24px 20px; flex: 1;
+  border-radius: 0 0 12px 12px;
+}
+.gc-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+  color: #3D7A94; background: rgba(61,122,148,0.08);
+  padding: 3px 8px; border-radius: 100px; margin-bottom: 8px;
+}
+.gc-badge .dot { width: 4px; height: 4px; border-radius: 50%; background: #3D7A94; }
+.gc-heading {
+  font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
+  color: #1A2832; letter-spacing: -0.01em; margin-bottom: 4px;
+}
+.gc-body { font-size: 11px; color: #5A7A88; line-height: 1.5; }
+.gc-card-mini {
+  margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+  background: #E8F0F4; border: 1px solid #D4E2E8;
+}
+.gc-card-mini .label { font-size: 9px; color: #7A9AA8; font-weight: 500; margin-bottom: 2px; }
+.gc-card-mini .val { font-size: 13px; color: #1A2832; font-weight: 600; }
+
+/* ── Comparison Table ── */
+.comparison {
+  max-width: 1200px; margin: 0 auto; padding: 48px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.comparison h2 {
+  font-size: 22px; font-weight: 600; color: #FFF; letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+.comparison-table {
+  width: 100%; border-collapse: collapse;
+}
+.comparison-table th {
+  text-align: left; padding: 12px 16px;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: #52525B; letter-spacing: 0.08em; text-transform: uppercase;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.comparison-table td {
+  padding: 12px 16px; font-size: 13px; color: #A1A1AA;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  vertical-align: top;
+}
+.comparison-table td:first-child { color: #D4D4D8; font-weight: 500; }
+.comparison-table td .score {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+}
+.comparison-table td .score.high { color: #34d399; }
+.comparison-table td .score.med { color: #CEAD50; }
+.comparison-table td .score.low { color: #f87171; }
+
+/* ── Powered By ── */
+.powered-by {
+  max-width: 1200px; margin: 0 auto; padding: 32px 48px 60px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.powered-by h2 {
+  font-size: 18px; font-weight: 600; color: #FFF; letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.powered-by p { font-size: 14px; color: #71717A; line-height: 1.7; max-width: 640px; }
+.powered-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 16px; padding: 8px 16px; border-radius: 10px;
+  background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.12);
+}
+.powered-badge .pb-logo {
+  font-family: 'DM Mono', monospace; font-size: 12px; color: #A384FF; font-weight: 500;
+}
+.powered-badge .pb-text { font-size: 12px; color: #71717A; }
+</style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="meta">Product.ai Phase 1 GTM / Brand Exploration</div>
+  <h1>Skincare Category Brand Identity</h1>
+  <p>Three brand candidates for the skincare category product. Each name gets its own visual identity native to the skincare community. "Verified by Product.ai" is the trust architecture underneath.</p>
+</div>
+
+<div class="context-bar">
+  <div class="context-item">
+    <div class="label">Model</div>
+    <div class="value">Category brand, powered by Product.ai</div>
+  </div>
+  <div class="context-item">
+    <div class="label">Audience</div>
+    <div class="value">r/SkincareAddiction, r/AsianBeauty, r/30PlusSkinCare</div>
+  </div>
+  <div class="context-item">
+    <div class="label">Form Factor</div>
+    <div class="value">Browser Extension + MCP + Web Tool</div>
+  </div>
+  <div class="context-item">
+    <div class="label">Design Principle</div>
+    <div class="value">Light mode, warm, science-forward, editorial</div>
+  </div>
+</div>
+
+<!-- ═══════════ CANDIDATE 1: STRATUM ═══════════ -->
+<div class="candidates">
+
+<div class="candidate candidate-stratum">
+  <div class="candidate-header">
+    <div class="candidate-brand">
+      <div class="candidate-rank">
+        Candidate 01 <span class="rec">RECOMMENDED</span>
+      </div>
+      <div class="candidate-name">Stratum</div>
+      <div class="candidate-tagline">Every layer tells the truth.</div>
+      <div class="candidate-desc">
+        Named for the stratum corneum -- the outermost layer of skin that protects everything underneath. Triple meaning: layers of skin (science), layers of truth (verification), layers of technology (Product.ai's architecture). Scientific without being clinical. Sophisticated without being pretentious. Works globally.
+      </div>
+    </div>
+    <div class="candidate-palette">
+      <div class="palette-label">Primary Palette</div>
+      <div class="palette-row">
+        <div class="swatch" style="background:#FAFAF7; color:#1A1A18;"><span class="hex">#FAFAF7</span></div>
+        <div class="swatch" style="background:#F0EDE6; color:#1A1A18;"><span class="hex">#F0EDE6</span></div>
+        <div class="swatch" style="background:#5B8C6C; color:#FFF;"><span class="hex">#5B8C6C</span></div>
+        <div class="swatch" style="background:#3D7A52; color:#FFF;"><span class="hex">#3D7A52</span></div>
+        <div class="swatch" style="background:#2D3B32; color:#FFF;"><span class="hex">#2D3B32</span></div>
+      </div>
+      <div class="palette-label" style="margin-top: 8px;">System Colors</div>
+      <div class="palette-row">
+        <div class="swatch" style="background:#34A87A; color:#FFF;"><span class="hex">Verified</span></div>
+        <div class="swatch" style="background:#C4962C; color:#FFF;"><span class="hex">Caution</span></div>
+        <div class="swatch" style="background:#C75B5B; color:#FFF;"><span class="hex">Alert</span></div>
+        <div class="swatch" style="background:#4A8BA8; color:#FFF;"><span class="hex">Info</span></div>
+      </div>
+      <div class="palette-label" style="margin-top: 8px;">Typography</div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: #D4D4D8;">
+        Space Grotesk (headings) + Inter (body) + DM Mono (data)
+      </div>
+    </div>
+  </div>
+
+  <div class="candidate-reasoning">
+    <div class="reasoning-grid">
+      <div class="reason-card">
+        <div class="title">Community Fit</div>
+        <div class="text">Scientific name that skincare enthusiasts will respect. Not cutesy, not clinical. The kind of name a dermatologist and a Reddit power user both find credible.</div>
+      </div>
+      <div class="reason-card">
+        <div class="title">Visual Direction</div>
+        <div class="text">Warm cream base (#FAFAF7) with sage green accents. Light mode -- skincare lives in daylight. Editorial warmth meets lab precision. Think: The Ordinary's packaging meets Aesop's typography.</div>
+      </div>
+      <div class="reason-card">
+        <div class="title">Tone of Voice</div>
+        <div class="text">"We read the research so you don't have to." Authoritative but never condescending. Treats the reader as smart. Evidence-first. No marketing superlatives. Dry wit welcome.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="candidate-preview">
+    <div class="preview-label">Sample UI Fragments</div>
+    <div class="preview-grid">
+      <!-- Nav Preview -->
+      <div class="mini-preview" style="display: flex; flex-direction: column;">
+        <div class="stratum-nav-preview">
+          <div class="stratum-nav-logo">stratum<span>.</span></div>
+          <div class="stratum-nav-links">
+            <span>Ingredients</span>
+            <span>Routines</span>
+            <span>Analyze</span>
+          </div>
+        </div>
+        <div class="stratum-content-preview">
+          <div class="stratum-badge"><span class="dot"></span> ARC-VERIFIED</div>
+          <div class="stratum-heading">Niacinamide (Vitamin B3)</div>
+          <div class="stratum-body">Reduces sebum production at 2-5% concentration. Evidence is strong for pore appearance; weak for "brightening" claims. Interacts with Vitamin C (L-AA) at low pH -- stagger application by 15 minutes.</div>
+          <div class="stratum-card-mini">
+            <div class="label">Confidence</div>
+            <div class="val" style="color: #3D7A52;">92% Forged</div>
+          </div>
+        </div>
+        <div class="preview-title">Ingredient Truth Page</div>
+      </div>
+
+      <!-- Extension Preview -->
+      <div class="mini-preview" style="background: #F5F5F0; position: relative; padding: 16px;">
+        <div style="font-size: 10px; color: #8A8A7F; margin-bottom: 8px; font-family: 'DM Mono', monospace;">STRATUM EXTENSION OVERLAY</div>
+        <div style="background: #FFF; border-radius: 10px; padding: 14px 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #E8E5DE;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: #2D3B32;">stratum<span style="color:#5B8C6C">.</span></div>
+            <div style="font-size: 9px; color: #3D7A52; background: rgba(61,122,82,0.08); padding: 2px 6px; border-radius: 4px; font-weight: 500;">3 FLAGS</div>
+          </div>
+          <div style="font-size: 11px; color: #1A1A18; font-weight: 500; margin-bottom: 6px;">CeraVe Hydrating Cleanser</div>
+          <div style="display: flex; gap: 4px; margin-bottom: 10px;">
+            <span style="font-size: 9px; padding: 2px 6px; border-radius: 4px; background: rgba(61,122,82,0.08); color: #3D7A52;">Ceramides OK</span>
+            <span style="font-size: 9px; padding: 2px 6px; border-radius: 4px; background: rgba(196,150,44,0.08); color: #C4962C;">Fragrance-free?</span>
+          </div>
+          <div style="font-size: 10px; color: #6B6B63; line-height: 1.4;">
+            3 of 4 marketing claims verified. One claim ("barrier-repairing") lacks clinical evidence at this formulation's concentration.
+          </div>
+          <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #F0EDE6; font-size: 9px; color: #8A8A7F;">
+            Powered by Product.ai Truth Graph
+          </div>
+        </div>
+        <div class="preview-title">Browser Extension Popup</div>
+      </div>
+
+      <!-- Newsletter Preview -->
+      <div class="mini-preview" style="background: #FAFAF7; position: relative; padding: 20px;">
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; color: #2D3B32; margin-bottom: 4px;">stratum<span style="color:#5B8C6C">.</span> weekly</div>
+        <div style="font-size: 10px; color: #8A8A7F; margin-bottom: 12px;">5 claims we verified this week</div>
+        <div style="border-top: 1px solid #E8E5DE; padding-top: 10px;">
+          <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px;">
+            <div style="width: 18px; height: 18px; border-radius: 50%; background: rgba(61,122,82,0.1); color: #3D7A52; display: flex; align-items: center; justify-content: center; font-size: 8px; flex-shrink: 0; margin-top: 1px; font-weight: 700;">1</div>
+            <div>
+              <div style="font-size: 12px; font-weight: 500; color: #1A1A18; margin-bottom: 2px;">"Retinol causes purging" -- Mostly True</div>
+              <div style="font-size: 10px; color: #6B6B63; line-height: 1.4;">Initial breakouts from retinoid use reflect accelerated cell turnover. 78% of dermatologists confirm this mechanism. But: duration beyond 8 weeks is NOT purging.</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px;">
+            <div style="width: 18px; height: 18px; border-radius: 50%; background: rgba(196,150,44,0.1); color: #C4962C; display: flex; align-items: center; justify-content: center; font-size: 8px; flex-shrink: 0; margin-top: 1px; font-weight: 700;">2</div>
+            <div>
+              <div style="font-size: 12px; font-weight: 500; color: #1A1A18; margin-bottom: 2px;">"Hyaluronic acid hydrates skin" -- Conditional</div>
+              <div style="font-size: 10px; color: #6B6B63; line-height: 1.4;">True in humid climates. In dry environments, HA can pull moisture FROM skin. Molecular weight matters: low-MW penetrates, high-MW sits on surface.</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <div style="width: 18px; height: 18px; border-radius: 50%; background: rgba(199,91,91,0.1); color: #C75B5B; display: flex; align-items: center; justify-content: center; font-size: 8px; flex-shrink: 0; margin-top: 1px; font-weight: 700;">3</div>
+            <div>
+              <div style="font-size: 12px; font-weight: 500; color: #1A1A18; margin-bottom: 2px;">"This serum reverses aging" -- False</div>
+              <div style="font-size: 10px; color: #6B6B63; line-height: 1.4;">No topical reverses chronological aging. The peptide in question showed 4% wrinkle depth reduction in one in-vitro study. The brand extrapolated.</div>
+            </div>
+          </div>
+        </div>
+        <div class="preview-title">Newsletter Sample</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CANDIDATE 2: PEEL ═══════════ -->
+<div class="candidate candidate-peel">
+  <div class="candidate-header">
+    <div class="candidate-brand">
+      <div class="candidate-rank">Candidate 02</div>
+      <div class="candidate-name">Peel</div>
+      <div class="candidate-tagline">Peel back the marketing. See what's real.</div>
+      <div class="candidate-desc">
+        Provocative, action-oriented. Dual meaning: revealing what's underneath marketing claims (peeling back layers of BS), and a literal skincare treatment (chemical peels). It's a verb -- it tells you what the product does. Edgier, more confrontational. Appeals to the skeptic archetype that dominates r/SkincareAddiction.
+      </div>
+    </div>
+    <div class="candidate-palette">
+      <div class="palette-label">Primary Palette</div>
+      <div class="palette-row">
+        <div class="swatch" style="background:#FFF9F6; color:#1A1A18;"><span class="hex">#FFF9F6</span></div>
+        <div class="swatch" style="background:#F5EBE4; color:#1A1A18;"><span class="hex">#F5EBE4</span></div>
+        <div class="swatch" style="background:#C07B6B; color:#FFF;"><span class="hex">#C07B6B</span></div>
+        <div class="swatch" style="background:#A85B4A; color:#FFF;"><span class="hex">#A85B4A</span></div>
+        <div class="swatch" style="background:#2A1F1C; color:#FFF;"><span class="hex">#2A1F1C</span></div>
+      </div>
+      <div class="palette-label" style="margin-top: 8px;">Typography</div>
+      <div style="font-family: 'Playfair Display', serif; font-size: 14px; color: #D4D4D8;">
+        Playfair Display (headings) + Inter (body) + DM Mono (data)
+      </div>
+    </div>
+  </div>
+
+  <div class="candidate-reasoning">
+    <div class="reasoning-grid">
+      <div class="reason-card">
+        <div class="title">Community Fit</div>
+        <div class="text">The skeptic's brand. Skincare Reddit is built on calling out BS marketing. Peel owns that energy. Risk: might feel too aggressive for the "positive vibes" segment of the community.</div>
+      </div>
+      <div class="reason-card">
+        <div class="title">Visual Direction</div>
+        <div class="text">Warm blush/coral palette. Serif headlines give editorial authority (think: a beauty magazine that actually does journalism). Soft, skin-toned warmth. More feminine-coded than Stratum.</div>
+      </div>
+      <div class="reason-card">
+        <div class="title">Tone of Voice</div>
+        <div class="text">"That serum your favorite influencer is selling? We checked." Confrontational but charming. Think: Wirecutter meets Vogue meets a dermatologist who's tired of Instagram science.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="candidate-preview">
+    <div class="preview-label">Sample UI Fragments</div>
+    <div class="preview-grid">
+      <div class="mini-preview" style="display: flex; flex-direction: column;">
+        <div class="peel-nav-preview">
+          <div class="peel-nav-logo">Peel<span>.</span></div>
+          <div class="peel-nav-links">
+            <span>Investigate</span>
+            <span>Routines</span>
+            <span>The Lab</span>
+          </div>
+        </div>
+        <div class="peel-content-preview">
+          <div class="peel-badge"><span class="dot"></span> VERIFIED</div>
+          <div class="peel-heading">Retinol: The Actual Science</div>
+          <div class="peel-body">Everyone recommends it. Few understand the dose-response curve. At 0.025%, you're getting some cell turnover. At 0.1%, you're getting real collagen stimulation. Below 0.01%? You're paying for marketing.</div>
+          <div class="peel-card-mini">
+            <div class="label">Verdict</div>
+            <div class="val" style="color: #A85B4A;">Dose-dependent. Most serums under-deliver.</div>
+          </div>
+        </div>
+        <div class="preview-title">Ingredient Deep Dive</div>
+      </div>
+
+      <div class="mini-preview" style="background: #F5EBE4; position: relative; padding: 16px;">
+        <div style="font-size: 10px; color: #9A8A84; margin-bottom: 8px; font-family: 'DM Mono', monospace;">PEEL EXTENSION OVERLAY</div>
+        <div style="background: #FFF; border-radius: 10px; padding: 14px 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #E8DDD5;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 500; color: #2A1F1C;">Peel<span style="color:#C07B6B">.</span></div>
+            <div style="font-size: 9px; color: #C4962C; background: rgba(196,150,44,0.08); padding: 2px 6px; border-radius: 4px; font-weight: 500;">2 CONCERNS</div>
+          </div>
+          <div style="font-size: 11px; color: #2A1F1C; font-weight: 500; margin-bottom: 6px;">Drunk Elephant Protini</div>
+          <div style="font-size: 10px; color: #7A6E68; line-height: 1.4;">
+            Claims "clinically proven." The study: 20 participants, 4 weeks, brand-funded. Not peer-reviewed. Peptide blend shows promise but the evidence bar for "clinically proven" is higher than this.
+          </div>
+        </div>
+        <div class="preview-title">Browser Extension Popup</div>
+      </div>
+
+      <div class="mini-preview" style="background: #FFF9F6; position: relative; padding: 20px;">
+        <div style="font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 500; color: #2A1F1C; margin-bottom: 4px;">The Peel Report</div>
+        <div style="font-size: 10px; color: #9A8A84; margin-bottom: 12px; font-style: italic;">What we found this week</div>
+        <div style="border-top: 1px solid #E8DDD5; padding-top: 10px;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 13px; color: #2A1F1C; margin-bottom: 4px;">The Sunscreen SPF Lie</div>
+          <div style="font-size: 10px; color: #7A6E68; line-height: 1.4; margin-bottom: 10px;">
+            SPF 50 is not twice as protective as SPF 25. SPF 30 blocks 97% of UVB. SPF 50 blocks 98%. The difference is marketing, not protection. Here's what actually matters for sun protection.
+          </div>
+          <div style="font-family: 'Playfair Display', serif; font-size: 13px; color: #2A1F1C; margin-bottom: 4px;">Your $90 Vitamin C Serum vs. The $12 One</div>
+          <div style="font-size: 10px; color: #7A6E68; line-height: 1.4;">
+            We tested the ingredient lists of 14 L-Ascorbic Acid serums across price points. The active ingredient is identical. The difference: packaging (airless pump vs dropper), stabilizers, and marketing budget.
+          </div>
+        </div>
+        <div class="preview-title">Newsletter Sample</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CANDIDATE 3: GLOW CHECK ═══════════ -->
+<div class="candidate candidate-glowcheck">
+  <div class="candidate-header">
+    <div class="candidate-brand">
+      <div class="candidate-rank">Candidate 03</div>
+      <div class="candidate-name">Glow Check</div>
+      <div class="candidate-tagline">Check everything. Glow with confidence.</div>
+      <div class="candidate-desc">
+        Community-native language. "Glow" is the aspirational state every skincare enthusiast is chasing. "Check" implies verification -- what Product.ai actually does. The two words together feel like a friend saying "let me check that for you." Most approachable of the three. Less premium positioning but highest instant comprehension.
+      </div>
+    </div>
+    <div class="candidate-palette">
+      <div class="palette-label">Primary Palette</div>
+      <div class="palette-row">
+        <div class="swatch" style="background:#F7FAFB; color:#1A1A18;"><span class="hex">#F7FAFB</span></div>
+        <div class="swatch" style="background:#E8F0F4; color:#1A1A18;"><span class="hex">#E8F0F4</span></div>
+        <div class="swatch" style="background:#4A8BA8; color:#FFF;"><span class="hex">#4A8BA8</span></div>
+        <div class="swatch" style="background:#2D6A82; color:#FFF;"><span class="hex">#2D6A82</span></div>
+        <div class="swatch" style="background:#1A2832; color:#FFF;"><span class="hex">#1A2832</span></div>
+      </div>
+      <div class="palette-label" style="margin-top: 8px;">Typography</div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: #D4D4D8;">
+        Space Grotesk (headings) + Inter (body) + DM Mono (data)
+      </div>
+    </div>
+  </div>
+
+  <div class="candidate-reasoning">
+    <div class="reasoning-grid">
+      <div class="reason-card">
+        <div class="title">Community Fit</div>
+        <div class="text">Highest instant comprehension. "What does it do?" is answered in the name. Very social-media-friendly. Risk: feels more like a feature name than a brand. May not scale to supplements/pet health Phase 2.</div>
+      </div>
+      <div class="reason-card">
+        <div class="title">Visual Direction</div>
+        <div class="text">Clean teal/aqua palette. Fresh, modern, friendly. The "clean beauty" color language. Light, airy, approachable. Feels like an app you'd recommend to a friend, not a research institution.</div>
+      </div>
+      <div class="reason-card">
+        <div class="title">Tone of Voice</div>
+        <div class="text">"Let's check this together." Collaborative, inclusive, non-judgmental. The approachable friend who happens to have a chemistry degree. Less editorial authority, more community warmth.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="candidate-preview">
+    <div class="preview-label">Sample UI Fragments</div>
+    <div class="preview-grid">
+      <div class="mini-preview" style="display: flex; flex-direction: column;">
+        <div class="gc-nav-preview">
+          <div class="gc-nav-logo">glow<span>check</span></div>
+          <div class="gc-nav-links">
+            <span>Check</span>
+            <span>Learn</span>
+            <span>Community</span>
+          </div>
+        </div>
+        <div class="gc-content-preview">
+          <div class="gc-badge"><span class="dot"></span> CHECKED</div>
+          <div class="gc-heading">Salicylic Acid (BHA)</div>
+          <div class="gc-body">Oil-soluble, so it actually penetrates pores (unlike AHAs). Effective at 0.5-2% for acne. Above 2%, you need a dermatologist. Below 0.5%, you're mostly getting a placebo effect.</div>
+          <div class="gc-card-mini">
+            <div class="label">Quick Check</div>
+            <div class="val" style="color: #2D6A82;">Effective at labeled concentration</div>
+          </div>
+        </div>
+        <div class="preview-title">Ingredient Page</div>
+      </div>
+
+      <div class="mini-preview" style="background: #E8F0F4; position: relative; padding: 16px;">
+        <div style="font-size: 10px; color: #7A9AA8; margin-bottom: 8px; font-family: 'DM Mono', monospace;">GLOW CHECK EXTENSION</div>
+        <div style="background: #FFF; border-radius: 10px; padding: 14px 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #D4E2E8;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: #1A2832;">glow<span style="color:#4A8BA8">check</span></div>
+            <div style="font-size: 9px; color: #3D7A52; background: rgba(61,122,82,0.08); padding: 2px 6px; border-radius: 4px; font-weight: 500;">ALL CLEAR</div>
+          </div>
+          <div style="font-size: 11px; color: #1A2832; font-weight: 500; margin-bottom: 6px;">La Roche-Posay Toleriane</div>
+          <div style="font-size: 10px; color: #5A7A88; line-height: 1.4;">
+            All 5 claims check out. Fragrance-free, non-comedogenic, dermatologist-tested. This one's solid. The prebiotic thermal water claim is marketing but harmless.
+          </div>
+        </div>
+        <div class="preview-title">Extension Popup</div>
+      </div>
+
+      <div class="mini-preview" style="background: #F7FAFB; position: relative; padding: 20px;">
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; color: #1A2832; margin-bottom: 2px;">glow<span style="color:#4A8BA8">check</span> weekly</div>
+        <div style="font-size: 10px; color: #7A9AA8; margin-bottom: 12px;">This week's ingredient checks</div>
+        <div style="border-top: 1px solid #D4E2E8; padding-top: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: #34A87A; flex-shrink: 0;"></div>
+            <div style="font-size: 11px; color: #1A2832;"><strong>Centella Asiatica:</strong> The hype is real. Strong evidence for wound healing and barrier repair.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: #C4962C; flex-shrink: 0;"></div>
+            <div style="font-size: 11px; color: #1A2832;"><strong>Bakuchiol as retinol alternative:</strong> Promising, but overstated. One good study. Needs more evidence.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: #C75B5B; flex-shrink: 0;"></div>
+            <div style="font-size: 11px; color: #1A2832;"><strong>"Collagen-boosting" serums:</strong> Topical collagen molecules are too large to penetrate. The claim is physically impossible.</div>
+          </div>
+        </div>
+        <div class="preview-title">Newsletter Sample</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /candidates -->
+
+<!-- ═══════════ COMPARISON TABLE ═══════════ -->
+<div class="comparison">
+  <h2>Side-by-Side Comparison</h2>
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Stratum</th>
+        <th>Peel</th>
+        <th>Glow Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Instant comprehension</td>
+        <td><span class="score med">7/10</span> -- needs one beat</td>
+        <td><span class="score high">8/10</span> -- clear verb</td>
+        <td><span class="score high">9/10</span> -- self-explanatory</td>
+      </tr>
+      <tr>
+        <td>Premium positioning</td>
+        <td><span class="score high">9/10</span> -- scientific, elevated</td>
+        <td><span class="score high">8/10</span> -- editorial, provocative</td>
+        <td><span class="score med">5/10</span> -- friendly, less premium</td>
+      </tr>
+      <tr>
+        <td>Community native</td>
+        <td><span class="score high">8/10</span> -- science-aligned</td>
+        <td><span class="score high">9/10</span> -- skeptic-aligned</td>
+        <td><span class="score high">8/10</span> -- aspirational-aligned</td>
+      </tr>
+      <tr>
+        <td>Phase 2 scalability</td>
+        <td><span class="score high">9/10</span> -- works for supplements, health</td>
+        <td><span class="score med">6/10</span> -- "Peel for pet health" is awkward</td>
+        <td><span class="score low">4/10</span> -- locked to skincare</td>
+      </tr>
+      <tr>
+        <td>Domain availability</td>
+        <td>stratum.ai, getstratum.com likely available</td>
+        <td>peel.ai unlikely, trypeelapp.com possible</td>
+        <td>glowcheck.com, glowcheck.ai possible</td>
+      </tr>
+      <tr>
+        <td>Trademark risk</td>
+        <td><span class="score high">Low</span> -- no obvious conflicts</td>
+        <td><span class="score med">Medium</span> -- common word in skincare</td>
+        <td><span class="score high">Low</span> -- compound is distinctive</td>
+      </tr>
+      <tr>
+        <td>Visual palette</td>
+        <td>Warm cream + sage green</td>
+        <td>Blush + coral + serif editorial</td>
+        <td>Clean teal + aqua</td>
+      </tr>
+      <tr>
+        <td>Tone archetype</td>
+        <td>The trusted expert</td>
+        <td>The investigative journalist</td>
+        <td>The knowledgeable friend</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════ POWERED BY ═══════════ -->
+<div class="powered-by">
+  <h2>The "Powered by" Connection</h2>
+  <p>
+    All three candidates share the same trust architecture underneath. The category brand owns the relationship with the user. Product.ai owns the verification methodology. When users encounter a second category product (e.g., supplements), they see a different brand with a familiar "powered by Product.ai" trust signal -- like how Google Maps and YouTube are different products with the same trust substrate.
+  </p>
+  <div class="powered-badge">
+    <span class="pb-logo">Product.ai</span>
+    <span class="pb-text">Verified by Product.ai Truth Graph</span>
+  </div>
+</div>
+
+</body>
+</html>

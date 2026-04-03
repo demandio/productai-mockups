@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retinol -- Verified Ingredient Science | Stratum</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #FAFAF7;
+  --surface: #F0EDE6;
+  --surface-2: #E8E5DE;
+  --border: #DDD9D0;
+  --text-1: #1A1A18;
+  --text-2: #4A4A45;
+  --text-3: #6B6B63;
+  --text-4: #8A8A7F;
+  --text-5: #B0AFA8;
+  --brand: #5B8C6C;
+  --brand-dark: #3D7A52;
+  --brand-light: rgba(91,140,108,0.08);
+  --verified: #34A87A;
+  --verified-bg: rgba(52,168,122,0.06);
+  --caution: #C4962C;
+  --caution-bg: rgba(196,150,44,0.06);
+  --alert: #C75B5B;
+  --alert-bg: rgba(199,91,91,0.06);
+  --info: #4A8BA8;
+  --info-bg: rgba(74,139,168,0.06);
+  --white: #FFFFFF;
+  --sans: 'Inter', -apple-system, sans-serif;
+  --heading: 'Space Grotesk', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text-1); line-height: 1.6; }
+
+/* ── Nav ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,247,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+}
+.nav-inner {
+  max-width: 900px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-logo {
+  font-family: var(--heading); font-size: 20px; font-weight: 600;
+  color: var(--text-1); letter-spacing: -0.02em; text-decoration: none;
+}
+.nav-logo span { color: var(--brand); font-weight: 400; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  font-size: 13px; color: var(--text-4); text-decoration: none;
+  transition: color 150ms; font-weight: 500;
+}
+.nav-links a:hover { color: var(--text-2); }
+.nav-links a.active { color: var(--brand-dark); }
+.nav-cta {
+  padding: 7px 16px; border-radius: 8px;
+  background: var(--brand); color: var(--white);
+  font-size: 12px; font-weight: 600; text-decoration: none;
+}
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+  max-width: 900px; margin: 0 auto;
+  padding: 16px 48px 0;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--text-4);
+}
+.breadcrumb a { color: var(--text-4); text-decoration: none; transition: color 150ms; }
+.breadcrumb a:hover { color: var(--text-2); }
+.breadcrumb .sep { color: var(--text-5); }
+.breadcrumb .current { color: var(--brand-dark); font-weight: 500; }
+
+/* ── Hero ── */
+.hero {
+  max-width: 900px; margin: 0 auto;
+  padding: 40px 48px 32px;
+}
+.hero-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--brand-dark); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-label .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--verified); }
+.hero h1 {
+  font-family: var(--heading); font-size: 36px; font-weight: 600;
+  color: var(--text-1); letter-spacing: -0.03em;
+  line-height: 1.15; margin-bottom: 10px;
+}
+.hero-alt {
+  font-family: var(--mono); font-size: 12px; color: var(--text-4);
+  margin-bottom: 12px;
+}
+.hero-desc {
+  font-size: 16px; color: var(--text-3); line-height: 1.7;
+  max-width: 640px; margin-bottom: 24px;
+}
+
+/* ── Stats Row ── */
+.stats-row {
+  max-width: 900px; margin: 0 auto;
+  padding: 0 48px 24px;
+  display: flex; gap: 24px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--surface-2);
+}
+.stat {
+  display: flex; align-items: baseline; gap: 6px;
+}
+.stat-num {
+  font-family: var(--heading); font-size: 22px; font-weight: 600;
+}
+.stat-num.green { color: var(--verified); }
+.stat-num.brand { color: var(--brand-dark); }
+.stat-num.amber { color: var(--caution); }
+.stat-label { font-size: 12px; color: var(--text-4); }
+
+/* ── Content ── */
+.content { max-width: 900px; margin: 0 auto; padding: 0 48px; }
+
+.section {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--surface-2);
+}
+.section:last-child { border-bottom: none; }
+.section h2 {
+  font-family: var(--heading); font-size: 20px; font-weight: 600;
+  color: var(--text-1); letter-spacing: -0.02em; margin-bottom: 6px;
+}
+.section-desc {
+  font-size: 13px; color: var(--text-4); line-height: 1.6; margin-bottom: 20px;
+}
+
+/* ── Axiom Cards ── */
+.axiom-list { display: flex; flex-direction: column; gap: 10px; }
+
+.axiom-card {
+  padding: 18px 22px; border-radius: 12px;
+  background: var(--white);
+  border: 1px solid var(--surface-2);
+  transition: border-color 150ms;
+  cursor: pointer;
+}
+.axiom-card:hover { border-color: var(--brand); }
+
+.axiom-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.axiom-confidence {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.04em; white-space: nowrap;
+  padding: 3px 8px; border-radius: 100px;
+}
+.axiom-confidence.forged { color: var(--verified); background: var(--verified-bg); }
+.axiom-confidence.probable { color: var(--caution); background: var(--caution-bg); }
+.axiom-confidence.disputed { color: var(--alert); background: var(--alert-bg); }
+.axiom-confidence .conf-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+.axiom-domain {
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  color: var(--text-5); letter-spacing: 0.06em;
+}
+
+.axiom-statement {
+  font-size: 15px; font-weight: 500; color: var(--text-1);
+  line-height: 1.5; margin-bottom: 6px;
+}
+
+.axiom-physics {
+  font-size: 13px; color: var(--text-3);
+  line-height: 1.6; margin-bottom: 10px;
+  padding-left: 12px; border-left: 2px solid var(--brand-light);
+}
+
+.axiom-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 10px; border-top: 1px solid var(--surface);
+}
+.axiom-sources {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.axiom-source {
+  font-family: var(--mono); font-size: 9px; color: var(--text-4);
+  padding: 2px 6px; border-radius: 4px; background: var(--surface);
+}
+.axiom-expand {
+  font-family: var(--mono); font-size: 10px; color: var(--text-5);
+  display: flex; align-items: center; gap: 4px;
+  transition: color 150ms;
+}
+.axiom-card:hover .axiom-expand { color: var(--brand); }
+
+/* ── Dose Response Chart (CSS-only) ── */
+.dose-chart {
+  background: var(--white); border-radius: 12px;
+  border: 1px solid var(--surface-2); padding: 24px;
+  margin-bottom: 10px;
+}
+.dose-chart-title {
+  font-family: var(--heading); font-size: 15px; font-weight: 600;
+  color: var(--text-1); margin-bottom: 16px;
+}
+.dose-bars { display: flex; flex-direction: column; gap: 8px; }
+.dose-bar-row {
+  display: flex; align-items: center; gap: 12px;
+}
+.dose-label {
+  width: 80px; font-family: var(--mono); font-size: 11px;
+  color: var(--text-4); text-align: right; flex-shrink: 0;
+}
+.dose-bar-track {
+  flex: 1; height: 24px; background: var(--surface);
+  border-radius: 6px; overflow: hidden; position: relative;
+}
+.dose-bar-fill {
+  height: 100%; border-radius: 6px;
+  display: flex; align-items: center; padding: 0 8px;
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  color: var(--white);
+}
+.dose-note {
+  width: 140px; font-size: 10px; color: var(--text-4); flex-shrink: 0;
+}
+
+/* ── Products Section ── */
+.product-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.product-card {
+  padding: 16px 18px; border-radius: 12px;
+  background: var(--white);
+  border: 1px solid var(--surface-2);
+  transition: border-color 150ms;
+}
+.product-card:hover { border-color: var(--brand); }
+.product-card .pc-name { font-size: 13px; font-weight: 600; color: var(--text-1); margin-bottom: 2px; }
+.product-card .pc-brand { font-size: 11px; color: var(--text-4); margin-bottom: 8px; }
+.product-card .pc-conc {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 2px 6px; border-radius: 4px; margin-bottom: 6px;
+}
+.product-card .pc-conc.good { color: var(--verified); background: var(--verified-bg); }
+.product-card .pc-conc.high { color: var(--caution); background: var(--caution-bg); }
+.product-card .pc-price { font-size: 12px; color: var(--text-3); }
+.product-card .pc-score {
+  font-family: var(--mono); font-size: 10px; color: var(--text-4);
+  margin-top: 6px;
+}
+
+/* ── Interactions Map ── */
+.interactions-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+}
+.ix-card {
+  padding: 16px 18px; border-radius: 12px;
+  border: 1px solid; display: flex; gap: 10px;
+}
+.ix-card.positive { background: var(--verified-bg); border-color: rgba(52,168,122,0.12); }
+.ix-card.negative { background: var(--alert-bg); border-color: rgba(199,91,91,0.12); }
+.ix-card.caution { background: var(--caution-bg); border-color: rgba(196,150,44,0.12); }
+.ix-card.neutral { background: var(--info-bg); border-color: rgba(74,139,168,0.12); }
+.ix-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 12px; font-weight: 700;
+}
+.ix-card.positive .ix-icon { background: rgba(52,168,122,0.12); color: var(--verified); }
+.ix-card.negative .ix-icon { background: rgba(199,91,91,0.12); color: var(--alert); }
+.ix-card.caution .ix-icon { background: rgba(196,150,44,0.12); color: var(--caution); }
+.ix-card.neutral .ix-icon { background: rgba(74,139,168,0.12); color: var(--info); }
+.ix-text { flex: 1; }
+.ix-title { font-size: 13px; font-weight: 600; color: var(--text-1); margin-bottom: 2px; }
+.ix-detail { font-size: 11px; color: var(--text-3); line-height: 1.5; }
+
+/* ── Challenge Bar ── */
+.challenge-bar {
+  max-width: 900px; margin: 0 auto;
+  padding: 24px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--surface-2);
+}
+.challenge-text {
+  flex: 1;
+}
+.challenge-text h3 {
+  font-family: var(--heading); font-size: 16px; font-weight: 600;
+  color: var(--text-1); margin-bottom: 2px;
+}
+.challenge-text p { font-size: 13px; color: var(--text-3); }
+.challenge-btn {
+  padding: 10px 20px; border-radius: 8px;
+  background: var(--white); color: var(--brand-dark);
+  font-size: 13px; font-weight: 600;
+  border: 1px solid var(--brand);
+  cursor: pointer; transition: all 150ms;
+  font-family: var(--sans); white-space: nowrap;
+}
+.challenge-btn:hover { background: var(--brand-light); }
+
+/* ── Footer ── */
+.footer {
+  max-width: 900px; margin: 0 auto;
+  padding: 24px 48px 60px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--surface-2);
+}
+.footer-left { font-size: 12px; color: var(--text-5); }
+.footer-powered {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--text-5);
+}
+.footer-powered .pai { font-family: var(--mono); font-weight: 500; color: var(--text-4); }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">stratum<span>.</span></a>
+    <div class="nav-links">
+      <a href="#" class="active">Ingredients</a>
+      <a href="#">Routines</a>
+      <a href="#">Analyze</a>
+      <a href="#">Community</a>
+      <a class="nav-cta" href="#">Get Extension</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ BREADCRUMB ═══ -->
+<div class="breadcrumb">
+  <a href="#">Ingredients</a>
+  <span class="sep">/</span>
+  <a href="#">Actives</a>
+  <span class="sep">/</span>
+  <span class="current">Retinol</span>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-label"><span class="dot"></span> ARC-VERIFIED INGREDIENT</div>
+  <h1>Retinol</h1>
+  <div class="hero-alt">Also known as: Vitamin A1, Retinyl palmitate (ester form), Tretinoin (prescription)</div>
+  <div class="hero-desc">
+    The most evidence-backed anti-aging active in dermatology. Accelerates cell turnover, stimulates collagen production, and reduces hyperpigmentation. But the dose-response curve is nonlinear, and most OTC products under-deliver on concentration while over-delivering on promises.
+  </div>
+</div>
+
+<!-- ═══ STATS ═══ -->
+<div class="stats-row">
+  <div class="stat">
+    <span class="stat-num green">14</span>
+    <span class="stat-label">Verified axioms</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num brand">87</span>
+    <span class="stat-label">Evidence sources</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num amber">3</span>
+    <span class="stat-label">Active challenges</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num brand">45</span>
+    <span class="stat-label">Products analyzed</span>
+  </div>
+</div>
+
+<!-- ═══ CONTENT ═══ -->
+<div class="content">
+
+  <!-- Dose-Response -->
+  <div class="section">
+    <h2>Dose-Response: What Actually Works</h2>
+    <div class="section-desc">Concentration matters more than brand. Here's what the evidence says at each level.</div>
+
+    <div class="dose-chart">
+      <div class="dose-chart-title">Retinol Concentration vs. Efficacy</div>
+      <div class="dose-bars">
+        <div class="dose-bar-row">
+          <div class="dose-label">0.01-0.03%</div>
+          <div class="dose-bar-track">
+            <div class="dose-bar-fill" style="width: 15%; background: var(--text-5);">min</div>
+          </div>
+          <div class="dose-note" style="color: var(--text-5);">Minimal effect. Mostly marketing.</div>
+        </div>
+        <div class="dose-bar-row">
+          <div class="dose-label">0.04-0.1%</div>
+          <div class="dose-bar-track">
+            <div class="dose-bar-fill" style="width: 40%; background: var(--caution);">mild</div>
+          </div>
+          <div class="dose-note" style="color: var(--caution);">Some cell turnover. Good for beginners.</div>
+        </div>
+        <div class="dose-bar-row">
+          <div class="dose-label">0.25-0.5%</div>
+          <div class="dose-bar-track">
+            <div class="dose-bar-fill" style="width: 70%; background: var(--brand);">effective</div>
+          </div>
+          <div class="dose-note" style="color: var(--brand);">Evidence-backed sweet spot for OTC.</div>
+        </div>
+        <div class="dose-bar-row">
+          <div class="dose-label">0.5-1.0%</div>
+          <div class="dose-bar-track">
+            <div class="dose-bar-fill" style="width: 90%; background: var(--verified);">strong</div>
+          </div>
+          <div class="dose-note" style="color: var(--verified);">Strong results. High irritation risk.</div>
+        </div>
+        <div class="dose-bar-row">
+          <div class="dose-label">Tretinoin Rx</div>
+          <div class="dose-bar-track">
+            <div class="dose-bar-fill" style="width: 100%; background: var(--brand-dark);">Rx</div>
+          </div>
+          <div class="dose-note">Prescription. Gold standard.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verified Axioms -->
+  <div class="section">
+    <h2>Verified Claims (Axioms)</h2>
+    <div class="section-desc">Each claim verified through ARC Protocol: adversarial research, multi-source evidence, expert review.</div>
+
+    <div class="axiom-list">
+      <div class="axiom-card">
+        <div class="axiom-header">
+          <span class="axiom-domain">MECHANISM OF ACTION</span>
+          <span class="axiom-confidence forged"><span class="conf-dot"></span> FORGED -- 96%</span>
+        </div>
+        <div class="axiom-statement">Retinol stimulates collagen I and III synthesis in human dermal fibroblasts at concentrations above 0.04%.</div>
+        <div class="axiom-physics">Retinoic acid (the metabolized form) binds RAR/RXR nuclear receptors, activating AP-1 transcription factor pathways that upregulate procollagen gene expression. The conversion rate from retinol to retinoic acid in vivo is approximately 0.1-1%, meaning OTC retinol is roughly 10-100x weaker than prescription tretinoin at equivalent concentrations.</div>
+        <div class="axiom-footer">
+          <div class="axiom-sources">
+            <span class="axiom-source">J Invest Dermatol 2006</span>
+            <span class="axiom-source">Arch Dermatol 2007</span>
+            <span class="axiom-source">3 replication studies</span>
+          </div>
+          <span class="axiom-expand">Evidence chain &#8250;</span>
+        </div>
+      </div>
+
+      <div class="axiom-card">
+        <div class="axiom-header">
+          <span class="axiom-domain">PURGING</span>
+          <span class="axiom-confidence forged"><span class="conf-dot"></span> FORGED -- 89%</span>
+        </div>
+        <div class="axiom-statement">Initial "purging" (increased breakouts) from retinoid use reflects accelerated keratinocyte turnover, not product irritation. It resolves within 4-8 weeks.</div>
+        <div class="axiom-physics">Retinoids speed the exfoliation cycle from ~28 days to ~14-21 days. Existing microcomedones (sub-surface acne) surface faster than they would naturally. If breakouts persist beyond 8 weeks or appear in areas where you don't typically break out, it's irritation, not purging.</div>
+        <div class="axiom-footer">
+          <div class="axiom-sources">
+            <span class="axiom-source">Dermatol Therapy 2017</span>
+            <span class="axiom-source">78% derm consensus</span>
+          </div>
+          <span class="axiom-expand">Evidence chain &#8250;</span>
+        </div>
+      </div>
+
+      <div class="axiom-card">
+        <div class="axiom-header">
+          <span class="axiom-domain">STABILITY</span>
+          <span class="axiom-confidence probable"><span class="conf-dot"></span> PROBABLE -- 72%</span>
+        </div>
+        <div class="axiom-statement">Retinol degrades rapidly when exposed to light and air. Products in dropper bottles lose 50-80% potency within 3 months of opening.</div>
+        <div class="axiom-physics">Photodegradation and oxidation convert retinol to inactive metabolites. Airless pump packaging preserves potency 3-5x longer than dropper bottles. Encapsulated retinol (retinol in liposomes or granactive retinoid) shows improved stability but variable release kinetics. If your product comes in a clear glass dropper bottle, the retinol is degrading every time you open it.</div>
+        <div class="axiom-footer">
+          <div class="axiom-sources">
+            <span class="axiom-source">J Cosmet Sci 2004</span>
+            <span class="axiom-source">Int J Pharm 2016</span>
+          </div>
+          <span class="axiom-expand">Evidence chain &#8250;</span>
+        </div>
+      </div>
+
+      <div class="axiom-card">
+        <div class="axiom-header">
+          <span class="axiom-domain">MARKETING CLAIM</span>
+          <span class="axiom-confidence disputed"><span class="conf-dot"></span> DISPUTED</span>
+        </div>
+        <div class="axiom-statement">"Bakuchiol is a natural retinol alternative with equivalent efficacy."</div>
+        <div class="axiom-physics">Based on a single randomized controlled trial (Dhaliwal 2019, n=44) showing comparable results after 12 weeks. The study was well-designed but has not been independently replicated. Bakuchiol's mechanism is poorly understood -- it does not bind retinoid receptors. Calling it a "retinol alternative" is premature. Calling it "equivalent" is not supported by current evidence.</div>
+        <div class="axiom-footer">
+          <div class="axiom-sources">
+            <span class="axiom-source">Brit J Dermatol 2019</span>
+            <span class="axiom-source">Awaiting replication</span>
+          </div>
+          <span class="axiom-expand">Evidence chain &#8250;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactions Map -->
+  <div class="section">
+    <h2>Ingredient Interactions</h2>
+    <div class="section-desc">How retinol plays with other common actives in your routine.</div>
+
+    <div class="interactions-grid">
+      <div class="ix-card positive">
+        <div class="ix-icon">+</div>
+        <div class="ix-text">
+          <div class="ix-title">Niacinamide</div>
+          <div class="ix-detail">Reduces retinol irritation. Can be used in the same routine. Complementary mechanisms -- niacinamide calms inflammation while retinol accelerates turnover.</div>
+        </div>
+      </div>
+
+      <div class="ix-card positive">
+        <div class="ix-icon">+</div>
+        <div class="ix-text">
+          <div class="ix-title">Hyaluronic Acid</div>
+          <div class="ix-detail">Apply HA before retinol to buffer irritation. HA provides the hydration retinol strips. Essential pairing for dry skin types.</div>
+        </div>
+      </div>
+
+      <div class="ix-card caution">
+        <div class="ix-icon">!</div>
+        <div class="ix-text">
+          <div class="ix-title">AHA/BHA (Glycolic, Salicylic)</div>
+          <div class="ix-detail">Both exfoliate -- combined use risks over-exfoliation and barrier damage. Alternate nights or use acids in AM, retinol in PM. Never layer directly.</div>
+        </div>
+      </div>
+
+      <div class="ix-card negative">
+        <div class="ix-icon">x</div>
+        <div class="ix-text">
+          <div class="ix-title">Benzoyl Peroxide</div>
+          <div class="ix-detail">BP oxidizes retinol on contact, rendering it inactive. Never apply together. If using both, apply BP in AM and retinol in PM.</div>
+        </div>
+      </div>
+
+      <div class="ix-card caution">
+        <div class="ix-icon">!</div>
+        <div class="ix-text">
+          <div class="ix-title">Vitamin C (L-AA)</div>
+          <div class="ix-detail">Different pH requirements (C needs acidic, retinol needs neutral). Conventional wisdom says separate, but newer research suggests sequential application works. Play it safe: C in AM, retinol in PM.</div>
+        </div>
+      </div>
+
+      <div class="ix-card neutral">
+        <div class="ix-icon">i</div>
+        <div class="ix-text">
+          <div class="ix-title">Sunscreen (mandatory)</div>
+          <div class="ix-detail">Retinol increases photosensitivity. Daily SPF 30+ is non-negotiable when using any retinoid. This is not optional.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products with This Ingredient -->
+  <div class="section">
+    <h2>Products We've Analyzed</h2>
+    <div class="section-desc">45 retinol products verified. Here are notable ones across price points.</div>
+
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="pc-name">A313 Pommade</div>
+        <div class="pc-brand">Pharma Developpement</div>
+        <div class="pc-conc good">0.12% retinyl palmitate (Rx in France)</div>
+        <div class="pc-price">$14 / 50g</div>
+        <div class="pc-score">Trust: 91/100</div>
+      </div>
+      <div class="product-card">
+        <div class="pc-name">Retinol 0.5 in Squalane</div>
+        <div class="pc-brand">The Ordinary</div>
+        <div class="pc-conc good">0.5% retinol</div>
+        <div class="pc-price">$5.80 / 30ml</div>
+        <div class="pc-score">Trust: 88/100</div>
+      </div>
+      <div class="product-card">
+        <div class="pc-name">Retinol Reform</div>
+        <div class="pc-brand">Drunk Elephant</div>
+        <div class="pc-conc high">1% retinol + 0.5% HPR</div>
+        <div class="pc-price">$62 / 30ml</div>
+        <div class="pc-score">Trust: 74/100 -- claims overstated</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ CHALLENGE BAR ═══ -->
+<div class="challenge-bar">
+  <div class="challenge-text">
+    <h3>Something wrong? Challenge this.</h3>
+    <p>If you have evidence that contradicts any axiom on this page, submit a challenge. We'll run it through ARC Protocol and update the science.</p>
+  </div>
+  <button class="challenge-btn">Submit a Challenge</button>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+  <div class="footer-left">stratum. -- Every layer tells the truth.</div>
+  <div class="footer-powered">
+    Verified by <span class="pai">Product.ai</span> Truth Graph
+  </div>
+</div>
+
+</body>
+</html>

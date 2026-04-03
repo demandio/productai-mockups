@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Mobile - Onboarding (Revised)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z450: #898992; --z500: #71717A; --z600: #52525B; --z700: #3F3F46;
+  --z750: #333338; --z800: #27272A; --z850: #1F1F22; --z900: #18181B;
+  --z925: #101013; --z950: #09090B; --black: #000000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v600: #8555EF; --v800: #5A17B7;
+  --g300: #03FF88; --g500: #03E67A;
+  --a300: #CEAD50;
+  --r400: #F64B4B;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { scrollbar-width: none; font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { scrollbar-width: none; -ms-overflow-style: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: #080808; color: var(--z50);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; padding: 32px; gap: 24px;
+  flex-wrap: wrap;
+}
+body::-webkit-scrollbar { display: none; }
+
+/* -- Phone -- */
+.phone {
+  width: 390px; height: 844px; background: var(--z950);
+  border-radius: 52px; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 2px 4px rgba(0,0,0,0.4),
+    0 12px 40px rgba(0,0,0,0.6), 0 40px 100px -20px rgba(0,0,0,0.8);
+  flex-shrink: 0;
+}
+.island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 124px; height: 36px; background: var(--black); border-radius: 20px; z-index: 100; }
+.home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; border-radius: 100px; background: rgba(255,255,255,0.15); z-index: 100; }
+.status { position: absolute; top: 16px; left: 32px; right: 32px;
+  display: flex; justify-content: space-between; align-items: center; z-index: 90; }
+.status .time { font-size: 16px; font-weight: 600; color: var(--white); }
+.status .sys { display: flex; gap: 5px; }
+.status .sys svg { width: 16px; height: 16px; fill: var(--white); }
+
+.screen { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
+
+/* Screen label */
+.screen-label {
+  position: absolute; bottom: -36px; left: 0; right: 0;
+  text-align: center;
+  font-size: 12px; font-family: var(--mono);
+  color: var(--z600); letter-spacing: 0.04em;
+}
+
+/* -- BG Glow -- */
+.bg-glow {
+  position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 500px;
+  background: radial-gradient(ellipse 55% 40% at 50% 30%, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.03) 40%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ====================================
+   SCREEN 1: WELCOME + VALUE DEMO
+   ==================================== */
+
+.s1-content {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 72px 28px 0;
+  position: relative; z-index: 1;
+  text-align: center;
+}
+
+.s1-logo {
+  display: flex; align-items: baseline;
+  margin-bottom: 4px;
+}
+.s1-logo .lp { font-size: 24px; font-weight: 600; color: var(--white); letter-spacing: -0.02em; }
+.s1-logo .la { font-family: var(--mono); font-size: 24px; color: var(--v500); }
+
+.s1-makers {
+  font-size: 11px; font-family: var(--mono);
+  color: var(--z600); text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 28px;
+}
+
+.s1-headline {
+  font-size: 28px; font-weight: 500;
+  line-height: 34px; letter-spacing: -0.02em;
+  color: var(--white); margin-bottom: 8px;
+}
+
+.s1-subtitle {
+  font-size: 15px; line-height: 22px;
+  color: var(--z450); margin-bottom: 28px;
+  max-width: 280px;
+}
+
+/* Mini verdict demo card */
+.verdict-card {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: left;
+}
+
+.vc-top {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.vc-thumb {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.vc-meta { display: flex; flex-direction: column; }
+.vc-name { font-size: 13px; font-weight: 500; color: var(--z200); }
+.vc-brand { font-size: 11px; color: var(--z600); }
+
+.vc-verdict {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 6px;
+}
+.vc-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--g500);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.vc-check svg { width: 12px; height: 12px; fill: var(--black); }
+.vc-rec { font-size: 13px; font-weight: 600; color: var(--white); }
+.vc-why { font-size: 11px; color: var(--z500); margin-left: 4px; }
+
+.vc-evidence {
+  font-size: 12px; color: var(--z500); line-height: 16px;
+  margin-bottom: 12px;
+  padding-left: 28px;
+}
+
+/* Price comparison rows */
+.vc-prices {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 10px;
+}
+.vc-price-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 0 0 28px;
+}
+.vc-retailer {
+  font-size: 12px; color: var(--z400);
+  min-width: 56px;
+}
+.vc-bp-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--v500); flex-shrink: 0;
+}
+.vc-code-tag {
+  display: inline-flex; align-items: center;
+  padding: 2px 6px;
+  background: rgba(3,230,122,0.08);
+  border: 0.5px solid rgba(3,230,122,0.15);
+  border-radius: 4px;
+  font-size: 10px; font-family: var(--mono);
+  font-weight: 500; color: var(--g500);
+}
+.vc-price {
+  font-size: 12px; font-family: var(--mono);
+  margin-left: auto;
+}
+.vc-price.green { color: var(--g500); }
+.vc-price.muted { color: var(--z400); }
+.vc-here-tag {
+  display: inline-flex;
+  padding: 1px 5px;
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 3px;
+  font-size: 9px; color: var(--z600);
+  font-family: var(--mono);
+}
+
+.vc-footer {
+  display: flex; align-items: center; gap: 4px;
+  padding-left: 28px;
+}
+.vc-footer-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--v500);
+}
+.vc-footer-text {
+  font-size: 9px; color: var(--z700);
+}
+
+/* Bottom CTA */
+.s1-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 0 28px 48px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  z-index: 1;
+}
+
+.cta-primary {
+  width: 100%; height: 52px;
+  background: var(--v500); color: var(--white);
+  border: none; border-radius: 14px;
+  font-size: 16px; font-weight: 600;
+  font-family: var(--sans); cursor: pointer;
+  box-shadow: 0 0 24px -6px rgba(139,92,246,0.4);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.s1-trust {
+  font-size: 12px; color: var(--z600); text-align: center;
+}
+
+
+/* ====================================
+   SCREEN 2: SIGN IN
+   ==================================== */
+
+.s2-content {
+  flex: 1; display: flex; flex-direction: column;
+  padding: 72px 28px 0;
+  position: relative; z-index: 1;
+}
+
+.s2-back {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.s2-back svg { width: 20px; height: 20px; color: var(--z500); }
+
+.s2-header { margin-bottom: 28px; }
+.s2-header h1 {
+  font-size: 24px; font-weight: 500; color: var(--white);
+  letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.s2-header p {
+  font-size: 15px; color: var(--z500); line-height: 22px;
+}
+
+/* Social buttons - white background */
+.s2-social-btns {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 0;
+}
+.s2-social-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; height: 52px;
+  background: var(--white);
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 500; color: #1f1f1f;
+  cursor: pointer; font-family: var(--sans);
+}
+.s2-social-btn svg { width: 20px; height: 20px; }
+
+/* Divider */
+.s2-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 16px 0;
+}
+.s2-divider .div-line { flex: 1; height: 0.5px; background: rgba(255,255,255,0.05); }
+.s2-divider span { font-size: 12px; color: var(--z700); }
+
+/* Email input */
+.s2-email-field {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  font-size: 15px; color: var(--white);
+  font-family: var(--sans);
+  outline: none;
+  margin-bottom: 8px;
+}
+.s2-email-field::placeholder { color: var(--z600); }
+.s2-email-field.filled {
+  border-color: rgba(139,92,246,0.3);
+}
+
+.s2-continue-btn {
+  width: 100%; height: 52px;
+  background: var(--v500); color: var(--white);
+  border: none; border-radius: 14px;
+  font-size: 16px; font-weight: 600;
+  font-family: var(--sans); cursor: pointer;
+  box-shadow: 0 0 24px -6px rgba(139,92,246,0.4);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Bottom terms */
+.s2-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 0 28px 48px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  z-index: 1;
+}
+.s2-terms {
+  text-align: center; font-size: 11px; color: var(--z700); line-height: 15px;
+}
+
+
+/* ====================================
+   SCREEN 3: HOME - READY TO SHOP
+   ==================================== */
+
+.s3-content {
+  flex: 1; display: flex; flex-direction: column;
+  position: relative; z-index: 1;
+}
+
+/* Top bar */
+.s3-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 60px 24px 0;
+  margin-bottom: 24px;
+}
+.s3-hamburger {
+  width: 28px; height: 28px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 5px; cursor: pointer;
+}
+.s3-hamburger span {
+  display: block; width: 18px; height: 1.5px;
+  background: var(--z400); border-radius: 1px;
+}
+.s3-topbar-logo {
+  display: flex; align-items: baseline;
+}
+.s3-topbar-logo .tlp { font-size: 15px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.s3-topbar-logo .tla { font-family: var(--mono); font-size: 15px; color: var(--v500); }
+.s3-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--v800), var(--v500));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: var(--white);
+}
+
+/* Welcome */
+.s3-welcome {
+  padding: 0 28px;
+  margin-bottom: 20px;
+}
+.s3-welcome h2 {
+  font-size: 20px; font-weight: 500; color: var(--white);
+  letter-spacing: -0.02em; margin-bottom: 2px;
+}
+.s3-welcome p {
+  font-size: 14px; color: var(--z500);
+}
+
+/* Starter cards */
+.s3-starters {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 0 28px;
+  flex: 1;
+}
+.s3-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.s3-card-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.s3-card-icon.violet { background: rgba(139,92,246,0.08); color: var(--v400); }
+.s3-card-icon.green { background: rgba(3,230,122,0.08); color: var(--g500); }
+.s3-card-icon.blue { background: rgba(96,165,250,0.08); color: #60A5FA; }
+.s3-card-icon.amber { background: rgba(206,173,80,0.08); color: var(--a300); }
+.s3-card-icon svg { width: 18px; height: 18px; }
+
+.s3-card-body {
+  flex: 1; min-width: 0;
+}
+.s3-card-title {
+  font-size: 14px; font-weight: 500; color: var(--z200);
+  margin-bottom: 1px;
+}
+.s3-card-sub {
+  font-size: 12px; color: var(--z600); line-height: 16px;
+}
+.s3-card-arrow {
+  flex-shrink: 0; color: var(--z700);
+  display: flex; align-items: center; justify-content: center;
+}
+.s3-card-arrow svg { width: 16px; height: 16px; }
+
+/* Chat input dock */
+.s3-dock {
+  padding: 8px 14px 0;
+  background: rgba(9,9,11,0.92);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-top: 0.5px solid rgba(255,255,255,0.05);
+}
+.s3-input {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 12px 12px 12px 16px;
+  display: flex; align-items: center; gap: 6px;
+}
+.s3-input-text {
+  flex: 1; font-size: 15px; color: var(--z600);
+}
+.s3-input-btns { display: flex; gap: 2px; }
+.s3-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.s3-btn svg { width: 18px; height: 18px; }
+.s3-btn.cam { background: none; color: var(--z500); }
+.s3-btn.mic { background: none; color: var(--z500); }
+.s3-btn.send { background: var(--v500); color: var(--white); box-shadow: 0 0 10px -2px rgba(139,92,246,0.35); }
+.s3-dock-spacer { padding: 8px 0 30px; }
+</style>
+</head>
+<body>
+
+<!-- ====================================
+     SCREEN 1: WELCOME + VALUE DEMO
+     ==================================== -->
+<div class="phone" style="margin-bottom: 48px;">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+  <div class="bg-glow"></div>
+  <div class="status">
+    <span class="time">9:41</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+  <div class="screen">
+    <div class="s1-content">
+      <div class="s1-logo">
+        <span class="lp">Product</span><span class="la">.ai</span>
+      </div>
+      <div class="s1-makers">From the makers of SimplyCodes</div>
+      <h1 class="s1-headline">Know before you buy</h1>
+      <p class="s1-subtitle">Independent product verdicts backed by verified evidence.</p>
+
+      <!-- Mini verdict demo card -->
+      <div class="verdict-card">
+        <div class="vc-top">
+          <div class="vc-thumb">&#127911;</div>
+          <div class="vc-meta">
+            <span class="vc-name">Sony WH-1000XM5</span>
+            <span class="vc-brand">Sony</span>
+          </div>
+        </div>
+
+        <div class="vc-verdict">
+          <div class="vc-check">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          </div>
+          <span class="vc-rec">Recommended</span>
+          <span class="vc-why">Best ANC for most people</span>
+        </div>
+
+        <div class="vc-evidence">ANC superior to Bose. 30hr battery. Call quality 4/10.</div>
+
+        <div class="vc-prices">
+          <div class="vc-price-row">
+            <span class="vc-retailer">Best Buy</span>
+            <span class="vc-bp-dot"></span>
+            <span class="vc-code-tag">AUDIO20</span>
+            <span class="vc-price green">$262.40</span>
+          </div>
+          <div class="vc-price-row">
+            <span class="vc-retailer">Amazon</span>
+            <span class="vc-price muted">$328.00</span>
+            <span class="vc-here-tag">You are here</span>
+          </div>
+        </div>
+
+        <div class="vc-footer">
+          <span class="vc-footer-dot"></span>
+          <span class="vc-footer-text">Supports Product.ai's mission</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="s1-bottom">
+      <button class="cta-primary">Get started</button>
+      <div class="s1-trust">Free. Independent. Verified.</div>
+    </div>
+  </div>
+  <div class="screen-label">1. WELCOME + VALUE DEMO</div>
+</div>
+
+<!-- ====================================
+     SCREEN 2: SIGN IN
+     ==================================== -->
+<div class="phone" style="margin-bottom: 48px;">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+  <div class="bg-glow"></div>
+  <div class="status">
+    <span class="time">9:41</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+  <div class="screen">
+    <div class="s2-content">
+      <div class="s2-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+
+      <div class="s2-header">
+        <h1>Create your shopping profile</h1>
+        <p>Save verdicts, track prices, and get smarter recommendations with every conversation.</p>
+      </div>
+
+      <div class="s2-social-btns">
+        <div class="s2-social-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </div>
+        <div class="s2-social-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#1f1f1f"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          Continue with Apple
+        </div>
+      </div>
+
+      <div class="s2-divider">
+        <div class="div-line"></div>
+        <span>or</span>
+        <div class="div-line"></div>
+      </div>
+
+      <input type="email" class="s2-email-field filled" value="michael@product.ai" placeholder="Email address">
+      <button class="s2-continue-btn">Continue</button>
+    </div>
+
+    <div class="s2-bottom">
+      <div class="s2-terms">By continuing, you agree to our Terms and Privacy Policy</div>
+      <div class="s2-terms">We earn from brand partners when you buy. Your data stays yours.</div>
+    </div>
+  </div>
+  <div class="screen-label">2. SIGN IN</div>
+</div>
+
+<!-- ====================================
+     SCREEN 3: HOME - READY TO SHOP
+     ==================================== -->
+<div class="phone" style="margin-bottom: 48px;">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+  <div class="bg-glow"></div>
+  <div class="status">
+    <span class="time">9:42</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+  <div class="screen">
+    <div class="s3-content">
+      <div class="s3-topbar">
+        <div class="s3-hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="s3-topbar-logo">
+          <span class="tlp">Product</span><span class="tla">.ai</span>
+        </div>
+        <div class="s3-avatar">M</div>
+      </div>
+
+      <div class="s3-welcome">
+        <h2>Welcome, Michael</h2>
+        <p>What are you shopping for?</p>
+      </div>
+
+      <div class="s3-starters">
+        <!-- Card 1: Scan -->
+        <div class="s3-card">
+          <div class="s3-card-icon violet">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M208 56H180.3L166.6 36A8 8 0 0 0 160 32H96a8 8 0 0 0-6.6 3.5L75.7 56H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V72a16 16 0 0 0-16-16z"/><circle cx="128" cy="128" r="40"/></svg>
+          </div>
+          <div class="s3-card-body">
+            <div class="s3-card-title">Scan a product</div>
+            <div class="s3-card-sub">Point your camera at any product or barcode</div>
+          </div>
+          <div class="s3-card-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <!-- Card 2: Live verdict -->
+        <div class="s3-card">
+          <div class="s3-card-icon green">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M32 128a96 96 0 0 1 192 0"/><path d="M128 128L80 80"/><circle cx="128" cy="128" r="12" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="s3-card-body">
+            <div class="s3-card-title">Is the Sony XM5 worth it?</div>
+            <div class="s3-card-sub">See a live product verdict</div>
+          </div>
+          <div class="s3-card-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <!-- Card 3: Budget search -->
+        <div class="s3-card">
+          <div class="s3-card-icon blue">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M213.7 213.7a16 16 0 0 1-22.6 0l-43.8-43.8a84 84 0 1 1 22.6-22.6l43.8 43.8a16 16 0 0 1 0 22.6z"/><line x1="116" y1="88" x2="116" y2="152"/><line x1="84" y1="120" x2="148" y2="120"/></svg>
+          </div>
+          <div class="s3-card-body">
+            <div class="s3-card-title">Find the best retinol under $40</div>
+            <div class="s3-card-sub">Budget-constrained search</div>
+          </div>
+          <div class="s3-card-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <!-- Card 4: Compare -->
+        <div class="s3-card">
+          <div class="s3-card-icon amber">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="32" y="48" width="80" height="160" rx="8"/><rect x="144" y="48" width="80" height="160" rx="8"/><line x1="72" y1="88" x2="72" y2="88.1" stroke-width="12" stroke-linecap="round"/><line x1="184" y1="88" x2="184" y2="88.1" stroke-width="12" stroke-linecap="round"/></svg>
+          </div>
+          <div class="s3-card-body">
+            <div class="s3-card-title">Compare AirPods Pro vs Sony XM5</div>
+            <div class="s3-card-sub">Side-by-side with evidence</div>
+          </div>
+          <div class="s3-card-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat input dock -->
+      <div class="s3-dock">
+        <div class="s3-input">
+          <button class="s3-btn cam">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M208 56H180.3L166.6 36A8 8 0 0 0 160 32H96a8 8 0 0 0-6.6 3.5L75.7 56H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V72a16 16 0 0 0-16-16z"/><circle cx="128" cy="128" r="40"/></svg>
+          </button>
+          <span class="s3-input-text">Ask about any product...</span>
+          <div class="s3-input-btns">
+            <button class="s3-btn mic">
+              <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="88" y="24" width="80" height="144" rx="40"/><line x1="128" y1="200" x2="128" y2="232"/><path d="M199.6 136a72 72 0 0 1-143.2 0"/></svg>
+            </button>
+            <button class="s3-btn send">
+              <svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="s3-dock-spacer"></div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-label">3. HOME - READY TO SHOP</div>
+</div>
+
+</body>
+</html>

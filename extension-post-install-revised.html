@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Extension - Post-Install Splash (Revised)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1;
+  background: #0a0a0a; color: var(--z50);
+  min-height: 100vh; padding: 40px 24px 80px;
+}
+
+.page-header { max-width: 1200px; margin: 0 auto 48px; }
+.page-header h1 { font-size: 24px; font-weight: 600; color: var(--z50); margin-bottom: 8px; }
+.page-header p { font-size: 14px; color: var(--z400); line-height: 1.5; max-width: 700px; }
+
+/* Browser frame */
+.browser {
+  width: 1100px; height: 680px; background: #1a1a1a;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; flex-shrink: 0;
+  margin: 0 auto;
+}
+
+.browser-chrome {
+  height: 38px; background: #252525;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; padding: 0 12px; gap: 8px; flex-shrink: 0;
+}
+.tl-group { display: flex; gap: 6px; }
+.tl { width: 11px; height: 11px; border-radius: 50%; }
+.tl.r { background: #ff5f57; } .tl.y { background: #febc2e; } .tl.g { background: #28c840; }
+
+.tab {
+  padding: 5px 14px; background: #2a2a2a; border-radius: 7px 7px 0 0;
+  font-size: 11px; color: var(--z200); display: flex; align-items: center; gap: 5px;
+  margin-left: 8px;
+}
+.tab .tab-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--v500); flex-shrink: 0; }
+
+.chrome-right { display: flex; gap: 4px; margin-left: auto; align-items: center; }
+.chrome-btn {
+  width: 26px; height: 26px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center; color: var(--z500);
+}
+.chrome-btn svg { width: 14px; height: 14px; }
+
+.ext-icon {
+  width: 26px; height: 26px; border-radius: 5px; background: var(--v500);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.ext-icon svg { width: 12px; height: 12px; color: var(--white); }
+.ext-badge {
+  position: absolute; top: -2px; right: -2px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #34d399; border: 2px solid #252525;
+}
+
+.url-bar {
+  height: 34px; background: #2a2a2a;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex; align-items: center; padding: 0 12px; gap: 6px; flex-shrink: 0;
+}
+.url-field {
+  flex: 1; height: 24px; background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+  padding: 0 10px; display: flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--z400);
+}
+.url-field .lock { color: var(--z600); }
+.url-field .lock svg { width: 11px; height: 11px; }
+.url-field .domain { color: var(--z300); font-weight: 500; }
+
+/* Page content */
+.page-content {
+  flex: 1; background: var(--z950); overflow-y: auto;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Splash content */
+.splash {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 48px 36px;
+  max-width: 520px; width: 100%;
+}
+
+/* 1. Compact confirmation line */
+.confirm-line {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 16px;
+}
+.confirm-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--v500); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.confirm-icon svg { width: 14px; height: 14px; color: var(--white); }
+.confirm-text {
+  font-size: 14px; color: var(--z400); font-weight: 400;
+}
+
+/* 2. Parent brand signal */
+.parent-brand {
+  display: flex; flex-direction: column; align-items: center;
+  margin-bottom: 28px;
+}
+.parent-brand .maker {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--z600); margin-bottom: 4px;
+}
+.parent-brand .proof {
+  font-size: 12px; color: var(--z700); line-height: 1.4;
+}
+
+/* 3. Verdict demonstration card */
+.verdict-demo {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.vd-product {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px 0;
+}
+.vd-thumb {
+  width: 40px; height: 40px; border-radius: 8px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.vd-prod-info { flex: 1; }
+.vd-prod-name { font-size: 14px; font-weight: 500; color: var(--z200); line-height: 1.3; }
+.vd-prod-brand { font-size: 11px; color: var(--z600); }
+
+.vd-verdict {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  margin: 12px 16px 0;
+  background: rgba(52,211,153,0.04);
+  border: 0.5px solid rgba(52,211,153,0.08);
+  border-radius: 8px;
+}
+.vd-verdict-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(52,211,153,0.12); color: #34d399;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.vd-verdict-icon svg { width: 12px; height: 12px; }
+.vd-verdict-text { flex: 1; }
+.vd-verdict-label { font-size: 13px; font-weight: 600; color: #34d399; }
+.vd-verdict-sub { font-size: 11px; color: var(--z500); }
+
+.vd-evidence {
+  padding: 10px 16px;
+  font-size: 12px; color: var(--z400); line-height: 1.5;
+}
+
+.vd-prices {
+  padding: 0 16px 14px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.vd-price-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.vd-price-row.best { background: rgba(52,211,153,0.04); }
+.vd-price-row .retailer {
+  color: var(--z500); display: flex; align-items: center; gap: 6px;
+}
+.vd-price-row.best .retailer { color: #34d399; font-weight: 500; }
+.vd-price-row .partner-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--v500); opacity: 0.6;
+}
+.vd-price-row .price-group {
+  display: flex; align-items: center; gap: 6px;
+}
+.vd-code-tag {
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  color: #34d399; background: rgba(52,211,153,0.08);
+  padding: 1px 5px; border-radius: 3px;
+}
+.vd-price {
+  font-family: var(--mono); font-weight: 600;
+}
+.vd-price-row.best .vd-price { color: #34d399; }
+.vd-price-row.current { background: rgba(255,255,255,0.03); }
+.vd-price-row.current .retailer { color: var(--z300); }
+.vd-price-row.current .vd-price { color: var(--z400); }
+.vd-here-tag {
+  font-family: var(--mono); font-size: 9px;
+  color: var(--z700);
+}
+
+.vd-footer {
+  padding: 8px 16px 12px;
+  border-top: 0.5px solid rgba(255,255,255,0.03);
+  display: flex; align-items: center; gap: 4px;
+  font-size: 9px; color: var(--z700);
+}
+.vd-footer-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--v500); opacity: 0.4; flex-shrink: 0;
+}
+
+/* 4. Primary CTA */
+.cta-primary {
+  width: 100%; height: 48px;
+  background: var(--v500); color: var(--white);
+  border: none; border-radius: 14px;
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: background 150ms;
+  margin-bottom: 8px;
+}
+.cta-primary:hover { background: var(--v400); }
+
+/* 5. Secondary CTA */
+.cta-secondary {
+  width: 100%; height: 44px;
+  background: rgba(255,255,255,0.06); color: var(--z300);
+  border: 0.5px solid rgba(255,255,255,0.08); border-radius: 14px;
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 150ms;
+  margin-bottom: 24px;
+}
+.cta-secondary:hover { background: rgba(255,255,255,0.1); }
+
+/* 6. Trust footer */
+.trust-footer {
+  font-size: 11px; color: var(--z700); text-align: center;
+  line-height: 1.5; max-width: 420px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Post-Install Splash Page (Revised)</h1>
+  <p>Activates behavior, not celebrates installation. One hero demonstration, one primary CTA, parent brand signal. Replaces the five-element design.</p>
+</div>
+
+<div class="browser">
+  <div class="browser-chrome">
+    <div class="tl-group"><div class="tl r"></div><div class="tl y"></div><div class="tl g"></div></div>
+    <div class="tab">
+      <div class="tab-dot"></div>
+      <span>Welcome to Product.ai</span>
+    </div>
+    <div class="chrome-right">
+      <div class="ext-icon">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+        <div class="ext-badge"></div>
+      </div>
+      <div class="chrome-btn"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><circle cx="128" cy="128" r="4" fill="currentColor"/><circle cx="128" cy="64" r="4" fill="currentColor"/><circle cx="128" cy="192" r="4" fill="currentColor"/></svg></div>
+    </div>
+  </div>
+
+  <div class="url-bar">
+    <div class="url-field">
+      <span class="lock"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M208 80H176V56a48 48 0 0 0-96 0V80H48A16 16 0 0 0 32 96V208a16 16 0 0 0 16 16H208a16 16 0 0 0 16-16V96A16 16 0 0 0 208 80ZM96 56a32 32 0 0 1 64 0V80H96Z"/></svg></span>
+      <span class="domain">product.ai</span>/welcome
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="splash">
+
+      <!-- 1. Compact confirmation line -->
+      <div class="confirm-line">
+        <div class="confirm-icon">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+        </div>
+        <span class="confirm-text">Product.ai is installed</span>
+      </div>
+
+      <!-- 2. Parent brand signal -->
+      <div class="parent-brand">
+        <div class="maker">From the makers of SimplyCodes</div>
+        <div class="proof">15 years. 400,000+ stores. Verified intelligence.</div>
+      </div>
+
+      <!-- 3. Hero verdict demonstration card -->
+      <div class="verdict-demo">
+        <div class="vd-product">
+          <div class="vd-thumb">&#x1F3A7;</div>
+          <div class="vd-prod-info">
+            <div class="vd-prod-name">Sony WH-1000XM5</div>
+            <div class="vd-prod-brand">Sony</div>
+          </div>
+        </div>
+
+        <div class="vd-verdict">
+          <div class="vd-verdict-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg>
+          </div>
+          <div class="vd-verdict-text">
+            <div class="vd-verdict-label">Recommended</div>
+            <div class="vd-verdict-sub">Best ANC for most people</div>
+          </div>
+        </div>
+
+        <div class="vd-evidence">
+          Industry-leading noise cancellation. 30hr battery. Call quality mediocre (4/10 in wind).
+        </div>
+
+        <div class="vd-prices">
+          <div class="vd-price-row best">
+            <span class="retailer">Best Buy <span class="partner-dot"></span></span>
+            <span class="price-group">
+              <span class="vd-code-tag">AUDIO20</span>
+              <span class="vd-price">$262.40</span>
+            </span>
+          </div>
+          <div class="vd-price-row current">
+            <span class="retailer">Amazon</span>
+            <span class="price-group">
+              <span class="vd-here-tag">You are here</span>
+              <span class="vd-price">$328.00</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="vd-footer">
+          <span class="vd-footer-dot"></span>
+          <span>Supports Product.ai's mission</span>
+        </div>
+      </div>
+
+      <!-- 4. Primary CTA -->
+      <button class="cta-primary">Try it on a product page</button>
+
+      <!-- 5. Secondary CTA -->
+      <button class="cta-secondary">Sign in to save your results</button>
+
+      <!-- 6. Trust footer -->
+      <div class="trust-footer">
+        Free. Independent. We earn from brand partners when you buy - never from your data.
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai - How We Stay Free</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z500: #71717A; --z600: #52525B; --z700: #3F3F46; --z800: #27272A;
+  --z900: #18181B; --z925: #101013; --z950: #09090B; --black: #000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body {
+  font-family: var(--sans); font-feature-settings: "ss02" 1;
+  background: var(--z950); color: var(--z50); line-height: 1.6;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(9,9,11,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  padding: 0 48px;
+}
+.nav-inner {
+  max-width: 800px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-logo { display: flex; align-items: baseline; text-decoration: none; }
+.nav-logo .lp { font-size: 17px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.nav-logo .la { font-family: var(--mono); font-size: 17px; color: var(--v500); }
+.nav-links { display: flex; gap: 24px; }
+.nav-links a {
+  font-size: 13px; color: var(--z500); text-decoration: none;
+  transition: color 150ms;
+}
+.nav-links a:hover { color: var(--z300); }
+
+/* ── Hero ── */
+.hero {
+  max-width: 800px; margin: 0 auto;
+  padding: 80px 48px 48px;
+}
+.hero-label {
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--v400); margin-bottom: 12px;
+}
+.hero h1 {
+  font-size: 40px; font-weight: 600; color: var(--white);
+  letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 16px;
+}
+.hero-sub {
+  font-size: 18px; color: var(--z400); line-height: 1.6;
+  max-width: 600px;
+}
+
+/* ── Content sections ── */
+.content {
+  max-width: 800px; margin: 0 auto; padding: 0 48px;
+}
+
+.section {
+  padding: 48px 0;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+}
+.section:first-child { border-top: none; }
+
+.section h2 {
+  font-size: 24px; font-weight: 600; color: var(--white);
+  letter-spacing: -0.02em; margin-bottom: 16px;
+}
+
+.section p {
+  font-size: 16px; color: var(--z400); line-height: 1.7; margin-bottom: 16px;
+}
+.section p:last-child { margin-bottom: 0; }
+
+.section strong { color: var(--z200); font-weight: 500; }
+
+/* ── The Model (visual) ── */
+.model-diagram {
+  display: flex; gap: 0; align-items: stretch;
+  margin: 32px 0;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 16px; overflow: hidden;
+}
+.model-step {
+  flex: 1; padding: 24px 20px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; position: relative;
+}
+.model-step:not(:last-child)::after {
+  content: '';
+  position: absolute; right: 0; top: 20%; bottom: 20%;
+  width: 0.5px; background: rgba(255,255,255,0.06);
+}
+.model-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.model-icon svg { width: 20px; height: 20px; }
+.model-icon.truth { background: rgba(52,211,153,0.08); color: #34d399; }
+.model-icon.decision { background: rgba(139,92,246,0.08); color: var(--v400); }
+.model-icon.purchase { background: rgba(96,165,250,0.08); color: #60a5fa; }
+.model-icon.revenue { background: rgba(251,191,36,0.08); color: #fbbf24; }
+
+.model-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.model-label.truth { color: #34d399; }
+.model-label.decision { color: var(--v400); }
+.model-label.purchase { color: #60a5fa; }
+.model-label.revenue { color: #fbbf24; }
+
+.model-desc {
+  font-size: 12px; color: var(--z500); line-height: 1.4;
+}
+.model-arrow {
+  position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+  z-index: 2; color: var(--z700); font-size: 14px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--z950); display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Commitments list ── */
+.commitments {
+  display: flex; flex-direction: column; gap: 12px;
+  margin: 24px 0;
+}
+.commitment {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px 18px; border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.05);
+}
+.commitment-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  margin-top: 1px;
+}
+.commitment-icon svg { width: 14px; height: 14px; }
+.commitment-icon.yes { background: rgba(52,211,153,0.08); color: #34d399; }
+.commitment-icon.no { background: rgba(248,113,113,0.08); color: #f87171; }
+
+.commitment-text { flex: 1; }
+.commitment-text h4 { font-size: 14px; font-weight: 500; color: var(--z200); margin-bottom: 2px; }
+.commitment-text p { font-size: 13px; color: var(--z500); line-height: 1.5; margin-bottom: 0; }
+
+/* ── Partner dot explainer ── */
+.dot-explainer {
+  display: flex; align-items: center; gap: 16px;
+  margin: 24px 0;
+  padding: 20px 24px; border-radius: 14px;
+  background: rgba(139,92,246,0.03);
+  border: 0.5px solid rgba(139,92,246,0.08);
+}
+.dot-demo {
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
+}
+.dot-merchant {
+  font-size: 14px; font-weight: 500; color: var(--z300);
+}
+.dot-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--v500); opacity: 0.7;
+}
+.dot-price {
+  font-family: var(--mono); font-size: 14px; font-weight: 600; color: #34d399;
+}
+.dot-explain {
+  flex: 1; font-size: 14px; color: var(--z400); line-height: 1.5;
+}
+
+/* ── Track record ── */
+.track-record {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin: 24px 0;
+}
+.track-stat {
+  padding: 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.05);
+  text-align: center;
+}
+.track-num {
+  font-family: var(--mono); font-size: 32px; font-weight: 600;
+  color: var(--v400); margin-bottom: 4px;
+}
+.track-label {
+  font-size: 13px; color: var(--z500); line-height: 1.4;
+}
+
+/* ── Trust ledger section ── */
+.ledger-card {
+  margin: 24px 0;
+  padding: 28px; border-radius: 16px;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.06);
+}
+.ledger-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.ledger-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(139,92,246,0.08); border: 0.5px solid rgba(139,92,246,0.12);
+  display: flex; align-items: center; justify-content: center;
+}
+.ledger-icon svg { width: 18px; height: 18px; color: var(--v400); }
+.ledger-title { font-size: 18px; font-weight: 600; color: var(--z200); }
+.ledger-badge {
+  font-family: var(--mono); font-size: 9px; font-weight: 600;
+  color: var(--v400); background: rgba(139,92,246,0.08);
+  padding: 3px 8px; border-radius: 4px; letter-spacing: 0.04em;
+}
+
+.ledger-desc {
+  font-size: 15px; color: var(--z400); line-height: 1.6; margin-bottom: 20px;
+}
+
+.ledger-features {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.ledger-feature {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: var(--z400); line-height: 1.5;
+}
+.ledger-feature svg { width: 16px; height: 16px; color: var(--v400); flex-shrink: 0; margin-top: 3px; }
+
+/* ── Audit invitation ── */
+.audit-card {
+  margin: 24px 0;
+  padding: 28px; border-radius: 16px;
+  background: rgba(52,211,153,0.02);
+  border: 0.5px solid rgba(52,211,153,0.08);
+}
+.audit-title {
+  font-size: 20px; font-weight: 600; color: var(--z200);
+  margin-bottom: 8px;
+}
+.audit-desc {
+  font-size: 15px; color: var(--z400); line-height: 1.6; margin-bottom: 20px;
+}
+.audit-methods {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.audit-method {
+  padding: 16px; border-radius: 10px;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.04);
+}
+.audit-method h4 {
+  font-size: 13px; font-weight: 600; color: var(--z200);
+  margin-bottom: 4px;
+}
+.audit-method p {
+  font-size: 12px; color: var(--z500); line-height: 1.5; margin-bottom: 0;
+}
+
+/* ── FAQ ── */
+.faq { margin: 24px 0; }
+.faq-item {
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+  padding: 20px 0;
+}
+.faq-item:first-child { border-top: none; }
+.faq-q {
+  font-size: 15px; font-weight: 500; color: var(--z200);
+  margin-bottom: 8px;
+}
+.faq-a {
+  font-size: 14px; color: var(--z500); line-height: 1.6;
+}
+
+/* ── Footer ── */
+.footer {
+  max-width: 800px; margin: 0 auto;
+  padding: 48px;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer .f-logo { display: flex; align-items: baseline; }
+.footer .f-lp { font-size: 16px; font-weight: 600; color: var(--z600); }
+.footer .f-la { font-family: var(--mono); font-size: 16px; color: var(--z700); }
+.footer .f-meta { font-size: 12px; font-family: var(--mono); color: var(--z800); }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><span class="lp">Product</span><span class="la">.ai</span></a>
+    <div class="nav-links">
+      <a href="#">Products</a>
+      <a href="#">Extension</a>
+      <a href="#">Mobile App</a>
+      <a href="#" style="color: var(--v400);">How We Stay Free</a>
+    </div>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-label">Transparency</div>
+  <h1>How Product.ai makes money without compromising what it tells you</h1>
+  <div class="hero-sub">Product.ai is free for everyone. When you buy through a partner link, a share of the sale supports our mission. Our recommendations never change based on who pays us. Here's how that works - and how you can verify it.</div>
+</div>
+
+<div class="content">
+
+  <!-- Section 1: The Model -->
+  <div class="section">
+    <h2>The model</h2>
+    <p>Product.ai earns revenue through affiliate partnerships with retailers. When you purchase a product through one of our links, the retailer pays us a commission. You pay nothing extra - the price is identical whether you buy through us or go directly.</p>
+    <p>This is the same model we've operated at SimplyCodes for 15 years across 400,000+ stores. It's not new. It's not experimental. It works because our incentives are aligned with yours: if we give you bad advice, you don't come back.</p>
+
+    <div class="model-diagram">
+      <div class="model-step">
+        <div class="model-icon truth"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+        <div class="model-label truth">Truth</div>
+        <div class="model-desc">We analyze the product independently</div>
+        <div class="model-arrow">&rsaquo;</div>
+      </div>
+      <div class="model-step">
+        <div class="model-icon decision"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+        <div class="model-label decision">Verdict</div>
+        <div class="model-desc">You decide whether to buy, based on evidence</div>
+        <div class="model-arrow">&rsaquo;</div>
+      </div>
+      <div class="model-step">
+        <div class="model-icon purchase"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M222.1 69.7l-12.4 92.4A15.9 15.9 0 0 1 193.9 176H70.1a15.9 15.9 0 0 1-15.8-13.9L37.9 64H24a8 8 0 0 1 0-16h13.9a16 16 0 0 1 15.8 13.9L57.1 80H216a8 8 0 0 1 6.1 13.7zM88 200a16 16 0 1 0 16 16 16 16 0 0 0-16-16zm96 0a16 16 0 1 0 16 16 16 16 0 0 0-16-16z"/></svg></div>
+        <div class="model-label purchase">Purchase</div>
+        <div class="model-desc">If you buy through a partner link, the retailer pays us</div>
+        <div class="model-arrow">&rsaquo;</div>
+      </div>
+      <div class="model-step">
+        <div class="model-icon revenue"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M152 120h-16V56a8 8 0 0 0-16 0v64H104a8 8 0 0 0 0 16h16v64a8 8 0 0 0 16 0v-64h16a8 8 0 0 0 0-16z"/><circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-width="16"/></svg></div>
+        <div class="model-label revenue">Mission</div>
+        <div class="model-desc">Revenue keeps Product.ai free for everyone</div>
+      </div>
+    </div>
+
+    <p>The arrow only goes one direction. Revenue follows truth - truth never follows revenue. We call this the <strong>Fiduciary Diode</strong>: the information we give you produces commerce, and commerce produces revenue. The revenue never flows backward to influence the information.</p>
+  </div>
+
+  <!-- Section 2: What the dot means -->
+  <div class="section">
+    <h2>What the dot means</h2>
+    <p>When you see a small violet dot next to a retailer name in Product.ai, it means that retailer is one of our partners. If you purchase through that link, Product.ai earns a commission.</p>
+
+    <div class="dot-explainer">
+      <div class="dot-demo">
+        <span class="dot-merchant">Best Buy</span>
+        <span class="dot-dot"></span>
+        <span class="dot-price">$262.40</span>
+      </div>
+      <div class="dot-explain">
+        This retailer is a Product.ai partner. Purchasing here supports our mission. The price is the same whether you buy through us or go directly.
+      </div>
+    </div>
+
+    <p>Retailers without a dot are not partners. We recommend them anyway when they have the best price or the best product. We cover over 400,000 stores - the majority are not partners. Our coverage is identical regardless of partnership status.</p>
+  </div>
+
+  <!-- Section 3: What we commit to -->
+  <div class="section">
+    <h2>What we will always do</h2>
+
+    <div class="commitments">
+      <div class="commitment">
+        <div class="commitment-icon yes"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+        <div class="commitment-text">
+          <h4>Recommend the best product, regardless of partnership</h4>
+          <p>If the best product is sold by a retailer we don't partner with, we recommend it anyway and earn nothing.</p>
+        </div>
+      </div>
+      <div class="commitment">
+        <div class="commitment-icon yes"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+        <div class="commitment-text">
+          <h4>Show the best price, regardless of who profits</h4>
+          <p>If a non-partner retailer has the lowest price, it appears first. We never reorder results to favor partners.</p>
+        </div>
+      </div>
+      <div class="commitment">
+        <div class="commitment-icon yes"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+        <div class="commitment-text">
+          <h4>Tell you not to buy something when that's the honest answer</h4>
+          <p>Our Kill Shot verdicts exist specifically for this. No affiliate-funded site would tell you not to buy a $2,499 product. We do.</p>
+        </div>
+      </div>
+      <div class="commitment">
+        <div class="commitment-icon yes"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg></div>
+        <div class="commitment-text">
+          <h4>Keep 100% of capabilities free, permanently</h4>
+          <p>No subscription. No premium tier. No "upgrade for the full verdict." Every feature, every user, free.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="margin-top: 32px;">What we will never do</h2>
+
+    <div class="commitments">
+      <div class="commitment">
+        <div class="commitment-icon no"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm40 112H88a8 8 0 0 1 0-16h80a8 8 0 0 1 0 16z"/></svg></div>
+        <div class="commitment-text">
+          <h4>Let commission rates influence recommendations</h4>
+          <p>Some retailers pay higher commissions than others. This data never enters our recommendation system.</p>
+        </div>
+      </div>
+      <div class="commitment">
+        <div class="commitment-icon no"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm40 112H88a8 8 0 0 1 0-16h80a8 8 0 0 1 0 16z"/></svg></div>
+        <div class="commitment-text">
+          <h4>Accept payment from brands for favorable coverage</h4>
+          <p>No sponsored verdicts. No paid placements. No "featured" products. Our recommendations are editorial, not commercial.</p>
+        </div>
+      </div>
+      <div class="commitment">
+        <div class="commitment-icon no"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm40 112H88a8 8 0 0 1 0-16h80a8 8 0 0 1 0 16z"/></svg></div>
+        <div class="commitment-text">
+          <h4>Sell your data or preferences</h4>
+          <p>Your shopping preferences, product research, and purchase history are yours. We use them to improve your experience. We never sell them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Track record -->
+  <div class="section">
+    <h2>Our track record</h2>
+    <p>This isn't a new promise. We've operated this way since 2009 at SimplyCodes, our coupon verification platform. The same team. The same philosophy. The same structural independence.</p>
+
+    <div class="track-record">
+      <div class="track-stat">
+        <div class="track-num">15</div>
+        <div class="track-label">Years of editorial independence under the affiliate model</div>
+      </div>
+      <div class="track-stat">
+        <div class="track-num">400K+</div>
+        <div class="track-label">Stores covered - partners and non-partners treated identically</div>
+      </div>
+      <div class="track-stat">
+        <div class="track-num">$0</div>
+        <div class="track-label">Outside investment. Bootstrapped. No one to answer to but you.</div>
+      </div>
+    </div>
+
+    <p>We've never optimized our search results for yield. We've never deprioritized a non-partner merchant. We've never softened a negative review because a brand partners with us. Not once in 15 years. Not because we're virtuous - because the math doesn't work. Short-term yield optimization destroys long-term trust, and trust is our only product.</p>
+  </div>
+
+  <!-- Section 5: Verifiable Trust Ledger -->
+  <div class="section">
+    <h2>Don't take our word for it</h2>
+    <p>Promises are easy. We built something harder: a system that makes our independence mathematically verifiable.</p>
+
+    <div class="ledger-card">
+      <div class="ledger-header">
+        <div class="ledger-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M208 80H176V56a48 48 0 0 0-96 0V80H48A16 16 0 0 0 32 96V208a16 16 0 0 0 16 16H208a16 16 0 0 0 16-16V96A16 16 0 0 0 208 80ZM96 56a32 32 0 0 1 64 0V80H96Z"/></svg></div>
+        <div>
+          <div class="ledger-title">Verifiable Trust Ledger</div>
+        </div>
+        <div class="ledger-badge">Coming 2026</div>
+      </div>
+
+      <div class="ledger-desc">An immutable, cryptographically secured record of every recommendation we make and every partner relationship we hold. Built on zero-knowledge proof technology so anyone can verify our claims without us revealing competitive intelligence.</div>
+
+      <div class="ledger-features">
+        <div class="ledger-feature">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg>
+          <span><strong>Tamper-proof.</strong> Records are written to an immutable ledger. We can't edit them after the fact, even if we wanted to.</span>
+        </div>
+        <div class="ledger-feature">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg>
+          <span><strong>Publicly auditable.</strong> Anyone - journalists, researchers, competitors - can verify that our recommendations don't correlate with partner status.</span>
+        </div>
+        <div class="ledger-feature">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg>
+          <span><strong>Zero-knowledge.</strong> Auditors can verify our independence without seeing our full partner list or commission rates. Privacy-preserving verification.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6: Audit invitation -->
+  <div class="section">
+    <h2>Audit us</h2>
+    <p>We don't just tolerate scrutiny. We invite it. If you're a journalist, researcher, YouTuber, or just a curious person who wants to check whether our recommendations are genuinely independent, here's how:</p>
+
+    <div class="audit-card">
+      <div class="audit-title">Standing invitation to independent auditors</div>
+      <div class="audit-desc">We will provide data, access, and cooperation to any credible independent party who wants to verify our editorial independence. No NDAs. No conditions. If we're wrong, we want to know.</div>
+
+      <div class="audit-methods">
+        <div class="audit-method">
+          <h4>Quarterly reports</h4>
+          <p>Published statistics showing the distribution of recommendations across partner and non-partner products.</p>
+        </div>
+        <div class="audit-method">
+          <h4>Trust Ledger access</h4>
+          <p>Public, cryptographic verification of recommendation history against partnership data.</p>
+        </div>
+        <div class="audit-method">
+          <h4>Data-driven studies</h4>
+          <p>We welcome independent researchers running correlation analysis on our recommendation patterns.</p>
+        </div>
+        <div class="audit-method">
+          <h4>Direct contact</h4>
+          <p>Reach us at transparency@product.ai for audit requests, media inquiries, or questions about our model.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 7: FAQ -->
+  <div class="section">
+    <h2>Questions we hear</h2>
+
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q">If most retailers are partners, doesn't that mean most links earn you money anyway?</div>
+        <div class="faq-a">Many large retailers have affiliate programs, yes. But many don't - especially direct-to-consumer brands, niche retailers, and international sellers. We cover all of them equally. The test isn't whether we earn money on most purchases. The test is whether we'd recommend a non-partner product over a partner product when the non-partner product is better. We do. Every time.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How is this different from Wirecutter or other review sites that earn affiliate revenue?</div>
+        <div class="faq-a">Two differences. First, our recommendations are generated by an AI system trained on verified evidence, not written by editors who might unconsciously favor reviewable products. Second, our Verifiable Trust Ledger makes our independence cryptographically provable, not just promised. Wirecutter says their editorial and commerce teams don't talk. We make it mathematically verifiable that our recommendations don't correlate with partnerships.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why not charge a subscription instead? Wouldn't that be cleaner?</div>
+        <div class="faq-a">We considered it seriously. Subscriptions create a different problem: the best product advice becomes available only to people who can afford it. We think honest product intelligence should be free for everyone. The affiliate model lets us do that while keeping our incentives aligned - we earn when you make a purchase you're happy with, not when you pay a monthly fee regardless.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if your business grows and the pressure to optimize revenue increases?</div>
+        <div class="faq-a">This is the right question. Our answer has three parts. First, we've resisted this pressure for 15 years as a bootstrapped company with zero outside investors - there's no board pushing for quarterly growth. Second, the Verifiable Trust Ledger creates a permanent, public record that would expose any drift. Third, we publish quarterly transparency reports so the trend is visible over time. If we ever compromise, the evidence will be public.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="f-logo"><span class="f-lp">Product</span><span class="f-la">.ai</span></div>
+  <span class="f-meta">Last updated March 2026</span>
+</div>
+
+</body>
+</html>

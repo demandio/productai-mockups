@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Mobile - Chat: Mattress Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z200: #E4E4E7;
+  --z300: #D4D4D8; --z400: #A1A1AA; --z450: #898992; --z500: #71717A;
+  --z600: #52525B; --z700: #3F3F46; --z750: #333338; --z800: #27272A;
+  --z850: #1F1F22; --z900: #18181B; --z925: #101013; --z950: #09090B;
+  --black: #000000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v800: #5A17B7;
+  --g300: #03FF88; --g500: #03E67A; --g600: #02C869;
+  --a300: #CEAD50;
+  --r400: #F64B4B; --r500: #D01F2B;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { scrollbar-width: none; -ms-overflow-style: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: #080808; color: var(--z50);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; padding: 32px;
+}
+body::-webkit-scrollbar { display: none; }
+.phone {
+  width: 390px; height: 844px; background: var(--z950);
+  border-radius: 52px; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 2px 4px rgba(0,0,0,0.4),
+    0 12px 40px rgba(0,0,0,0.6), 0 40px 100px -20px rgba(0,0,0,0.8);
+  flex-shrink: 0;
+}
+.island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 124px; height: 36px; background: var(--black); border-radius: 20px; z-index: 100; }
+.home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; border-radius: 100px; background: rgba(255,255,255,0.15); z-index: 100; }
+.status { position: absolute; top: 16px; left: 32px; right: 32px;
+  display: flex; justify-content: space-between; align-items: center; z-index: 90; }
+.status .time { font-size: 16px; font-weight: 600; color: var(--white); }
+.status .sys { display: flex; gap: 5px; }
+.status .sys svg { width: 16px; height: 16px; fill: var(--white); }
+.app { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
+
+/* Header */
+.chat-hdr {
+  padding: 58px 14px 0; height: 100px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-shrink: 0;
+  background: rgba(9,9,11,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  z-index: 50; padding-bottom: 10px;
+}
+.ch-l { display: flex; align-items: center; gap: 10px; }
+.ch-back {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ch-back svg { width: 18px; height: 18px; }
+.ch-t .ct-n { font-size: 16px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.ch-t .ct-d {
+  font-size: 10px; font-family: var(--mono); color: var(--v400);
+  letter-spacing: 0.04em; display: flex; align-items: center; gap: 4px;
+}
+.ct-d .dd { width: 4px; height: 4px; border-radius: 50%; background: var(--v500); }
+.ch-r { display: flex; gap: 4px; }
+.ch-btn {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ch-btn svg { width: 18px; height: 18px; }
+
+/* Thread */
+.thread { flex: 1; overflow-y: auto; padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 16px; }
+.thread::-webkit-scrollbar { display: none; }
+
+/* Messages */
+.msg { display: flex; flex-direction: column; max-width: 100%; }
+.msg.user { align-items: flex-end; }
+.msg.ai { align-items: flex-start; }
+
+.u-bub {
+  background: var(--v500); color: var(--white);
+  border-radius: 20px 20px 4px 20px; padding: 12px 16px;
+  font-size: 15px; line-height: 21px; max-width: 85%;
+}
+
+/* Link bubble */
+.u-link-bub {
+  max-width: 85%;
+  display: flex; flex-direction: column; gap: 4px;
+  align-items: flex-end;
+}
+.u-link-preview {
+  background: var(--z900);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px 14px 4px 14px;
+  padding: 12px;
+  width: 240px;
+  display: flex; gap: 10px; align-items: center;
+}
+.u-link-preview .lp-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.u-link-preview .lp-info { flex: 1; min-width: 0; }
+.u-link-preview .lp-title {
+  font-size: 12px; font-weight: 500; color: var(--z200);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.u-link-preview .lp-url {
+  font-size: 10px; font-family: var(--mono); color: var(--z600);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.u-link-cap {
+  background: var(--v500); color: var(--white);
+  border-radius: 14px 14px 4px 14px; padding: 8px 14px;
+  font-size: 14px;
+}
+
+/* AI */
+.ai-w { max-width: 95%; display: flex; flex-direction: column; gap: 8px; }
+.ai-lbl { display: flex; align-items: center; gap: 6px; padding: 0 2px; }
+.ai-av {
+  width: 20px; height: 20px; border-radius: 5px;
+  background: linear-gradient(135deg, var(--v800), var(--v500));
+  display: flex; align-items: center; justify-content: center;
+}
+.ai-av svg { width: 12px; height: 12px; color: var(--white); }
+.ai-nm { font-size: 11px; font-weight: 600; color: var(--z500); }
+
+.ai-txt { font-size: 15px; line-height: 22px; color: var(--z300); padding: 0 2px; }
+.ai-txt strong { color: var(--z200); font-weight: 500; }
+.hl { color: var(--v400); font-family: var(--mono); font-weight: 500; font-size: 14px; }
+.hl-r { color: var(--r400); font-family: var(--mono); font-weight: 500; font-size: 14px; }
+.hl-g { color: #34d399; font-family: var(--mono); font-weight: 500; font-size: 14px; }
+.hl-w { color: var(--a300); font-family: var(--mono); font-weight: 500; font-size: 14px; }
+
+/* Clarifying Questions */
+.ai-questions {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 2px 2px;
+}
+.ai-q {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 14px; line-height: 20px; color: var(--z400);
+}
+.ai-q .q-num {
+  font-family: var(--mono); font-size: 12px; color: var(--v400);
+  font-weight: 500; flex-shrink: 0; margin-top: 2px;
+}
+
+/* ── Kill Shot Card ── */
+.ks {
+  background: rgba(248,113,113,0.03);
+  border: 0.5px solid rgba(248,113,113,0.12);
+  border-radius: 16px; overflow: hidden;
+}
+.ks::before {
+  content: '';
+  display: block; height: 0.5px;
+  background: linear-gradient(90deg, transparent 10%, rgba(248,113,113,0.35) 50%, transparent 90%);
+}
+
+.ks-hd {
+  padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 0.5px solid rgba(248,113,113,0.08);
+}
+.ks-ic {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(248,113,113,0.12); color: var(--r400);
+  display: flex; align-items: center; justify-content: center;
+}
+.ks-ic svg { width: 18px; height: 18px; }
+.ks-tb .ks-t { font-size: 16px; font-weight: 600; color: var(--r400); }
+.ks-tb .ks-s { font-size: 11px; color: var(--z600); margin-top: 1px; }
+
+.ks-bd { padding: 14px 16px; }
+.ks-bd p { font-size: 14px; line-height: 20px; color: var(--z400); }
+.ks-bd p + p { margin-top: 8px; }
+
+/* Evidence */
+.ks-ev { margin-top: 10px; padding-top: 10px; border-top: 0.5px solid rgba(255,255,255,0.04); }
+.ev-i { display: flex; gap: 8px; padding: 5px 0; }
+.ev-d { width: 3px; border-radius: 2px; flex-shrink: 0; margin-top: 3px; }
+.ev-d.red { background: var(--r400); }
+.ev-d.hi { background: #34d399; }
+.ev-d.md { background: var(--v400); }
+.ev-t { font-size: 12px; line-height: 17px; color: var(--z500); }
+.ev-t .cf { font-family: var(--mono); font-size: 10px; color: var(--z600); }
+
+/* Kill Shot Actions */
+.ks-actions {
+  padding: 10px 16px;
+  display: flex; gap: 6px;
+  border-top: 0.5px solid rgba(248,113,113,0.06);
+  background: rgba(248,113,113,0.02);
+}
+.ks-act {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 11px;
+  border-radius: 100px; font-size: 11px; font-weight: 500;
+  cursor: pointer; font-family: var(--sans); white-space: nowrap;
+}
+.ks-act svg { width: 12px; height: 12px; }
+.ks-act.share {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  color: var(--z500);
+}
+
+/* ── Comparison Card ── */
+.comp {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.07);
+  border-radius: 16px; overflow: hidden;
+}
+.comp-hd {
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+}
+.comp-hd-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: rgba(139,92,246,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--v400);
+}
+.comp-hd-icon svg { width: 14px; height: 14px; }
+.comp-hd-title { font-size: 13px; font-weight: 600; color: var(--z300); }
+
+/* Comparison rows */
+.comp-body { padding: 12px 16px; }
+
+.comp-row {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 0.5px solid rgba(255,255,255,0.03);
+}
+.comp-row:last-child { border-bottom: none; }
+
+.comp-rank {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; font-family: var(--mono);
+  flex-shrink: 0; margin-top: 1px;
+}
+.comp-rank.r1 { background: rgba(3,230,122,0.1); color: #34d399; }
+.comp-rank.r2 { background: rgba(139,92,246,0.1); color: var(--v400); }
+.comp-rank.r3 { background: rgba(255,255,255,0.05); color: var(--z500); }
+
+.comp-info { flex: 1; min-width: 0; }
+.comp-info h4 { font-size: 13px; font-weight: 500; color: var(--z200); margin-bottom: 2px; }
+.comp-info .comp-why { font-size: 11px; color: var(--z500); line-height: 15px; margin-bottom: 4px; }
+
+.comp-bottom {
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.comp-price { font-size: 14px; font-weight: 600; font-family: var(--mono); color: var(--z300); }
+.comp-deal { font-size: 10px; font-family: var(--mono); color: #34d399; }
+.comp-badge {
+  padding: 2px 6px; border-radius: 100px;
+  font-size: 9px; font-weight: 600;
+}
+.comp-badge.pick { background: rgba(3,230,122,0.08); color: #34d399; }
+
+/* Comparison actions */
+.comp-actions {
+  padding: 10px 16px;
+  display: flex; gap: 6px;
+  border-top: 0.5px solid rgba(255,255,255,0.04);
+}
+.comp-act {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 11px;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 100px;
+  font-size: 11px; font-weight: 500; color: var(--z500);
+  cursor: pointer; font-family: var(--sans); white-space: nowrap;
+}
+.comp-act svg { width: 12px; height: 12px; }
+.comp-act.primary {
+  background: rgba(3,230,122,0.06);
+  border-color: rgba(3,230,122,0.15);
+  color: #34d399;
+}
+.comp-act.violet {
+  background: rgba(139,92,246,0.06);
+  border-color: rgba(139,92,246,0.15);
+  color: var(--v400);
+}
+
+/* Follow-up */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 0 4px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 13px; background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.08); border-radius: 100px;
+  font-size: 13px; color: var(--z400); cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Timestamp */
+.ts { text-align: center; padding: 4px 0 8px; }
+.ts span { font-size: 10px; font-family: var(--mono); color: var(--z700); }
+
+/* Input */
+.input-dock {
+  flex-shrink: 0; padding: 8px 14px 0;
+  background: rgba(9,9,11,0.92); backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-top: 0.5px solid rgba(255,255,255,0.05); z-index: 50;
+}
+.input-row {
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 22px; padding: 8px 10px 8px 16px;
+  display: flex; align-items: flex-end; gap: 4px;
+}
+.input-row textarea {
+  flex: 1; font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  font-size: 15px; line-height: 21px; color: var(--white);
+  border: none; background: none; outline: none; resize: none;
+  min-height: 21px; max-height: 84px; padding: 3px 0;
+}
+.input-row textarea::placeholder { color: var(--z600); }
+.ia { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.ib {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ib svg { width: 18px; height: 18px; }
+.ib.ph { background: none; color: var(--z500); }
+.ib.vo { background: none; color: var(--z500); }
+.ib.se { background: var(--v500); color: var(--white); box-shadow: 0 0 10px -2px rgba(139,92,246,0.35); }
+.kb-h { padding: 8px 0 30px; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+
+  <div class="status">
+    <span class="time">10:22</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <div class="app">
+
+    <div class="chat-hdr">
+      <div class="ch-l">
+        <button class="ch-back">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg>
+        </button>
+        <div class="ch-t">
+          <span class="ct-n">Mattress Research</span>
+          <span class="ct-d"><span class="dd"></span> Mattresses L3</span>
+        </div>
+      </div>
+      <div class="ch-r">
+        <button class="ch-btn">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="4" fill="currentColor"/><circle cx="128" cy="64" r="4" fill="currentColor"/><circle cx="128" cy="192" r="4" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="thread">
+
+      <div class="ts"><span>Today, 10:14 AM</span></div>
+
+      <!-- User 1 -->
+      <div class="msg user">
+        <div class="u-bub">I need a new mattress. I keep seeing Purple ads everywhere. Is it actually worth it or is it just good marketing?</div>
+      </div>
+
+      <!-- AI 1 - Clarifying -->
+      <div class="msg ai">
+        <div class="ai-w">
+          <div class="ai-lbl">
+            <div class="ai-av"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+            <span class="ai-nm">Product.ai</span>
+          </div>
+          <div class="ai-txt">Good instinct to question the marketing. I have deep verified data on mattresses. A few things will change the answer completely:</div>
+          <div class="ai-questions">
+            <div class="ai-q"><span class="q-num">1.</span> What's your primary sleep position?</div>
+            <div class="ai-q"><span class="q-num">2.</span> Any pain issues - back, hips, shoulders?</div>
+            <div class="ai-q"><span class="q-num">3.</span> Sleeping alone or with a partner?</div>
+            <div class="ai-q"><span class="q-num">4.</span> Budget range?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User 2 -->
+      <div class="msg user">
+        <div class="u-bub">Side sleeper mostly. My lower back kills me every morning. With my partner, she sleeps hot. Budget is around $1500 for a queen.</div>
+      </div>
+
+      <!-- AI 2 - Kill Shot -->
+      <div class="msg ai">
+        <div class="ai-w">
+          <div class="ai-lbl">
+            <div class="ai-av"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg></div>
+            <span class="ai-nm">Product.ai</span>
+          </div>
+
+          <div class="ai-txt">I have a clear answer on this one. <strong>Purple is wrong for you.</strong></div>
+
+          <!-- Kill Shot Card -->
+          <div class="ks">
+            <div class="ks-hd">
+              <div class="ks-ic">
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M208 36H48A12 12 0 0 0 36 48v160a12 12 0 0 0 12 12h160a12 12 0 0 0 12-12V48a12 12 0 0 0-12-12zm-42.3 125.7a8.1 8.1 0 0 1-11.4 0L128 135.3l-26.3 26.4a8.1 8.1 0 0 1-11.4-11.4l26.4-26.3-26.4-26.3a8.1 8.1 0 0 1 11.4-11.4l26.3 26.4 26.3-26.4a8.1 8.1 0 0 1 11.4 11.4L139.3 124l26.4 26.3a8.1 8.1 0 0 1 0 11.4z"/></svg>
+              </div>
+              <div class="ks-tb">
+                <div class="ks-t">Don't Buy This</div>
+                <div class="ks-s">Purple Hybrid Premier 4" - Queen $2,499</div>
+              </div>
+            </div>
+            <div class="ks-bd">
+              <p>Purple's hyper-elastic polymer grid is engineered for <span class="hl-r">back and stomach sleepers</span>. The grid distributes weight evenly across a flat surface - great for supine position, but it <strong>fails to conform to the curved hip-shoulder profile of side sleepers</strong>.</p>
+              <p>For your specific situation - side sleeper with lower back pain - the grid creates <span class="hl-r">pressure points at the hip and shoulder</span> instead of relieving them. Your lower back pain will likely get worse, not better.</p>
+
+              <div class="ks-ev">
+                <div class="ev-i">
+                  <div class="ev-d red"></div>
+                  <div class="ev-t">Side sleepers report 2.3x higher hip pressure on Purple vs memory foam in pressure mapping studies. <span class="cf">94% confidence - 4 studies</span></div>
+                </div>
+                <div class="ev-i">
+                  <div class="ev-d red"></div>
+                  <div class="ev-t">Purple's own sleep trial data shows 31% return rate for "primarily side sleepers" vs 12% for back sleepers. <span class="cf">89% confidence - trial data analysis</span></div>
+                </div>
+                <div class="ev-i">
+                  <div class="ev-d md"></div>
+                  <div class="ev-t">At $2,499 for the 4" grid, it's also over budget. The 3" ($1,799) has the same fundamental issue. <span class="cf">verified pricing</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="ks-actions">
+              <div class="ks-act share">
+                <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M216 112v96a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8v-96"/><polyline points="96 144 128 112 160 144"/><line x1="128" y1="112" x2="128" y2="24"/></svg>
+                Share this verdict
+              </div>
+            </div>
+          </div>
+
+          <div class="ai-txt" style="margin-top:4px;">Here's what actually works for your situation:</div>
+
+          <!-- Comparison Card -->
+          <div class="comp">
+            <div class="comp-hd">
+              <div class="comp-hd-icon">
+                <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="40" y="40" width="176" height="176" rx="8"/><line x1="128" y1="40" x2="128" y2="216"/><line x1="40" y1="128" x2="216" y2="128"/></svg>
+              </div>
+              <span class="comp-hd-title">Best for Side Sleepers with Back Pain</span>
+            </div>
+            <div class="comp-body">
+
+              <div class="comp-row">
+                <div class="comp-rank r1">1</div>
+                <div class="comp-info">
+                  <h4>Helix Midnight Luxe</h4>
+                  <div class="comp-why">Zoned lumbar support + memory foam top layer. Specifically engineered for side sleepers. Gel-infused for cooling - addresses your partner's heat issue.</div>
+                  <div class="comp-bottom">
+                    <div>
+                      <span class="comp-price">$1,374</span>
+                      <span class="comp-deal"> $200 off right now</span>
+                    </div>
+                    <span class="comp-badge pick">Top Pick</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="comp-row">
+                <div class="comp-rank r2">2</div>
+                <div class="comp-info">
+                  <h4>WinkBed (Softer)</h4>
+                  <div class="comp-why">Hybrid with Euro-top. Better edge support than Helix if you sleep near the edge. Slightly warmer - less cooling gel.</div>
+                  <div class="comp-bottom">
+                    <span class="comp-price">$1,299</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="comp-row">
+                <div class="comp-rank r3">3</div>
+                <div class="comp-info">
+                  <h4>Tempur-Pedic ProAdapt</h4>
+                  <div class="comp-why">Best pressure relief of all three. Premium build quality. But over budget at full price and sleeps warm.</div>
+                  <div class="comp-bottom">
+                    <div>
+                      <span class="comp-price">$2,199</span>
+                      <span class="comp-deal"> check outlet pricing</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="comp-actions">
+              <div class="comp-act primary">
+                <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg>
+                View Helix Midnight Luxe
+              </div>
+              <div class="comp-act">
+                <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M168 224a8 8 0 0 1-13.9 5.4L128 200l-26.1 29.4A8 8 0 0 1 88 224V32a8 8 0 0 1 8-8h64a8 8 0 0 1 8 8z"/></svg>
+                Save
+              </div>
+            </div>
+          </div>
+
+          <!-- Follow-ups -->
+          <div class="chips">
+            <div class="chip">Why not Casper or Saatva?</div>
+            <div class="chip">Tell me more about zoned lumbar</div>
+            <div class="chip">What about a mattress topper instead?</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="input-dock">
+      <div class="input-row">
+        <textarea rows="1" placeholder="Ask a follow-up..."></textarea>
+        <div class="ia">
+          <button class="ib ph">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M208 56H180.3L166.6 36A8 8 0 0 0 160 32H96a8 8 0 0 0-6.6 3.5L75.7 56H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V72a16 16 0 0 0-16-16z"/><circle cx="128" cy="128" r="40"/></svg>
+          </button>
+          <button class="ib vo">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="88" y="24" width="80" height="144" rx="40"/><line x1="128" y1="200" x2="128" y2="232"/><path d="M199.6 136a72 72 0 0 1-143.2 0"/></svg>
+          </button>
+          <button class="ib se">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M228.9 121.3l-176-88a8 8 0 0 0-11.3 9.3L60.9 120H136a8 8 0 0 1 0 16H60.9l-19.3 77.4a8 8 0 0 0 11.3 9.3l176-88a8 8 0 0 0 0-14.4z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="kb-h"></div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

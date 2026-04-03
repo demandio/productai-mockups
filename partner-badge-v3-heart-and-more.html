@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai - Partner Badge v3: Heart + New Icons</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    color: #e4e4e7;
+    font-family: 'DM Sans', sans-serif;
+    padding: 40px 24px 80px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 8px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+    color: #a1a1aa;
+    line-height: 1.5;
+    max-width: 700px;
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 0.5px solid #27272a;
+    margin: 56px auto;
+    max-width: 1200px;
+  }
+
+  .section-header {
+    max-width: 1200px;
+    margin: 0 auto 28px;
+  }
+
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 4px;
+  }
+
+  .section-header p {
+    font-size: 13px;
+    color: #71717a;
+    line-height: 1.5;
+  }
+
+  /* -- Concept grid -- */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .concept-card {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .concept-header {
+    padding: 20px 20px 16px;
+    border-bottom: 0.5px solid #27272a;
+  }
+
+  .concept-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #8b5cf6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .concept-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 4px;
+  }
+
+  .concept-metaphor {
+    font-size: 12px;
+    color: #8b5cf6;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+
+  .concept-desc {
+    font-size: 12px;
+    color: #71717a;
+    line-height: 1.5;
+  }
+
+  .concept-body { padding: 20px; }
+
+  /* -- Price rows -- */
+  .price-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .price-row:hover { background: rgba(139, 92, 246, 0.06); }
+
+  .price-row-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .merchant-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e4e4e7;
+    white-space: nowrap;
+  }
+
+  .price-row-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .price {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fafafa;
+  }
+
+  .price.best { color: #4ade80; }
+
+  .code-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    border: 0.5px solid rgba(74, 222, 128, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .you-are-here {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #a1a1aa;
+    background: rgba(161, 161, 170, 0.1);
+    border: 0.5px solid rgba(161, 161, 170, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .footer-note {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 0.5px solid #1a1a1e;
+    font-size: 11px;
+    color: #52525b;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer-note a {
+    color: #71717a;
+    text-decoration: underline;
+    text-decoration-color: #3f3f46;
+    text-underline-offset: 2px;
+  }
+
+  /* -- Tooltip -- */
+  .badge-wrap {
+    position: relative;
+    cursor: pointer;
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .badge-tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: #1c1c20;
+    border: 0.5px solid #3f3f46;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #d4d4d8;
+    line-height: 1.5;
+    width: 230px;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 10;
+  }
+
+  .badge-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1c1c20;
+  }
+
+  .badge-wrap:hover .badge-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .tt-highlight { color: #8b5cf6; font-weight: 500; }
+
+  .tt-learn {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #71717a;
+    text-decoration: underline;
+    text-decoration-color: #3f3f46;
+    text-underline-offset: 2px;
+  }
+
+  /* -- Verdict card -- */
+  .verdict-card {
+    background: #09090b;
+    border: 0.5px solid #27272a;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 420px;
+  }
+
+  .verdict-bar {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 0.5px solid #27272a;
+    background: rgba(74, 222, 128, 0.04);
+    border-bottom-color: rgba(74, 222, 128, 0.1);
+  }
+
+  .verdict-icon-wrap {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+    background: rgba(74, 222, 128, 0.15); color: #4ade80;
+  }
+
+  .verdict-text { font-size: 14px; font-weight: 600; color: #fafafa; }
+  .verdict-body { padding: 16px 20px; font-size: 13px; color: #a1a1aa; line-height: 1.5; }
+  .verdict-prices { padding: 0 20px 20px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Partner Badge v3: Heart + New Directions</h1>
+  <p>Heart variations from subtle to proud, plus new icons that carry meaning without implying merchant endorsement. Each shown in price row context with hover tooltips.</p>
+</div>
+
+<!-- ====== HEARTS ====== -->
+<div class="section-header">
+  <h2>Heart Variations</h2>
+  <p>The heart says "love" or "support" - it's about the user's relationship to Product.ai, not the merchant's quality. Five treatments from minimal to expressive.</p>
+</div>
+
+<div class="concept-grid">
+
+<!-- Heart 1: Outline -->
+<div class="concept-card">
+  <div class="concept-header">
+    <div class="concept-label">Heart A</div>
+    <div class="concept-title">Outline Heart</div>
+    <div class="concept-metaphor">"This is something you can support"</div>
+    <div class="concept-desc">Empty heart outline. Potential energy - unfilled, waiting for your action. The lightest possible heart. Becomes filled in the tooltip or after purchase as a micro-interaction.</div>
+  </div>
+  <div class="concept-body">
+    <div class="price-section-label">Best Prices</div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" stroke="#8b5cf6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">
+            Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.
+            <span class="tt-learn">How we stay free</span>
+          </div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$38.25</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" stroke="#8b5cf6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">The Ordinary</span><span class="you-are-here">You are here</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="10" height="10" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; opacity: 0.5;"><path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" stroke="#8b5cf6" stroke-width="1.3"/></svg>
+      <span>Supports Product.ai's mission. <a href="#">Learn more</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- Heart 2: Filled -->
+<div class="concept-card">
+  <div class="concept-header">
+    <div class="concept-label">Heart B</div>
+    <div class="concept-title">Filled Heart</div>
+    <div class="concept-metaphor">"Made with love - supported by you"</div>
+    <div class="concept-desc">Solid filled heart in violet. Prouder, warmer, more present. Reads instantly as "love" or "favorite." The risk: does it look like a "liked" or "favorited" indicator? The reward: universally understood, emotionally resonant, impossible to misread as "endorsed."</div>
+  </div>
+  <div class="concept-body">
+    <div class="price-section-label">Best Prices</div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" fill="#8b5cf6" opacity="0.7" stroke="#8b5cf6" stroke-width="0.8"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$38.25</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" fill="#8b5cf6" opacity="0.7" stroke="#8b5cf6" stroke-width="0.8"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">The Ordinary</span><span class="you-are-here">You are here</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="10" height="10" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0;"><path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" fill="#8b5cf6" opacity="0.5"/></svg>
+      <span>Supports Product.ai's mission. <a href="#">Learn more</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- Heart 3: Small heart inside circle -->
+<div class="concept-card">
+  <div class="concept-header">
+    <div class="concept-label">Heart C</div>
+    <div class="concept-title">Heart in Circle</div>
+    <div class="concept-metaphor">"Part of the Product.ai ecosystem"</div>
+    <div class="concept-desc">Small heart inside a subtle circle container. The circle gives it badge weight - it feels intentional, designed, official. The heart inside says "support" not "verify." Reads as a stamp of connection, not a stamp of approval.</div>
+  </div>
+  <div class="concept-body">
+    <div class="price-section-label">Best Prices</div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.5" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+            <path d="M10 14.5s-4.5-3-4.5-5.8a2.6 2.6 0 014.5-1.8 2.6 2.6 0 014.5 1.8c0 2.8-4.5 5.8-4.5 5.8z" fill="#8b5cf6" opacity="0.6"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$38.25</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.5" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+            <path d="M10 14.5s-4.5-3-4.5-5.8a2.6 2.6 0 014.5-1.8 2.6 2.6 0 014.5 1.8c0 2.8-4.5 5.8-4.5 5.8z" fill="#8b5cf6" opacity="0.6"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">The Ordinary</span><span class="you-are-here">You are here</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; opacity: 0.5;">
+        <circle cx="10" cy="10" r="8.5" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+        <path d="M10 14.5s-4.5-3-4.5-5.8a2.6 2.6 0 014.5-1.8 2.6 2.6 0 014.5 1.8c0 2.8-4.5 5.8-4.5 5.8z" fill="#8b5cf6" opacity="0.5"/>
+      </svg>
+      <span>Supports Product.ai's mission. <a href="#">Learn more</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- NEW: Open hand / giving -->
+<div class="concept-card">
+  <div class="concept-header">
+    <div class="concept-label">New Icon A</div>
+    <div class="concept-title">Gift / Give</div>
+    <div class="concept-metaphor">"A small gift to the mission"</div>
+    <div class="concept-desc">A small gift box or giving hand. The purchase is a gift - not to the merchant, not to Product.ai, but to the mission of free product truth. Generosity framing without being needy. Your purchase is an act of giving, not an act of being sold to.</div>
+  </div>
+  <div class="concept-body">
+    <div class="price-section-label">Best Prices</div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="10" width="14" height="8" rx="1.5" stroke="#8b5cf6" stroke-width="1.1" fill="rgba(139, 92, 246, 0.1)"/>
+            <rect x="2" y="7.5" width="16" height="3.5" rx="1" stroke="#8b5cf6" stroke-width="1.1" fill="rgba(139, 92, 246, 0.08)"/>
+            <line x1="10" y1="7.5" x2="10" y2="18" stroke="#8b5cf6" stroke-width="1" opacity="0.4"/>
+            <path d="M10 7.5C10 7.5 7 4 5.5 4C4 4 3.5 5.5 5 6.5C6 7.2 10 7.5 10 7.5Z" stroke="#8b5cf6" stroke-width="1" fill="rgba(139, 92, 246, 0.15)"/>
+            <path d="M10 7.5C10 7.5 13 4 14.5 4C16 4 16.5 5.5 15 6.5C14 7.2 10 7.5 10 7.5Z" stroke="#8b5cf6" stroke-width="1" fill="rgba(139, 92, 246, 0.15)"/>
+          </svg>
+          <div class="badge-tooltip">Your purchase is <span class="tt-highlight">a gift to the mission</span>. It helps keep Product.ai free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$38.25</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="10" width="14" height="8" rx="1.5" stroke="#8b5cf6" stroke-width="1.1" fill="rgba(139, 92, 246, 0.1)"/>
+            <rect x="2" y="7.5" width="16" height="3.5" rx="1" stroke="#8b5cf6" stroke-width="1.1" fill="rgba(139, 92, 246, 0.08)"/>
+            <line x1="10" y1="7.5" x2="10" y2="18" stroke="#8b5cf6" stroke-width="1" opacity="0.4"/>
+            <path d="M10 7.5C10 7.5 7 4 5.5 4C4 4 3.5 5.5 5 6.5C6 7.2 10 7.5 10 7.5Z" stroke="#8b5cf6" stroke-width="1" fill="rgba(139, 92, 246, 0.15)"/>
+            <path d="M10 7.5C10 7.5 13 4 14.5 4C16 4 16.5 5.5 15 6.5C14 7.2 10 7.5 10 7.5Z" stroke="#8b5cf6" stroke-width="1" fill="rgba(139, 92, 246, 0.15)"/>
+          </svg>
+          <div class="badge-tooltip">Your purchase is <span class="tt-highlight">a gift to the mission</span>. It helps keep Product.ai free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">The Ordinary</span><span class="you-are-here">You are here</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; opacity: 0.5;">
+        <rect x="3" y="10" width="14" height="8" rx="1.5" stroke="#8b5cf6" stroke-width="1.1" fill="rgba(139, 92, 246, 0.1)"/>
+        <rect x="2" y="7.5" width="16" height="3.5" rx="1" stroke="#8b5cf6" stroke-width="1.1" fill="rgba(139, 92, 246, 0.08)"/>
+      </svg>
+      <span>Your purchase gifts the mission. <a href="#">Learn more</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- NEW: Handshake simplified -->
+<div class="concept-card">
+  <div class="concept-header">
+    <div class="concept-label">New Icon B</div>
+    <div class="concept-title">Handshake</div>
+    <div class="concept-metaphor">"We're in this together"</div>
+    <div class="concept-desc">Two hands meeting. Partnership between equals - user, Product.ai, and merchant are all connected. The most human icon. Risk: could feel corporate or transactional. Reward: universally understood as "partnership" without implying hierarchy.</div>
+  </div>
+  <div class="concept-body">
+    <div class="price-section-label">Best Prices</div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <path d="M2 11L5.5 7.5L8 9L11 6L14 9L17.5 6" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 11L5 13.5L8.5 11L10 12.5L12 11L14.5 13L18 10" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+          </svg>
+          <div class="badge-tooltip"><span class="tt-highlight">Product.ai partner.</span> Buying here supports our mission to keep product truth free.<span class="tt-learn">How partnerships work</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$38.25</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <path d="M2 11L5.5 7.5L8 9L11 6L14 9L17.5 6" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 11L5 13.5L8.5 11L10 12.5L12 11L14.5 13L18 10" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+          </svg>
+          <div class="badge-tooltip"><span class="tt-highlight">Product.ai partner.</span> Buying here supports our mission to keep product truth free.<span class="tt-learn">How partnerships work</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">The Ordinary</span><span class="you-are-here">You are here</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; opacity: 0.5;">
+        <path d="M2 11L5.5 7.5L8 9L11 6L14 9L17.5 6" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Product.ai partner. <a href="#">What this means</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- NEW: Thumbs up -->
+<div class="concept-card">
+  <div class="concept-header">
+    <div class="concept-label">New Icon C</div>
+    <div class="concept-title">Thumbs Up</div>
+    <div class="concept-metaphor">"You're doing a good thing"</div>
+    <div class="concept-desc">A small thumbs up. Affirms the USER's action, not the merchant's quality. "Good for you for buying through us." The most direct positive-reinforcement icon. Casual, warm, non-corporate. Risk: could feel too casual for a trust-first brand.</div>
+  </div>
+  <div class="concept-body">
+    <div class="price-section-label">Best Prices</div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Ulta</span>
+        <div class="badge-wrap">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M7 18H4a1 1 0 01-1-1v-5a1 1 0 011-1h3m0 7V11m0 7h1.5a1 1 0 001-.8l1.2-6A1 1 0 0012.7 10H15a2 2 0 002-2V6.5a2 2 0 00-2-2h-2L11.5 2" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Nice one. Buying here <span class="tt-highlight">supports Product.ai</span> and keeps product truth free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+        <span class="code-badge">SKINCARE15</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$38.25</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Sephora</span>
+        <div class="badge-wrap">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M7 18H4a1 1 0 01-1-1v-5a1 1 0 011-1h3m0 7V11m0 7h1.5a1 1 0 001-.8l1.2-6A1 1 0 0012.7 10H15a2 2 0 002-2V6.5a2 2 0 00-2-2h-2L11.5 2" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="badge-tooltip">Nice one. Buying here <span class="tt-highlight">supports Product.ai</span> and keeps product truth free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$44.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">The Ordinary</span><span class="you-are-here">You are here</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Dermstore</span></div>
+      <div class="price-row-right"><span class="price">$45.00</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="10" height="10" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; opacity: 0.5;">
+        <path d="M7 18H4a1 1 0 01-1-1v-5a1 1 0 011-1h3m0 7V11m0 7h1.5a1 1 0 001-.8l1.2-6A1 1 0 0012.7 10H15a2 2 0 002-2V6.5a2 2 0 00-2-2h-2L11.5 2" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Supports Product.ai's mission. <a href="#">Learn more</a></span>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ====== FULL VERDICT CARDS ====== -->
+<hr class="section-divider">
+
+<div class="section-header">
+  <h2>Full Verdict Context: Top 3 Finalists</h2>
+  <p>Filled Heart, Heart in Circle, and PAI Dot (from v2) inside complete verdict cards.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px; max-width: 1300px; margin: 0 auto;">
+
+<!-- Filled Heart verdict -->
+<div class="verdict-card">
+  <div class="verdict-bar">
+    <div class="verdict-icon-wrap">&#10003;</div>
+    <div class="verdict-text">Recommended</div>
+  </div>
+  <div class="verdict-body">Sony WH-1000XM5. Class-leading ANC, improved call quality, lighter build. The benchmark for noise-cancelling headphones.</div>
+  <div class="verdict-prices">
+    <div class="price-section-label" style="display: flex; justify-content: space-between; align-items: center;">
+      <span>Best Prices</span>
+      <span style="font-size: 10px; color: #52525b; text-transform: none; letter-spacing: 0;">Filled Heart</span>
+    </div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Amazon</span>
+        <div class="badge-wrap">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" fill="#8b5cf6" opacity="0.7" stroke="#8b5cf6" stroke-width="0.8"/></svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+        <span class="code-badge">SAVE20</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$278.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Best Buy</span>
+        <div class="badge-wrap">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" fill="#8b5cf6" opacity="0.7" stroke="#8b5cf6" stroke-width="0.8"/></svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$298.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">B&H Photo</span></div>
+      <div class="price-row-right"><span class="price">$328.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Sony Direct</span></div>
+      <div class="price-row-right"><span class="price">$349.99</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="10" height="10" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0;"><path d="M10 17.5s-7-4.5-7-9A4 4 0 0110 5.5a4 4 0 017 3c0 4.5-7 9-7 9z" fill="#8b5cf6" opacity="0.5"/></svg>
+      <span>Supports Product.ai's mission. <a href="#">Learn more</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- Heart in Circle verdict -->
+<div class="verdict-card">
+  <div class="verdict-bar">
+    <div class="verdict-icon-wrap">&#10003;</div>
+    <div class="verdict-text">Recommended</div>
+  </div>
+  <div class="verdict-body">Sony WH-1000XM5. Class-leading ANC, improved call quality, lighter build. The benchmark for noise-cancelling headphones.</div>
+  <div class="verdict-prices">
+    <div class="price-section-label" style="display: flex; justify-content: space-between; align-items: center;">
+      <span>Best Prices</span>
+      <span style="font-size: 10px; color: #52525b; text-transform: none; letter-spacing: 0;">Heart in Circle</span>
+    </div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Amazon</span>
+        <div class="badge-wrap">
+          <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.5" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+            <path d="M10 14.5s-4.5-3-4.5-5.8a2.6 2.6 0 014.5-1.8 2.6 2.6 0 014.5 1.8c0 2.8-4.5 5.8-4.5 5.8z" fill="#8b5cf6" opacity="0.6"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+        <span class="code-badge">SAVE20</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$278.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Best Buy</span>
+        <div class="badge-wrap">
+          <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.5" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+            <path d="M10 14.5s-4.5-3-4.5-5.8a2.6 2.6 0 014.5-1.8 2.6 2.6 0 014.5 1.8c0 2.8-4.5 5.8-4.5 5.8z" fill="#8b5cf6" opacity="0.6"/>
+          </svg>
+          <div class="badge-tooltip">Buying here <span class="tt-highlight">supports Product.ai</span> and helps keep honest product advice free for everyone.<span class="tt-learn">How we stay free</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$298.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">B&H Photo</span></div>
+      <div class="price-row-right"><span class="price">$328.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Sony Direct</span></div>
+      <div class="price-row-right"><span class="price">$349.99</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="11" height="11" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; opacity: 0.5;">
+        <circle cx="10" cy="10" r="8.5" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+        <path d="M10 14.5s-4.5-3-4.5-5.8a2.6 2.6 0 014.5-1.8 2.6 2.6 0 014.5 1.8c0 2.8-4.5 5.8-4.5 5.8z" fill="#8b5cf6" opacity="0.5"/>
+      </svg>
+      <span>Supports Product.ai's mission. <a href="#">Learn more</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- PAI Dot verdict (baseline) -->
+<div class="verdict-card">
+  <div class="verdict-bar">
+    <div class="verdict-icon-wrap">&#10003;</div>
+    <div class="verdict-text">Recommended</div>
+  </div>
+  <div class="verdict-body">Sony WH-1000XM5. Class-leading ANC, improved call quality, lighter build. The benchmark for noise-cancelling headphones.</div>
+  <div class="verdict-prices">
+    <div class="price-section-label" style="display: flex; justify-content: space-between; align-items: center;">
+      <span>Best Prices</span>
+      <span style="font-size: 10px; color: #52525b; text-transform: none; letter-spacing: 0;">PAI Dot (baseline)</span>
+    </div>
+    <div class="price-row" style="background: rgba(74, 222, 128, 0.04);">
+      <div class="price-row-left">
+        <span class="merchant-name">Amazon</span>
+        <div class="badge-wrap">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#8b5cf6" opacity="0.7"/></svg>
+          <div class="badge-tooltip"><span class="tt-highlight">Product.ai partner.</span> Buying here supports our mission to keep honest product advice free.<span class="tt-learn">How we make money</span></div>
+        </div>
+        <span class="code-badge">SAVE20</span>
+      </div>
+      <div class="price-row-right"><span class="price best">$278.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left">
+        <span class="merchant-name">Best Buy</span>
+        <div class="badge-wrap">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#8b5cf6" opacity="0.7"/></svg>
+          <div class="badge-tooltip"><span class="tt-highlight">Product.ai partner.</span> Buying here supports our mission to keep honest product advice free.<span class="tt-learn">How we make money</span></div>
+        </div>
+      </div>
+      <div class="price-row-right"><span class="price">$298.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">B&H Photo</span></div>
+      <div class="price-row-right"><span class="price">$328.00</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-row-left"><span class="merchant-name">Sony Direct</span></div>
+      <div class="price-row-right"><span class="price">$349.99</span></div>
+    </div>
+    <div class="footer-note">
+      <svg width="8" height="8" viewBox="0 0 10 10" fill="none" style="flex-shrink: 0;"><circle cx="5" cy="5" r="4" fill="#8b5cf6" opacity="0.5"/></svg>
+      <span>= Product.ai partner. <a href="#">What this means</a></span>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>

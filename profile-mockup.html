@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Mobile - Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+:root {
+  --white: #FFFFFF; --z50: #FAFAFA; --z300: #D4D4D8; --z400: #A1A1AA;
+  --z450: #898992; --z500: #71717A; --z600: #52525B; --z700: #3F3F46;
+  --z750: #333338; --z800: #27272A; --z850: #1F1F22; --z900: #18181B;
+  --z925: #101013; --z950: #09090B; --black: #000000;
+  --v300: #BCABFF; --v400: #A384FF; --v500: #8B5CF6; --v800: #5A17B7;
+  --g500: #03E67A; --g600: #02C869;
+  --a300: #CEAD50;
+  --r400: #F64B4B;
+  --b300: #6EB6FF;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { scrollbar-width: none; -ms-overflow-style: none;
+  font-family: var(--sans); font-feature-settings: "ss02" 1, "liga" 0, "clig" 0;
+  background: #080808; color: var(--z50);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; padding: 32px;
+}
+body::-webkit-scrollbar { display: none; }
+.phone {
+  width: 390px; height: 844px; background: var(--z950);
+  border-radius: 52px; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 2px 4px rgba(0,0,0,0.4),
+    0 12px 40px rgba(0,0,0,0.6), 0 40px 100px -20px rgba(0,0,0,0.8);
+  flex-shrink: 0;
+}
+.island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 124px; height: 36px; background: var(--black); border-radius: 20px; z-index: 100; }
+.home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; border-radius: 100px; background: rgba(255,255,255,0.15); z-index: 100; }
+.status { position: absolute; top: 16px; left: 32px; right: 32px;
+  display: flex; justify-content: space-between; align-items: center; z-index: 90; }
+.status .time { font-size: 16px; font-weight: 600; color: var(--white); }
+.status .sys { display: flex; gap: 5px; }
+.status .sys svg { width: 16px; height: 16px; fill: var(--white); }
+.app { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
+
+/* Background */
+.bg-glow {
+  position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 400px;
+  background: radial-gradient(ellipse 55% 45% at 50% 20%, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.03) 40%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+
+/* Header */
+.hdr {
+  padding: 58px 20px 0; height: 108px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-shrink: 0; z-index: 50; padding-bottom: 12px;
+}
+.h-l { display: flex; align-items: center; gap: 10px; }
+.h-back {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.h-back svg { width: 18px; height: 18px; }
+.h-title { font-size: 18px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+.h-r { display: flex; gap: 4px; }
+.h-btn {
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.05); color: var(--z400);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.h-btn svg { width: 18px; height: 18px; }
+
+/* Content */
+.content { flex: 1; overflow-y: auto; padding: 0; position: relative; z-index: 1; }
+.content::-webkit-scrollbar { display: none; }
+
+/* ── Avatar + Identity ── */
+.identity {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 20px 20px 24px;
+}
+.id-avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--v800), var(--v500));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 600; color: var(--white);
+  margin-bottom: 12px;
+  box-shadow: 0 0 24px -4px rgba(139,92,246,0.3);
+}
+.id-name { font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+.id-email { font-size: 13px; color: var(--z600); margin-bottom: 8px; }
+.id-plan {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 100px;
+  font-size: 11px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.04em;
+}
+.id-plan.free { background: rgba(255,255,255,0.04); color: var(--z500); }
+.id-plan.pro { background: rgba(139,92,246,0.1); color: var(--v400); }
+.id-plan .plan-dot { width: 5px; height: 5px; border-radius: 50%; }
+.id-plan.free .plan-dot { background: var(--z600); }
+.id-plan.pro .plan-dot { background: var(--v500); }
+
+/* ── Stats Row ── */
+.stats-row {
+  display: flex; gap: 6px;
+  padding: 0 20px 16px;
+}
+.stat-card {
+  flex: 1;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+.stat-card .sc-num {
+  font-size: 20px; font-weight: 600; font-family: var(--mono);
+  color: var(--z200); margin-bottom: 2px;
+}
+.stat-card .sc-label {
+  font-size: 10px; color: var(--z600);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+
+/* ── Section ── */
+.sec {
+  padding: 16px 20px 8px;
+  font-size: 10px; font-weight: 600; font-family: var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--z700);
+  display: flex; align-items: center; gap: 8px;
+}
+.sec .sl { flex: 1; height: 0.5px; background: rgba(255,255,255,0.03); }
+
+/* ── Axiom Section ── */
+.axiom-section {
+  padding: 8px 20px 16px;
+}
+.axiom-group {
+  margin-bottom: 14px;
+}
+.axiom-group-label {
+  font-size: 11px; font-weight: 600; color: var(--z500);
+  margin-bottom: 6px; padding: 0 2px;
+}
+.axiom-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.ax {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 13px;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 100px;
+  font-size: 13px; color: var(--z400);
+  cursor: pointer;
+  transition: all 150ms;
+}
+.ax:active { border-color: rgba(255,255,255,0.12); }
+.ax .ax-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.ax-dot.g { background: #34d399; }
+.ax-dot.b { background: var(--z400); }
+.ax-dot.v { background: var(--v400); }
+.ax-dot.y { background: var(--a300); }
+.ax-dot.r { background: var(--r400); }
+.ax-dot.bl { background: var(--b300); }
+
+.ax.active {
+  background: rgba(139,92,246,0.08);
+  border-color: rgba(139,92,246,0.2);
+  color: var(--v300);
+}
+.ax .ax-x {
+  width: 14px; height: 14px; color: var(--z600); margin-left: 2px;
+  display: flex; align-items: center; justify-content: center;
+}
+.ax .ax-x svg { width: 12px; height: 12px; }
+
+.add-axiom {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 13px;
+  background: none;
+  border: 0.5px dashed rgba(255,255,255,0.1);
+  border-radius: 100px;
+  font-size: 13px; color: var(--z700);
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.add-axiom svg { width: 14px; height: 14px; }
+
+/* ── Price Threshold ── */
+.threshold-card {
+  margin: 0 20px 16px;
+  padding: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 14px;
+}
+.tc-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.tc-header .tc-label {
+  font-size: 13px; color: var(--z400);
+}
+.tc-header .tc-value {
+  font-size: 18px; font-weight: 600; font-family: var(--mono);
+  color: var(--v400);
+}
+.tc-bar {
+  height: 6px; background: rgba(255,255,255,0.06);
+  border-radius: 3px; position: relative;
+  margin-bottom: 6px;
+}
+.tc-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 60%; background: var(--v500); border-radius: 3px;
+}
+.tc-thumb {
+  position: absolute; top: 50%; left: 60%;
+  transform: translate(-50%, -50%);
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--v500); border: 2.5px solid var(--white);
+  box-shadow: 0 0 8px rgba(139,92,246,0.5);
+  cursor: pointer;
+}
+.tc-range {
+  display: flex; justify-content: space-between;
+  font-size: 10px; font-family: var(--mono); color: var(--z750);
+}
+.tc-desc {
+  font-size: 11px; color: var(--z600); margin-top: 8px; line-height: 15px;
+}
+
+/* ── Ecosystem ── */
+.eco-row {
+  display: flex; gap: 8px;
+  padding: 8px 20px 16px;
+}
+.eco-card {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 8px;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 150ms;
+}
+.eco-card.selected {
+  background: rgba(139,92,246,0.06);
+  border-color: rgba(139,92,246,0.2);
+}
+.eco-card .eco-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.eco-card .eco-name {
+  font-size: 12px; font-weight: 500;
+  color: var(--z500);
+}
+.eco-card.selected .eco-name { color: var(--v300); }
+.eco-check {
+  width: 16px; height: 16px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.eco-check.on { background: var(--v500); color: var(--white); }
+.eco-check.off { background: rgba(255,255,255,0.06); }
+.eco-check svg { width: 10px; height: 10px; }
+
+/* ── What I Know Section ── */
+.knowledge-card {
+  margin: 0 20px 8px;
+  padding: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 14px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer;
+  transition: border-color 200ms;
+}
+.knowledge-card:active { border-color: rgba(255,255,255,0.12); }
+
+.kc-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.kc-icon svg { width: 17px; height: 17px; }
+.kc-icon.violet { background: rgba(139,92,246,0.08); color: var(--v400); }
+.kc-icon.green { background: rgba(3,230,122,0.08); color: #34d399; }
+.kc-icon.blue { background: rgba(107,182,255,0.08); color: var(--b300); }
+
+.kc-info { flex: 1; min-width: 0; }
+.kc-info .kc-title { font-size: 14px; color: var(--z200); margin-bottom: 1px; }
+.kc-info .kc-desc { font-size: 11px; color: var(--z600); }
+
+.kc-right { flex-shrink: 0; display: flex; align-items: center; gap: 6px; }
+.kc-right .kc-count { font-size: 13px; font-family: var(--mono); font-weight: 600; color: var(--z400); }
+.kc-right .kc-chev { color: var(--z700); }
+.kc-right .kc-chev svg { width: 16px; height: 16px; }
+
+/* ── Learned From Conversations ── */
+.learned-section {
+  padding: 8px 20px 16px;
+}
+.learned-item {
+  display: flex; gap: 8px; align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 0.5px solid rgba(255,255,255,0.03);
+}
+.learned-item:last-child { border-bottom: none; }
+
+.li-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: rgba(139,92,246,0.06);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--v400); flex-shrink: 0; margin-top: 1px;
+}
+.li-icon svg { width: 12px; height: 12px; }
+
+.li-info { flex: 1; }
+.li-info .li-text {
+  font-size: 13px; line-height: 18px; color: var(--z400);
+}
+.li-info .li-text strong { color: var(--z300); font-weight: 500; }
+.li-info .li-source {
+  font-size: 10px; font-family: var(--mono); color: var(--z750);
+  margin-top: 2px;
+}
+
+.li-remove {
+  color: var(--z800); cursor: pointer; flex-shrink: 0;
+  padding: 4px;
+}
+.li-remove svg { width: 14px; height: 14px; }
+
+/* ── Data Controls ── */
+.data-row {
+  display: flex; gap: 8px;
+  padding: 8px 20px 20px;
+}
+.data-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: var(--sans);
+}
+.data-btn svg { width: 15px; height: 15px; }
+.data-btn.export {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  color: var(--z400);
+}
+.data-btn.clear {
+  background: rgba(248,113,113,0.04);
+  border: 0.5px solid rgba(248,113,113,0.1);
+  color: var(--r400);
+}
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="island"></div>
+  <div class="home-ind"></div>
+  <div class="bg-glow"></div>
+
+  <div class="status">
+    <span class="time">2:53</span>
+    <div class="sys">
+      <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <div class="app">
+
+    <div class="hdr">
+      <div class="h-l">
+        <button class="h-back">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="160 208 80 128 160 48"/></svg>
+        </button>
+        <span class="h-title">Your Profile</span>
+      </div>
+      <div class="h-r">
+        <button class="h-btn">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><circle cx="128" cy="128" r="36"/><line x1="128" y1="32" x2="128" y2="56"/><line x1="128" y1="200" x2="128" y2="224"/><line x1="32" y1="128" x2="56" y2="128"/><line x1="200" y1="128" x2="224" y2="128"/></svg>
+          </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Identity -->
+      <div class="identity">
+        <div class="id-avatar">SK</div>
+        <div class="id-name">Sarah Kim</div>
+        <div class="id-email">sarah.kim@gmail.com</div>
+        <div class="id-plan free"><span class="plan-dot"></span> Free plan</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="sc-num">47</div>
+          <div class="sc-label">Verdicts</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-num">12</div>
+          <div class="sc-label">Products</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-num">$218</div>
+          <div class="sc-label">Saved</div>
+        </div>
+      </div>
+
+      <!-- Shopping Interests -->
+      <div class="sec">Shopping Interests <span class="sl"></span></div>
+      <div class="axiom-section">
+        <div class="axiom-chips">
+          <div class="ax active">
+            <span class="ax-dot g"></span> Skincare
+            <span class="ax-x"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></span>
+          </div>
+          <div class="ax active">
+            <span class="ax-dot g"></span> Running
+            <span class="ax-x"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></span>
+          </div>
+          <div class="ax active">
+            <span class="ax-dot y"></span> Kitchen
+            <span class="ax-x"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></span>
+          </div>
+          <div class="ax active">
+            <span class="ax-dot v"></span> Audio
+            <span class="ax-x"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg></span>
+          </div>
+          <div class="ax"><span class="ax-dot b"></span> Electronics</div>
+          <div class="ax"><span class="ax-dot b"></span> Fitness</div>
+          <div class="add-axiom">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="40" y1="128" x2="216" y2="128"/></svg>
+            Add
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Threshold -->
+      <div class="sec">Price Research Threshold <span class="sl"></span></div>
+      <div class="threshold-card">
+        <div class="tc-header">
+          <span class="tc-label">I research before spending over</span>
+          <span class="tc-value">$150</span>
+        </div>
+        <div class="tc-bar">
+          <div class="tc-fill"></div>
+          <div class="tc-thumb"></div>
+        </div>
+        <div class="tc-range">
+          <span>$25</span>
+          <span>$100</span>
+          <span>$250</span>
+          <span>$500+</span>
+        </div>
+        <div class="tc-desc">Products above this price trigger more detailed verdicts and price tracking alerts.</div>
+      </div>
+
+      <!-- Ecosystem -->
+      <div class="sec">Ecosystem <span class="sl"></span></div>
+      <div class="eco-row">
+        <div class="eco-card selected">
+          <div class="eco-icon">&#xF8FF;</div>
+          <div class="eco-name">Apple</div>
+          <div class="eco-check on">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.1 104.1 0 0 0 128 24zm45.7 85.7l-56 56a8.1 8.1 0 0 1-11.4 0l-24-24a8 8 0 0 1 11.4-11.4L112 148.7l50.3-50.4a8 8 0 0 1 11.4 11.4z"/></svg>
+          </div>
+        </div>
+        <div class="eco-card">
+          <div class="eco-icon">&#x1F4F1;</div>
+          <div class="eco-name">Android</div>
+          <div class="eco-check off"></div>
+        </div>
+        <div class="eco-card">
+          <div class="eco-icon">&#x1F3E0;</div>
+          <div class="eco-name">Smart Home</div>
+          <div class="eco-check off"></div>
+        </div>
+      </div>
+
+      <!-- What I Know -->
+      <div class="sec">What I Know About You <span class="sl"></span></div>
+
+      <div class="knowledge-card">
+        <div class="kc-icon violet">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="32" y="48" width="192" height="160" rx="8"/><line x1="128" y1="48" x2="128" y2="208"/><line x1="32" y1="128" x2="224" y2="128"/></svg>
+        </div>
+        <div class="kc-info">
+          <div class="kc-title">My Products</div>
+          <div class="kc-desc">Things you own</div>
+        </div>
+        <div class="kc-right">
+          <span class="kc-count">12</span>
+          <span class="kc-chev"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></span>
+        </div>
+      </div>
+
+      <div class="knowledge-card">
+        <div class="kc-icon green">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M168 224a8 8 0 0 1-13.9 5.4L128 200l-26.1 29.4A8 8 0 0 1 88 224V32a8 8 0 0 1 8-8h64a8 8 0 0 1 8 8z"/></svg>
+        </div>
+        <div class="kc-info">
+          <div class="kc-title">Saved Items</div>
+          <div class="kc-desc">Products, verdicts, comparisons</div>
+        </div>
+        <div class="kc-right">
+          <span class="kc-count">7</span>
+          <span class="kc-chev"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></span>
+        </div>
+      </div>
+
+      <div class="knowledge-card">
+        <div class="kc-icon blue">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><polyline points="128 72 128 128 176 128"/></svg>
+        </div>
+        <div class="kc-info">
+          <div class="kc-title">Conversation History</div>
+          <div class="kc-desc">Past research threads</div>
+        </div>
+        <div class="kc-right">
+          <span class="kc-count">23</span>
+          <span class="kc-chev"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="96 48 176 128 96 208"/></svg></span>
+        </div>
+      </div>
+
+      <!-- Learned from Conversations -->
+      <div class="sec">Learned From Conversations <span class="sl"></span></div>
+      <div class="learned-section">
+        <div class="learned-item">
+          <div class="li-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <div class="li-info">
+            <div class="li-text">You prefer <strong>Nike for running</strong> but are open to Brooks</div>
+            <div class="li-source">inferred from 3 conversations</div>
+          </div>
+          <div class="li-remove">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg>
+          </div>
+        </div>
+        <div class="learned-item">
+          <div class="li-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <div class="li-info">
+            <div class="li-text">You're <strong>sensitive to retinol concentration claims</strong> in skincare</div>
+            <div class="li-source">inferred from skincare research thread</div>
+          </div>
+          <div class="li-remove">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg>
+          </div>
+        </div>
+        <div class="learned-item">
+          <div class="li-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <div class="li-info">
+            <div class="li-text">You <strong>prioritize ANC quality over call quality</strong> in headphones</div>
+            <div class="li-source">inferred from headphone comparison</div>
+          </div>
+          <div class="li-remove">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg>
+          </div>
+        </div>
+        <div class="learned-item">
+          <div class="li-icon">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176 232a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v152a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V104a8 8 0 0 1 16 0v120a8 8 0 0 1-8 8zm-48 0a8 8 0 0 1-8-8V136a8 8 0 0 1 16 0v88a8 8 0 0 1-8 8z"/></svg>
+          </div>
+          <div class="li-info">
+            <div class="li-text">Your husband is <strong>into cooking</strong> - potential gift recipient</div>
+            <div class="li-source">inferred from gift shopping thread</div>
+          </div>
+          <div class="li-remove">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Controls -->
+      <div class="sec">Your Data <span class="sl"></span></div>
+      <div class="data-row">
+        <div class="data-btn export">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M216 112v96a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8v-96"/><polyline points="96 144 128 112 160 144"/><line x1="128" y1="112" x2="128" y2="24"/></svg>
+          Export all data
+        </div>
+        <div class="data-btn clear">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="216" y1="56" x2="40" y2="56"/><line x1="104" y1="104" x2="104" y2="168"/><line x1="152" y1="104" x2="152" y2="168"/><path d="M200 56v152a8 8 0 0 1-8 8H64a8 8 0 0 1-8-8V56"/><path d="M168 56V40a16 16 0 0 0-16-16h-48a16 16 0 0 0-16 16v16"/></svg>
+          Clear all data
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
