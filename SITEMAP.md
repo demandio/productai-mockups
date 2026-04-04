@@ -30,6 +30,8 @@ Base URL: https://productai-mockups.vercel.app
 | Post-Install Splash - Original | https://productai-mockups.vercel.app/#extension/post-install-original | extension-post-install-flow.html |
 | First Verdict: Sign-In First - Original | https://productai-mockups.vercel.app/#extension/first-verdict-original | extension-install-onboarding.html |
 | Side Panel: Product Verdict on Amazon | https://productai-mockups.vercel.app/#extension/side-panel | extension-side-panel-mockup.html |
+| Research Mode: Reddit Claim-Checking | https://productai-mockups.vercel.app/#extension/research-mode | extension-research-mode.html |
+| Shopping Mode: Sephora Product Analysis | https://productai-mockups.vercel.app/#extension/shopping-mode-skincare | extension-shopping-skincare.html |
 | Empty State - Non-Commerce Page | https://productai-mockups.vercel.app/#extension/empty-state | extension-empty-state.html |
 | Caution & Kill Shot Verdicts | https://productai-mockups.vercel.app/#extension/caution-killshot | extension-caution-killshot.html |
 | Chat Follow-Up & Loading | https://productai-mockups.vercel.app/#extension/chat-followup | extension-chat-followup.html |
