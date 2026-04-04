@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Skincare - Extension Shopping Mode</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { font-family: -apple-system, sans-serif; background: #F5F5F5; color: #333; line-height: 1.5; overflow-x: hidden; }
+
+/* ── Simulated Browser Chrome ── */
+.browser-frame {
+  max-width: 1280px; margin: 40px auto;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #DDD;
+}
+.browser-bar {
+  background: #F0F0F0; padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid #DDD;
+}
+.browser-dots { display: flex; gap: 6px; }
+.browser-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.browser-dots .r { background: #FF5F57; }
+.browser-dots .y { background: #FFBD2E; }
+.browser-dots .g { background: #28CA42; }
+.browser-url {
+  flex: 1; background: rgba(255,255,255,0.03); border-radius: 6px;
+  padding: 6px 12px; font-size: 12px; color: #666;
+  border: 1px solid #E0E0E0;
+}
+.browser-url .domain { color: #333; font-weight: 500; }
+.browser-extensions {
+  display: flex; gap: 8px; align-items: center;
+}
+.ext-icon {
+  width: 24px; height: 24px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; cursor: pointer;
+}
+.ext-pai {
+  background: #8B5CF6; color: #FFF; font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 9px; position: relative;
+}
+.ext-pai .notif {
+  position: absolute; top: -3px; right: -3px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #C4962C; color: #FFF; font-size: 7px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid #F0F0F0;
+}
+.ext-other { background: #E0E0E0; color: #999; font-size: 10px; }
+
+/* ── Simulated Sephora Page ── */
+.page-content {
+  display: flex; position: relative;
+  background: rgba(255,255,255,0.03);
+  min-height: 700px;
+}
+.product-page {
+  flex: 1; padding: 32px 40px;
+}
+
+/* Simulated Sephora header */
+.fake-sephora-nav {
+  background: #000; color: #FFF; padding: 10px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+}
+.fake-sephora-nav .logo { font-size: 16px; letter-spacing: 0.2em; }
+.fake-sephora-nav .links { display: flex; gap: 20px; font-size: 11px; font-weight: 400; color: #CCC; }
+
+.product-layout {
+  display: flex; gap: 40px; padding: 24px 0;
+}
+.product-image {
+  width: 360px; height: 400px; flex-shrink: 0;
+  background: #F9F9F9; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid #EEE;
+}
+.product-image-placeholder {
+  width: 200px; height: 280px;
+  background: linear-gradient(135deg, #F0E8F8 0%, #E8F0F0 100%);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+}
+.product-image-placeholder .bottle {
+  width: 60px; height: 120px; border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(135deg, #D4C4E8 0%, #C4D8E0 100%);
+  position: relative;
+}
+.product-image-placeholder .bottle::before {
+  content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  width: 24px; height: 12px; border-radius: 4px 4px 0 0;
+  background: #AAA;
+}
+.product-image-placeholder .label {
+  font-size: 10px; color: #999; text-align: center;
+}
+
+.product-info { flex: 1; }
+.product-brand-label { font-size: 13px; font-weight: 600; color: #000; letter-spacing: 0.02em; margin-bottom: 4px; }
+.product-title { font-size: 22px; font-weight: 400; color: #000; margin-bottom: 8px; }
+.product-rating { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #666; margin-bottom: 12px; }
+.product-rating .stars { color: #F5A623; letter-spacing: 2px; }
+.product-price { font-size: 20px; font-weight: 600; color: #000; margin-bottom: 16px; }
+.product-size { font-size: 12px; color: #666; margin-bottom: 20px; }
+.product-desc { font-size: 14px; color: #444; line-height: 1.7; margin-bottom: 20px; }
+.add-to-bag {
+  padding: 14px 48px; background: #000; color: #FFF;
+  font-size: 14px; font-weight: 600; letter-spacing: 0.05em;
+  border: none; border-radius: 0; cursor: pointer;
+}
+.product-claims {
+  margin-top: 24px; padding-top: 20px; border-top: 1px solid #EEE;
+}
+.product-claims .label { font-size: 12px; font-weight: 600; color: #000; margin-bottom: 8px; letter-spacing: 0.02em; }
+.claim-tag {
+  display: inline-block; padding: 4px 10px; border-radius: 4px;
+  font-size: 11px; color: #333; background: #F5F5F5;
+  margin: 0 4px 4px 0; border: 1px solid #EEE;
+}
+
+/* ═══ PRODUCT.AI EXTENSION PANEL ═══ */
+.pai-panel {
+  width: 360px; flex-shrink: 0;
+  background: #09090B;
+  border-left: 1px solid #3F3F46;
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.pai-panel::before {
+  content: 'PRODUCT.AI EXTENSION PANEL';
+  position: absolute; top: -24px; right: 0;
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  color: #999; letter-spacing: 0.08em;
+}
+
+.sp-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #27272A;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sp-logo {
+  font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600;
+  color: #FAFAFA; letter-spacing: -0.02em;
+}
+.sp-logo span { color: #8B5CF6; font-weight: 400; }
+.sp-close {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: #18181B; color: #71717A;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; cursor: pointer; border: none;
+}
+
+/* Score Banner */
+.sp-score-banner {
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(139,92,246,0.04) 100%);
+  border-bottom: 1px solid #27272A;
+}
+.sp-product-name {
+  font-size: 14px; font-weight: 600; color: #FAFAFA; margin-bottom: 2px;
+}
+.sp-product-brand { font-size: 11px; color: #71717A; margin-bottom: 12px; }
+.sp-score-row {
+  display: flex; align-items: center; gap: 16px;
+}
+.sp-score-circle {
+  width: 56px; height: 56px; border-radius: 50%;
+  border: 2.5px solid #34A87A;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.sp-score-circle .num {
+  font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700;
+  color: #34A87A; line-height: 1;
+}
+.sp-score-circle .of {
+  font-family: 'DM Mono', monospace; font-size: 8px; color: #71717A;
+}
+.sp-score-breakdown {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.sp-score-item {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px;
+}
+.sp-score-item .k { color: #4A4A45; }
+.sp-score-item .v { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; }
+.sp-score-item .v.good { color: #34A87A; }
+.sp-score-item .v.warn { color: #C4962C; }
+.sp-score-item .v.bad { color: #C75B5B; }
+
+/* Claims Verification */
+.sp-section {
+  padding: 16px 20px;
+  border-bottom: 1px solid #27272A;
+}
+.sp-section-title {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+  color: #71717A; letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.sp-claim {
+  display: flex; align-items: flex-start; gap: 8px;
+  margin-bottom: 10px;
+  padding: 8px 10px; border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid #27272A;
+}
+.sp-claim:last-child { margin-bottom: 0; }
+.sp-claim-icon {
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+  font-size: 9px; font-weight: 700;
+}
+.sp-claim-icon.pass { background: rgba(52,211,153,0.1); color: #34A87A; }
+.sp-claim-icon.warn { background: rgba(196,150,44,0.1); color: #C4962C; }
+.sp-claim-icon.fail { background: rgba(199,91,91,0.1); color: #C75B5B; }
+.sp-claim-text { flex: 1; }
+.sp-claim-label { font-size: 12px; font-weight: 500; color: #FAFAFA; margin-bottom: 1px; }
+.sp-claim-detail { font-size: 10px; color: #71717A; line-height: 1.4; }
+
+/* Key Ingredients */
+.sp-ingredient {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 10px; border-radius: 8px;
+  margin-bottom: 4px;
+  background: rgba(255,255,255,0.03); border: 1px solid #27272A;
+}
+.sp-ingredient:last-child { margin-bottom: 0; }
+.sp-ing-left {
+  display: flex; align-items: center; gap: 6px;
+}
+.sp-ing-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.sp-ing-dot.good { background: #34A87A; }
+.sp-ing-dot.warn { background: #C4962C; }
+.sp-ing-dot.info { background: #4A8BA8; }
+.sp-ing-name { font-size: 12px; font-weight: 500; color: #FAFAFA; }
+.sp-ing-conc { font-family: 'DM Mono', monospace; font-size: 10px; color: #71717A; }
+
+/* Interaction Alert */
+.sp-alert {
+  padding: 10px 12px; border-radius: 8px;
+  background: rgba(196,150,44,0.06);
+  border: 1px solid rgba(196,150,44,0.12);
+  margin-bottom: 8px;
+}
+.sp-alert:last-child { margin-bottom: 0; }
+.sp-alert-title {
+  font-size: 11px; font-weight: 600; color: #C4962C;
+  margin-bottom: 2px; display: flex; align-items: center; gap: 4px;
+}
+.sp-alert-text { font-size: 10px; color: #71717A; line-height: 1.4; }
+
+/* Verdict */
+.sp-verdict {
+  padding: 16px 20px;
+  background: rgba(52,211,153,0.06);
+  border-top: 1px solid rgba(52,211,153,0.1);
+}
+.sp-verdict-label {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+  color: #34A87A; letter-spacing: 0.08em; margin-bottom: 6px;
+}
+.sp-verdict-text {
+  font-size: 13px; font-weight: 500; color: #FAFAFA; line-height: 1.5;
+  margin-bottom: 8px;
+}
+.sp-verdict-detail { font-size: 11px; color: #71717A; line-height: 1.5; }
+
+/* Footer */
+.sp-footer {
+  padding: 12px 20px;
+  border-top: 1px solid #27272A;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: auto;
+}
+.sp-footer-text { font-size: 9px; color: #71717A; }
+.sp-footer-link { font-size: 10px; color: #8B5CF6; font-weight: 500; cursor: pointer; }
+
+/* ── Annotation Labels ── */
+.mock-label {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: #18181B; color: #FAFAF7; padding: 8px 20px; border-radius: 8px;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 200;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ BROWSER FRAME ═══ -->
+<div class="browser-frame">
+  <!-- Browser Bar -->
+  <div class="browser-bar">
+    <div class="browser-dots">
+      <span class="r"></span><span class="y"></span><span class="g"></span>
+    </div>
+    <div class="browser-url">
+      <span class="domain">sephora.com</span>/product/the-ordinary-niacinamide-10-zinc-1-P427519
+    </div>
+    <div class="browser-extensions">
+      <div class="ext-icon ext-other">S</div>
+      <div class="ext-icon ext-pai">
+        P.ai
+        <span class="notif">2</span>
+      </div>
+      <div class="ext-icon ext-other">A</div>
+    </div>
+  </div>
+
+  <!-- Simulated Sephora Nav -->
+  <div class="fake-sephora-nav">
+    <span class="logo">SEPHORA</span>
+    <div class="links">
+      <span>New</span>
+      <span>Brands</span>
+      <span>Skincare</span>
+      <span>Makeup</span>
+      <span>Hair</span>
+      <span>Fragrance</span>
+    </div>
+  </div>
+
+  <!-- Page Content: Sephora + Product.ai Panel -->
+  <div class="page-content">
+
+    <!-- Simulated Sephora Product Page -->
+    <div class="product-page">
+      <div class="product-layout">
+        <div class="product-image">
+          <div class="product-image-placeholder">
+            <div class="bottle"></div>
+            <div class="label">Product Image<br>(simulated)</div>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-brand-label">THE ORDINARY</div>
+          <div class="product-title">Niacinamide 10% + Zinc 1%</div>
+          <div class="product-rating">
+            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            <span>4.0 | 12.4K Reviews</span>
+          </div>
+          <div class="product-price">$5.90</div>
+          <div class="product-size">Size: 1 oz / 30 mL</div>
+          <div class="product-desc">
+            A high-strength vitamin and mineral blemish formula. Niacinamide (Vitamin B3) is indicated to reduce the appearance of skin blemishes and congestion. A high 10% concentration of this vitamin is supported in the formula by zinc salt of pyrrolidone carboxylic acid to balance visible aspects of sebum activity.
+          </div>
+          <button class="add-to-bag">ADD TO BAG</button>
+          <div class="product-claims">
+            <div class="label">Product Claims</div>
+            <span class="claim-tag">Vegan</span>
+            <span class="claim-tag">Cruelty-Free</span>
+            <span class="claim-tag">Gluten-Free</span>
+            <span class="claim-tag">Oil-Free</span>
+            <span class="claim-tag">Alcohol-Free</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PRODUCT.AI EXTENSION PANEL ═══ -->
+    <div class="pai-panel">
+
+      <!-- Header -->
+      <div class="sp-header">
+        <div class="sp-logo">Product<span>.ai</span></div>
+        <button class="sp-close">x</button>
+      </div>
+
+      <!-- Score Banner -->
+      <div class="sp-score-banner">
+        <div class="sp-product-name">Niacinamide 10% + Zinc 1%</div>
+        <div class="sp-product-brand">The Ordinary / DECIEM</div>
+        <div class="sp-score-row">
+          <div class="sp-score-circle">
+            <span class="num">87</span>
+            <span class="of">/100</span>
+          </div>
+          <div class="sp-score-breakdown">
+            <div class="sp-score-item">
+              <span class="k">Claims verified</span>
+              <span class="v good">4 of 5</span>
+            </div>
+            <div class="sp-score-item">
+              <span class="k">Ingredient safety</span>
+              <span class="v good">Clean</span>
+            </div>
+            <div class="sp-score-item">
+              <span class="k">Concentration</span>
+              <span class="v warn">High (10%)</span>
+            </div>
+            <div class="sp-score-item">
+              <span class="k">Interactions</span>
+              <span class="v warn">1 flag</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Claims Verification -->
+      <div class="sp-section">
+        <div class="sp-section-title">Marketing Claims Check</div>
+
+        <div class="sp-claim">
+          <div class="sp-claim-icon pass">&#10003;</div>
+          <div class="sp-claim-text">
+            <div class="sp-claim-label">"Reduces blemishes"</div>
+            <div class="sp-claim-detail">Supported. 12 studies confirm niacinamide efficacy for blemish reduction at 2-5%.</div>
+          </div>
+        </div>
+
+        <div class="sp-claim">
+          <div class="sp-claim-icon pass">&#10003;</div>
+          <div class="sp-claim-text">
+            <div class="sp-claim-label">"Balances sebum"</div>
+            <div class="sp-claim-detail">Supported. Both niacinamide and zinc PCA have evidence for sebum regulation.</div>
+          </div>
+        </div>
+
+        <div class="sp-claim">
+          <div class="sp-claim-icon warn">!</div>
+          <div class="sp-claim-text">
+            <div class="sp-claim-label">"High-strength formula"</div>
+            <div class="sp-claim-detail">True but misleading. 10% is higher than evidence-optimal range (2-5%). Higher is not necessarily better.</div>
+          </div>
+        </div>
+
+        <div class="sp-claim">
+          <div class="sp-claim-icon pass">&#10003;</div>
+          <div class="sp-claim-text">
+            <div class="sp-claim-label">"Oil-free"</div>
+            <div class="sp-claim-detail">Confirmed. No oils in ingredient list.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Ingredients -->
+      <div class="sp-section">
+        <div class="sp-section-title">Key Ingredients</div>
+
+        <div class="sp-ingredient">
+          <div class="sp-ing-left">
+            <span class="sp-ing-dot good"></span>
+            <span class="sp-ing-name">Niacinamide</span>
+          </div>
+          <span class="sp-ing-conc">10%</span>
+        </div>
+
+        <div class="sp-ingredient">
+          <div class="sp-ing-left">
+            <span class="sp-ing-dot good"></span>
+            <span class="sp-ing-name">Zinc PCA</span>
+          </div>
+          <span class="sp-ing-conc">1%</span>
+        </div>
+
+        <div class="sp-ingredient">
+          <div class="sp-ing-left">
+            <span class="sp-ing-dot info"></span>
+            <span class="sp-ing-name">Dimethicone</span>
+          </div>
+          <span class="sp-ing-conc">vehicle</span>
+        </div>
+
+        <div class="sp-ingredient">
+          <div class="sp-ing-left">
+            <span class="sp-ing-dot info"></span>
+            <span class="sp-ing-name">Glycerin</span>
+          </div>
+          <span class="sp-ing-conc">humectant</span>
+        </div>
+      </div>
+
+      <!-- Interactions -->
+      <div class="sp-section">
+        <div class="sp-section-title">Routine Interactions</div>
+        <div class="sp-alert">
+          <div class="sp-alert-title">Niacinamide + Vitamin C</div>
+          <div class="sp-alert-text">If using L-Ascorbic Acid, apply separately (AM/PM split). At 10% niacinamide, the flushing risk with low-pH Vitamin C is real.</div>
+        </div>
+        <div class="sp-alert" style="background: rgba(52,211,153,0.06); border-color: rgba(52,211,153,0.1);">
+          <div class="sp-alert-title" style="color: #34A87A;">Safe with retinoids</div>
+          <div class="sp-alert-text">Niacinamide can reduce retinoid irritation. Good evening routine companion.</div>
+        </div>
+      </div>
+
+      <!-- Verdict -->
+      <div class="sp-verdict">
+        <div class="sp-verdict-label">PRODUCT.AI VERDICT</div>
+        <div class="sp-verdict-text">Good buy. The formula works, the price is right. Start every other day at this concentration.</div>
+        <div class="sp-verdict-detail">4 of 5 marketing claims verified. One is technically true but misleading (10% is higher than evidence supports as optimal). Clean ingredient list, no fragrance, no sensitizers. Exceptional value at $5.90.</div>
+      </div>
+
+      <!-- Footer -->
+      <div class="sp-footer">
+        <span class="sp-footer-text">Powered by Product.ai Truth Graph</span>
+        <span class="sp-footer-link">Full analysis &rarr;</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="mock-label">Product.ai extension (Phase 2) -- side panel overlay on Sephora product page</div>
+
+</body>
+</html>

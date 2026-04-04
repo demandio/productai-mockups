@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product.ai Skincare - Extension Research Mode</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #09090B;
+  --surface: #18181B;
+  --surface-2: #27272A;
+  --border: #3F3F46;
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+  --text-faint: #52525B;
+  --brand: #8B5CF6;
+  --brand-dark: #A384FF;
+  --brand-light: rgba(139,92,246,0.08);
+  --verified: #34A87A;
+  --verified-bg: rgba(52,168,122,0.06);
+  --caution: #C4962C;
+  --caution-bg: rgba(196,150,44,0.06);
+  --alert: #C75B5B;
+  --alert-bg: rgba(199,91,91,0.06);
+  --info: #4A8BA8;
+  --info-bg: rgba(74,139,168,0.06);
+  --disputed: #9B6B9E;
+  --disputed-bg: rgba(155,107,158,0.06);
+  --white: #FAFAFA;
+  --card-bg: rgba(255,255,255,0.03);
+  --reddit-bg: #1A1A1B;
+  --reddit-surface: #272729;
+  --reddit-border: #343536;
+  --reddit-text: #D7DADC;
+  --reddit-text-2: #818384;
+  --reddit-blue: #4FBCFF;
+  --reddit-orange: #FF4500;
+  --sans: 'Inter', -apple-system, sans-serif;
+  --heading: 'Space Grotesk', -apple-system, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--sans); background: #1A1A1B; color: #D7DADC; line-height: 1.6; overflow: hidden; height: 100vh; }
+
+/* -- Browser Chrome -- */
+.browser {
+  display: flex; flex-direction: column; height: 100vh;
+  background: #2B2B2B;
+}
+.browser-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 16px; background: #323232;
+  border-bottom: 1px solid #404040;
+  flex-shrink: 0;
+}
+.browser-dots { display: flex; gap: 6px; }
+.browser-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.browser-dots .r { background: #FF5F56; }
+.browser-dots .y { background: #FFBD2E; }
+.browser-dots .g { background: #27C93F; }
+.browser-url {
+  flex: 1; background: #1E1E1E; border-radius: 8px;
+  padding: 6px 14px; font-size: 12px; color: #999;
+  font-family: var(--sans); border: 1px solid #404040;
+}
+.browser-url span { color: #D7DADC; }
+.browser-extensions {
+  display: flex; gap: 6px; align-items: center;
+}
+.ext-icon {
+  width: 24px; height: 24px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  background: #404040; font-size: 10px; color: #999;
+  position: relative;
+}
+.ext-icon.pai {
+  background: var(--brand); color: white; font-weight: 700;
+  font-family: var(--mono); font-size: 9px;
+}
+.ext-icon.pai .badge {
+  position: absolute; top: -3px; right: -3px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--verified); border: 2px solid #323232;
+  font-size: 7px; color: white; display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+}
+
+/* -- Main Layout -- */
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* -- Reddit Page (Left) -- */
+.reddit-page {
+  flex: 1; overflow-y: auto; background: var(--reddit-bg);
+  padding: 16px 20px;
+}
+.reddit-page::-webkit-scrollbar { width: 6px; }
+.reddit-page::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+
+.reddit-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 16px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--reddit-border);
+}
+.reddit-sub-icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: white;
+}
+.reddit-sub-name { font-size: 13px; font-weight: 600; color: var(--reddit-text); }
+.reddit-sub-meta { font-size: 11px; color: var(--reddit-text-2); }
+
+/* -- Reddit Post -- */
+.reddit-post {
+  background: var(--reddit-surface); border-radius: 8px;
+  border: 1px solid var(--reddit-border); padding: 16px;
+  margin-bottom: 12px;
+}
+.reddit-post-header {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 8px; font-size: 11px; color: var(--reddit-text-2);
+}
+.reddit-post-header .user { color: var(--reddit-blue); font-weight: 500; }
+.reddit-post h2 {
+  font-size: 17px; font-weight: 600; color: var(--reddit-text);
+  line-height: 1.3; margin-bottom: 10px;
+}
+.reddit-post-body {
+  font-size: 13px; color: var(--reddit-text); line-height: 1.7;
+}
+.reddit-post-body p { margin-bottom: 10px; }
+.reddit-post-actions {
+  display: flex; gap: 12px; margin-top: 12px;
+  font-size: 11px; color: var(--reddit-text-2); font-weight: 600;
+}
+
+/* -- Reddit Comments -- */
+.reddit-comment {
+  background: var(--reddit-surface); border-radius: 8px;
+  border: 1px solid var(--reddit-border); padding: 14px;
+  margin-bottom: 8px;
+}
+.reddit-comment-header {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 6px; font-size: 11px; color: var(--reddit-text-2);
+}
+.reddit-comment-header .user { color: var(--reddit-blue); font-weight: 500; }
+.reddit-comment-body {
+  font-size: 13px; color: var(--reddit-text); line-height: 1.6;
+}
+.reddit-comment .highlight {
+  background: rgba(196,150,44,0.15); padding: 1px 4px; border-radius: 3px;
+  border-bottom: 2px solid var(--caution);
+}
+.reddit-comment .highlight-good {
+  background: rgba(52,168,122,0.12); padding: 1px 4px; border-radius: 3px;
+  border-bottom: 2px solid var(--verified);
+}
+.reddit-comment .highlight-bad {
+  background: rgba(199,91,91,0.12); padding: 1px 4px; border-radius: 3px;
+  border-bottom: 2px solid var(--alert);
+}
+.reddit-comment-actions {
+  display: flex; gap: 10px; margin-top: 8px;
+  font-size: 10px; color: var(--reddit-text-2); font-weight: 600;
+}
+
+/* -- Extension Panel (Right) -- */
+.ext-panel {
+  width: 360px; flex-shrink: 0;
+  background: var(--bg); color: var(--text-primary);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.ext-panel::-webkit-scrollbar { width: 4px; }
+.ext-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+/* -- Panel Header -- */
+.panel-header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(9,9,11,0.95); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--surface-2);
+}
+.panel-logo {
+  font-family: var(--heading); font-size: 15px; font-weight: 600;
+  color: var(--text-primary);
+}
+.panel-logo span { color: var(--brand); font-weight: 400; }
+.panel-mode-badge {
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  color: var(--brand-dark); background: var(--brand-light);
+  padding: 3px 8px; border-radius: 100px;
+  letter-spacing: 0.04em;
+}
+.panel-close {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); cursor: pointer; border: none; background: none;
+  font-size: 14px;
+}
+
+/* -- Panel Content -- */
+.panel-content { padding: 16px; flex: 1; }
+
+.panel-context {
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--brand-light); border: 1px solid rgba(139,92,246,0.12);
+  margin-bottom: 16px;
+}
+.panel-context-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  color: var(--brand-dark); letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.panel-context-text {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.5;
+}
+
+/* -- Detected Claims -- */
+.claims-section { margin-bottom: 20px; }
+.claims-title {
+  font-family: var(--heading); font-size: 14px; font-weight: 600;
+  color: var(--text-primary); margin-bottom: 4px;
+}
+.claims-subtitle {
+  font-size: 11px; color: var(--text-muted); margin-bottom: 12px;
+}
+
+.claim-card {
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--card-bg); border: 1px solid var(--surface-2);
+  margin-bottom: 8px; transition: border-color 150ms;
+}
+.claim-card:hover { border-color: var(--brand); opacity: 0.95; }
+
+.claim-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 8px; margin-bottom: 6px;
+}
+.claim-quote {
+  font-size: 12px; font-weight: 600; color: var(--text-primary);
+  line-height: 1.4; flex: 1;
+}
+.claim-quote::before { content: '\201C'; color: var(--text-faint); }
+.claim-quote::after { content: '\201D'; color: var(--text-faint); }
+
+.claim-verdict {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  padding: 2px 7px; border-radius: 100px;
+  letter-spacing: 0.03em; flex-shrink: 0;
+}
+.claim-verdict.verified { color: var(--verified); background: var(--verified-bg); }
+.claim-verdict.caution { color: var(--caution); background: var(--caution-bg); }
+.claim-verdict.disputed { color: var(--disputed); background: var(--disputed-bg); }
+.claim-verdict.alert { color: var(--alert); background: var(--alert-bg); }
+
+.claim-detail {
+  font-size: 11px; color: var(--text-secondary); line-height: 1.6;
+}
+.claim-source {
+  font-family: var(--mono); font-size: 9px; color: var(--text-faint);
+  margin-top: 6px; letter-spacing: 0.02em;
+}
+
+/* -- Interactions Alert -- */
+.interaction-alert {
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--caution-bg); border: 1px solid rgba(196,150,44,0.12);
+  margin-bottom: 16px;
+}
+.interaction-alert-header {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
+}
+.interaction-alert-icon {
+  width: 18px; height: 18px; border-radius: 5px;
+  background: rgba(196,150,44,0.15); color: var(--caution);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+}
+.interaction-alert-title {
+  font-size: 12px; font-weight: 600; color: var(--text-primary);
+}
+.interaction-alert-body {
+  font-size: 11px; color: var(--text-secondary); line-height: 1.6;
+  padding-left: 24px;
+}
+
+/* -- Related Axioms -- */
+.axioms-section { margin-bottom: 16px; }
+.axiom-mini {
+  padding: 10px 12px; border-radius: 8px;
+  background: var(--card-bg); border: 1px solid var(--surface-2);
+  margin-bottom: 6px; cursor: pointer;
+  transition: border-color 150ms;
+}
+.axiom-mini:hover { border-color: var(--brand); }
+.axiom-mini-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 3px;
+}
+.axiom-mini-domain {
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  color: var(--brand-dark); letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.axiom-mini-confidence {
+  font-family: var(--mono); font-size: 9px; color: var(--text-faint);
+}
+.axiom-mini-text {
+  font-size: 11px; color: var(--text-secondary); line-height: 1.5;
+}
+.axiom-mini-arrow {
+  font-size: 10px; color: var(--text-faint); margin-top: 4px;
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* -- Panel Footer -- */
+.panel-footer {
+  padding: 12px 16px; border-top: 1px solid var(--surface-2);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.panel-input {
+  display: flex; gap: 8px; align-items: center;
+}
+.panel-input input {
+  flex: 1; padding: 8px 12px; border-radius: 8px;
+  border: 1px solid var(--surface-2); font-size: 12px;
+  font-family: var(--sans); color: var(--text-primary);
+  background: var(--surface);
+}
+.panel-input input::placeholder { color: var(--text-faint); }
+.panel-input button {
+  padding: 8px 14px; border-radius: 8px;
+  background: var(--brand); color: white;
+  font-size: 11px; font-weight: 600; border: none;
+  font-family: var(--sans); cursor: pointer;
+}
+.panel-powered {
+  font-size: 10px; color: var(--text-faint); text-align: center;
+}
+.panel-powered span {
+  font-family: var(--mono); font-weight: 500; color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<!-- ========== BROWSER CHROME ========== -->
+<div class="browser">
+  <div class="browser-bar">
+    <div class="browser-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    <div class="browser-url">
+      <span>reddit.com</span>/r/SkincareAddiction/comments/retinol_concentration_does_it_matter
+    </div>
+    <div class="browser-extensions">
+      <div class="ext-icon">uB</div>
+      <div class="ext-icon">1P</div>
+      <div class="ext-icon pai">P.ai<div class="badge">3</div></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- ========== REDDIT PAGE ========== -->
+    <div class="reddit-page">
+      <div class="reddit-header">
+        <div class="reddit-sub-icon">S</div>
+        <div>
+          <div class="reddit-sub-name">r/SkincareAddiction</div>
+          <div class="reddit-sub-meta">4.8M members - Posted by u/skincare_skeptic42 - 3h ago</div>
+        </div>
+      </div>
+
+      <div class="reddit-post">
+        <div class="reddit-post-header">
+          <span class="user">u/skincare_skeptic42</span> - 3 hours ago - 127 upvotes
+        </div>
+        <h2>Does retinol concentration actually matter? My derm says 0.5% is fine but everyone here swears by 1%+</h2>
+        <div class="reddit-post-body">
+          <p>I've been using The Ordinary Retinol 0.5% in Squalane for about 4 months and honestly I see results. My derm told me that 0.5% is the sweet spot and going higher just increases irritation without proportional benefits.</p>
+          <p>But every thread I read here has people saying you need at least 1% to see "real" anti-aging effects, and some people are even using <span class="highlight">bakuchiol as a "natural retinol alternative"</span> that's supposedly just as effective.</p>
+          <p>What's the actual science here? Is my derm wrong or is this sub just pushing higher concentrations for no reason?</p>
+        </div>
+        <div class="reddit-post-actions">
+          <span>247 Comments</span>
+          <span>Share</span>
+          <span>Save</span>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div class="reddit-comment">
+        <div class="reddit-comment-header">
+          <span class="user">u/derm_resident_2024</span> - 2h ago - 89 pts
+        </div>
+        <div class="reddit-comment-body">
+          Your derm is right. <span class="highlight-good">The clinical evidence supports 0.25-0.5% as the effective range</span> with diminishing returns above that. The 1%+ crowd is mostly anecdotal. Higher concentrations increase irritation risk significantly without proportional efficacy gains.
+        </div>
+        <div class="reddit-comment-actions">
+          <span>Reply</span><span>Share</span>
+        </div>
+      </div>
+
+      <div class="reddit-comment">
+        <div class="reddit-comment-header">
+          <span class="user">u/ingredient_nerd</span> - 2h ago - 45 pts
+        </div>
+        <div class="reddit-comment-body">
+          <span class="highlight-bad">Bakuchiol is definitely equivalent to retinol</span> - there was a study in the British Journal of Dermatology that showed comparable results. If you can't tolerate retinol, bakuchiol gives you the same anti-aging benefits without the irritation.
+        </div>
+        <div class="reddit-comment-actions">
+          <span>Reply</span><span>Share</span>
+        </div>
+      </div>
+
+      <div class="reddit-comment">
+        <div class="reddit-comment-header">
+          <span class="user">u/routine_builder</span> - 1h ago - 28 pts
+        </div>
+        <div class="reddit-comment-body">
+          I mix my retinol with niacinamide and vitamin C in my PM routine. Hasn't caused any issues for me. <span class="highlight">The idea that you can't mix these is a myth</span> from like 2015 that keeps getting repeated.
+        </div>
+        <div class="reddit-comment-actions">
+          <span>Reply</span><span>Share</span>
+        </div>
+      </div>
+
+      <div class="reddit-comment">
+        <div class="reddit-comment-header">
+          <span class="user">u/clean_beauty_convert</span> - 45m ago - 12 pts
+        </div>
+        <div class="reddit-comment-body">
+          I switched from retinol to <span class="highlight">rosehip oil which has natural retinoids</span> and it's been amazing for my skin. Much gentler and no purging period. Nature > lab every time.
+        </div>
+        <div class="reddit-comment-actions">
+          <span>Reply</span><span>Share</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== EXTENSION PANEL ========== -->
+    <div class="ext-panel">
+      <div class="panel-header">
+        <div class="panel-logo">Product<span>.ai</span></div>
+        <div class="panel-mode-badge">SKINCARE - RESEARCH MODE</div>
+        <button class="panel-close">x</button>
+      </div>
+
+      <div class="panel-content">
+        <!-- Context -->
+        <div class="panel-context">
+          <div class="panel-context-label">Thread Analysis</div>
+          <div class="panel-context-text">
+            Detected <strong>3 ingredient claims</strong> and <strong>2 misconceptions</strong> in this thread. 4 relevant axioms loaded from the Truth Graph.
+          </div>
+        </div>
+
+        <!-- Claims Check -->
+        <div class="claims-section">
+          <div class="claims-title">Claims Detected in Thread</div>
+          <div class="claims-subtitle">Product.ai checked each claim against verified axioms</div>
+
+          <div class="claim-card">
+            <div class="claim-header">
+              <div class="claim-quote">0.25-0.5% is the effective range with diminishing returns above</div>
+              <div class="claim-verdict verified">VERIFIED</div>
+            </div>
+            <div class="claim-detail">
+              Correct. Clinical evidence shows retinol stimulates collagen I and III synthesis at concentrations above 0.04%, with optimal efficacy at 0.25-0.5%. Above 1.0%, irritation risk increases disproportionately to efficacy gains.
+            </div>
+            <div class="claim-source">AXIOM: Retinol Dose-Response - FORGED 96% - 87 evidence sources</div>
+          </div>
+
+          <div class="claim-card">
+            <div class="claim-header">
+              <div class="claim-quote">Bakuchiol is definitely equivalent to retinol</div>
+              <div class="claim-verdict disputed">DISPUTED</div>
+            </div>
+            <div class="claim-detail">
+              Misleading. The Dhaliwal 2019 BJD study (n=44) showed comparable improvement in wrinkles and pigmentation after 12 weeks, but the study was small, industry-funded, and has not been independently replicated. Bakuchiol activates different pathways than retinol. "Equivalent" overstates the current evidence.
+            </div>
+            <div class="claim-source">AXIOM: Bakuchiol Equivalence - DISPUTED - No independent replication</div>
+          </div>
+
+          <div class="claim-card">
+            <div class="claim-header">
+              <div class="claim-quote">You can't mix retinol with niacinamide and vitamin C - that's a myth</div>
+              <div class="claim-verdict caution">PARTIALLY TRUE</div>
+            </div>
+            <div class="claim-detail">
+              The "can't mix" claim IS overstated. However, at high niacinamide concentrations (10%+), combining with L-ascorbic acid (vitamin C) at low pH can cause flushing. Separation or time delay is advisable. Retinol + niacinamide alone is safe and potentially synergistic.
+            </div>
+            <div class="claim-source">AXIOM: Niacinamide-Retinol Interaction - FORGED 89%</div>
+          </div>
+
+          <div class="claim-card">
+            <div class="claim-header">
+              <div class="claim-quote">Rosehip oil has natural retinoids</div>
+              <div class="claim-verdict alert">MISLEADING</div>
+            </div>
+            <div class="claim-detail">
+              Rosehip seed oil contains trace amounts of tretinoin (all-trans retinoic acid) but at concentrations far below therapeutic thresholds. Claiming rosehip oil substitutes for retinol is not supported by evidence. The "natural retinoid" framing is technically true but functionally misleading.
+            </div>
+            <div class="claim-source">AXIOM: Natural Retinoid Sources - FORGED 82%</div>
+          </div>
+        </div>
+
+        <!-- Interaction Alert -->
+        <div class="interaction-alert">
+          <div class="interaction-alert-header">
+            <div class="interaction-alert-icon">!</div>
+            <div class="interaction-alert-title">Thread mentions mixing retinol + Vitamin C</div>
+          </div>
+          <div class="interaction-alert-body">
+            If you use both in your routine, apply Vitamin C in the morning and retinol at night. Using them together at low pH can reduce retinol stability. This is a real interaction, not a myth - but the solution is timing, not avoidance.
+          </div>
+        </div>
+
+        <!-- Related Axioms -->
+        <div class="axioms-section">
+          <div class="claims-title">Related Axioms</div>
+          <div class="claims-subtitle">Verified knowledge relevant to this discussion</div>
+
+          <div class="axiom-mini">
+            <div class="axiom-mini-header">
+              <span class="axiom-mini-domain">Mechanism of Action</span>
+              <span class="axiom-mini-confidence">FORGED 96%</span>
+            </div>
+            <div class="axiom-mini-text">Retinol stimulates collagen I and III synthesis at concentrations above 0.04% via RAR/RXR receptor binding.</div>
+            <div class="axiom-mini-arrow">View full axiom ></div>
+          </div>
+
+          <div class="axiom-mini">
+            <div class="axiom-mini-header">
+              <span class="axiom-mini-domain">Stability</span>
+              <span class="axiom-mini-confidence">PROBABLE 72%</span>
+            </div>
+            <div class="axiom-mini-text">Retinol degrades 50-80% in dropper/pump bottles within 3 months. Airless packaging extends active life to 6-12 months.</div>
+            <div class="axiom-mini-arrow">View full axiom ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Footer -->
+      <div class="panel-footer">
+        <div class="panel-input">
+          <input type="text" placeholder="Ask about this thread...">
+          <button>Ask</button>
+        </div>
+        <div class="panel-powered">Powered by <span>Product.ai</span> Truth Graph</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

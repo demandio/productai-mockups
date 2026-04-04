@@ -485,6 +485,20 @@ const TABS = [
         ]
       },
       {
+        id: 'ext-research', label: 'Research + Shopping Modes', sublabel: 'Desktop Extension',
+        desc: 'Two context-driven modes, one extension. Research mode (Phase 1) activates on community pages - claim-checking. Shopping mode (Phase 2) activates on retailer pages - verdicts + affiliate commerce.',
+        items: [
+          { slug: 'research-mode', src: 'extension-research-mode.html', title: 'Research Mode: Reddit Claim-Checking', type: 'wide', full: true,
+            desc: 'Extension panel on r/SkincareAddiction. Detects 3 ingredient claims and 2 misconceptions. Checks each against the Truth Graph with FORGED/DISPUTED/SIGNAL confidence tiers.',
+            caption: `Phase 1 research mode - the trust-building surface. Extension detects it's on a community page (r/SkincareAddiction) and switches to research mode. Scans the thread for ingredient claims and checks each against verified axioms from the Truth Graph. Four claims detected: retinol dose-response (VERIFIED - 0.25-0.5% is the effective range), bakuchiol equivalence (DISPUTED - the BJD study was small and industry-funded), niacinamide + vitamin C mixing (PARTIALLY TRUE - safe at normal concentrations but flushing risk at 10%+ niacinamide with low-pH vitamin C), rosehip oil as retinoid source (MISLEADING - trace amounts far below therapeutic thresholds). Highlighted text on the Reddit page corresponds to detected claims. Interaction alert warns about retinol + vitamin C timing. Related axioms section shows deeper Truth Graph entries. This is the trust primitive for Phase 1 GTM: demonstrate value on community pages where users are already researching, before asking them to trust Product.ai on shopping pages.`,
+            tags: [['Extension','ext'],['Phase 1','key'],['Research Mode','key']] },
+          { slug: 'shopping-mode-skincare', src: 'extension-shopping-skincare.html', title: 'Shopping Mode: Sephora Product Analysis', type: 'wide', full: true,
+            desc: 'Extension panel on Sephora product page. Trust score, marketing claims verification, key ingredients with concentrations, routine interaction alerts, and verdict. Phase 2 commerce surface.',
+            caption: `Phase 2 shopping mode - the commerce surface. Extension detects it's on a retailer product page (Sephora) and switches to shopping mode. Analyzes The Ordinary Niacinamide 10% + Zinc 1%: trust score 87/100, marketing claims check (4 of 5 verified, "high-strength" is technically true but misleading since 10% exceeds evidence-optimal 2-5%), key ingredients with concentrations, routine interaction flag (niacinamide + vitamin C flushing risk at this concentration). Product.ai verdict: "Good buy. The formula works, the price is right. Start every other day at this concentration." This is where trust converts to commerce - after establishing credibility in research mode (Phase 1), users encounter the extension on shopping pages where it delivers verdicts alongside purchase context.`,
+            tags: [['Extension','ext'],['Phase 2','key'],['Shopping Mode','key']] }
+        ]
+      },
+      {
         id: 'ext-badges', label: 'Toolbar Badge States', sublabel: 'Desktop Extension',
         desc: 'The extension icon in Chrome\'s toolbar. The badge is the ambient signaling layer - it tells you when Product.ai has something to say.',
         custom: 'badges', items: []
@@ -737,6 +751,7 @@ const IC = {
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const app = document.getElementById('app');
+let _galleryScrollY = 0;
 
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
@@ -760,7 +775,7 @@ function renderHeader() {
     <div class="logo"><span class="logo-p">Product</span><span class="logo-a">.ai</span></div>
     <h1>Consumer Surfaces</h1>
     <p>Product strategy and high-fidelity mockups for the Product.ai mobile app, desktop extension, and web surfaces.</p>
-    <div class="meta"><span>March 2026</span><span>51 Screens</span></div>
+    <div class="meta"><span>March 2026</span><span>53 Screens</span></div>
   </div>`;
 }
 
@@ -880,6 +895,9 @@ function renderGallery(tabData) {
   html += renderFooter();
   app.innerHTML = html;
   document.title = `${tabData.label} - Product.ai Consumer Surfaces`;
+  if (_galleryScrollY > 0) {
+    requestAnimationFrame(() => window.scrollTo(0, _galleryScrollY));
+  }
   bindGalleryEvents(tabData);
 }
 
@@ -1003,6 +1021,7 @@ function bindGalleryEvents(tabData) {
         if (item) window.open(item.src, '_blank');
         return;
       }
+      _galleryScrollY = window.scrollY;
       navigate(card.dataset.tab + '/' + card.dataset.slug);
     });
   }
@@ -1124,6 +1143,25 @@ function handleRoute() {
 document.addEventListener('keydown', function(e) {
   if (window._detailKeyHandler) window._detailKeyHandler(e);
 });
+
+// Prevent iframes from stealing focus - reclaim on any mouse movement
+// This ensures Escape key always works even after hovering over iframes
+document.addEventListener('mousemove', function() {
+  if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+    window.focus();
+  }
+});
+document.addEventListener('click', function(e) {
+  if (e.target.tagName !== 'IFRAME') {
+    window.focus();
+  }
+});
+// Periodic focus reclaim - catches edge cases where iframe steals focus
+setInterval(function() {
+  if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+    window.focus();
+  }
+}, 500);
 
 // Clear detail key handler when navigating away from detail
 window.addEventListener('hashchange', function() {
